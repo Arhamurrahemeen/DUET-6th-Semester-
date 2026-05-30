@@ -1,0 +1,322 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px;line-height:1.7}
+.tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.tab{font-size:12px;padding:5px 14px;border-radius:99px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);transition:all .15s}
+.tab.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+h3{font-size:15px;font-weight:500;margin:0 0 8px}
+h4{font-size:13px;font-weight:500;margin:10px 0 4px}
+p,li{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+ul{padding-left:16px;margin-bottom:8px}
+.card{border-radius:12px;border:0.5px solid var(--color-border-tertiary);padding:12px 16px;margin-bottom:10px;background:var(--color-background-primary)}
+.card-title{font-size:13px;font-weight:500;margin-bottom:5px}
+.card-body{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:520px){.grid2{grid-template-columns:1fr}}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:500;margin-right:3px}
+.b-blue{background:#E6F1FB;color:#0C447C}.b-teal{background:#E1F5EE;color:#085041}.b-purple{background:#EEEDFE;color:#26215C}.b-amber{background:#FAEEDA;color:#633806}.b-coral{background:#FAECE7;color:#712B13}
+@media(prefers-color-scheme:dark){
+  .b-blue{background:#042C53;color:#B5D4F4}.b-teal{background:#04342C;color:#9FE1CB}.b-purple{background:#26215C;color:#CECBF6}.b-amber{background:#412402;color:#FAC775}.b-coral{background:#4A1B0C;color:#F5C4B3}
+}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px}
+th{font-weight:500;text-align:left;padding:6px 10px;border-bottom:1px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+td{padding:6px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.exam-box{border-radius:12px;border:0.5px solid #1D9E75;background:#E1F5EE;padding:12px 16px;margin-bottom:12px}
+@media(prefers-color-scheme:dark){.exam-box{background:#04342C;border-color:#0F6E56}}
+.exam-box .lbl{font-size:10px;font-weight:500;color:#085041;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+@media(prefers-color-scheme:dark){.exam-box .lbl{color:#5DCAA5}}
+.exam-box p,.exam-box li{font-size:12px;color:#085041;line-height:1.8}
+@media(prefers-color-scheme:dark){.exam-box p,.exam-box li{color:#9FE1CB}}
+.num-worked{border-radius:12px;border:0.5px solid #534AB7;background:#EEEDFE;padding:12px 16px;margin-bottom:12px}
+@media(prefers-color-scheme:dark){.num-worked{background:#26215C;border-color:#7F77DD}}
+.num-worked .lbl{font-size:10px;font-weight:500;color:#3C3489;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+@media(prefers-color-scheme:dark){.num-worked .lbl{color:#AFA9EC}}
+.num-worked p,.num-worked li{font-size:12px;color:#3C3489;line-height:1.8}
+@media(prefers-color-scheme:dark){.num-worked p,.num-worked li{color:#CECBF6}}
+.step-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#534AB7;color:#EEEDFE;font-size:10px;font-weight:500;flex-shrink:0;margin-top:1px}
+@media(prefers-color-scheme:dark){.step-num{background:#7F77DD;color:#26215C}}
+.warn-box{border-radius:8px;border:0.5px solid #BA7517;background:#FAEEDA;padding:10px 14px;margin-bottom:10px}
+@media(prefers-color-scheme:dark){.warn-box{background:#412402;border-color:#854F0B}}
+.warn-box p{font-size:12px;color:#633806}
+@media(prefers-color-scheme:dark){.warn-box p{color:#FAC775}}
+.mono{font-family:var(--font-mono);font-size:12px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px;border:0.5px solid var(--color-border-tertiary)}
+.dijk-table-ex{font-size:11px}
+.dijk-table-ex th{font-size:11px;padding:4px 8px}
+.dijk-table-ex td{padding:4px 8px;font-size:11px}
+.td-final{background:#EAF3DE;color:#27500A;font-weight:500}
+.td-active{background:#E6F1FB;color:#0C447C;font-weight:500}
+@media(prefers-color-scheme:dark){.td-final{background:#173404;color:#C0DD97}.td-active{background:#042C53;color:#B5D4F4}}
+.quiz-area{border-radius:12px;border:0.5px solid var(--color-border-secondary);padding:14px 16px;margin-bottom:10px}
+.quiz-q{font-size:13px;font-weight:500;margin-bottom:10px}
+.opt{font-size:12px;padding:8px 12px;border-radius:8px;border:0.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-secondary);margin:4px 0;display:block;transition:background .15s;color:var(--color-text-primary)}
+.opt:hover{background:var(--color-background-tertiary)}
+.opt.correct{background:#EAF3DE;border-color:#639922;color:#27500A}
+.opt.wrong{background:#FCEBEB;border-color:#A32D2D;color:#791F1F}
+@media(prefers-color-scheme:dark){.opt.correct{background:#173404;border-color:#3B6D11;color:#C0DD97}.opt.wrong{background:#501313;border-color:#791F1F;color:#F7C1C1}}
+.fb{display:none;margin-top:8px;font-size:12px;padding:8px 12px;border-radius:8px;border:0.5px solid}
+.fb-ok{background:#EAF3DE;border-color:#639922;color:#27500A;display:block}
+.fb-no{background:#FCEBEB;border-color:#A32D2D;color:#791F1F;display:block}
+@media(prefers-color-scheme:dark){.fb-ok{background:#173404;color:#C0DD97}.fb-no{background:#501313;color:#F7C1C1}}
+.btn{display:inline-block;font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:0.5px solid var(--color-border-primary);cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-primary);margin:3px;transition:background .15s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-primary{background:#0C447C;color:#E6F1FB;border-color:#042C53}
+.btn-primary:hover{background:#042C53}
+</style>
+
+<div style="padding:.5rem 0">
+<div class="tabs">
+  <button class="tab active" onclick="show('theory')">Theory & Contrast</button>
+  <button class="tab" onclick="show('dijk-method')">Dijkstra method</button>
+  <button class="tab" onclick="show('bf-method')">Bellman-Ford method</button>
+  <button class="tab" onclick="show('quiz')">Quiz</button>
+  <button class="tab" onclick="show('answers')">Model answers</button>
+</div>
+
+<!-- THEORY -->
+<div id="theory" class="panel active">
+  <h3>Two routing algorithms — what the exam tests</h3>
+  <p style="margin-bottom:10px">Both algorithms solve the same problem: find the shortest path from a source to all other nodes. They differ in <em>what information each router needs</em> and <em>how they compute it</em>. Understanding this contrast is what C-6 taxonomy demands.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title"><span class="badge b-blue">Dijkstra — Link State</span></div>
+      <div class="card-body">
+        Type: Global / centralized<br>
+        Info needed: <strong>Complete network topology</strong> (all link costs)<br>
+        How: Build a least-cost tree greedily — always pick the cheapest unvisited node next<br>
+        Complexity: O(n²) comparisons<br>
+        Protocol: OSPF uses this<br>
+        Analogy: You have a full map — plan the entire route upfront
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge b-teal">Bellman-Ford — Distance Vector</span></div>
+      <div class="card-body">
+        Type: Decentralized / distributed<br>
+        Info needed: <strong>Only neighbor costs</strong> (no global map)<br>
+        How: Exchange distance tables with neighbors, apply BF equation iteratively<br>
+        Complexity: O(V × E)<br>
+        Protocol: RIP uses this<br>
+        Analogy: Ask people on the road how far each destination is from them
+      </div>
+    </div>
+  </div>
+
+  <h3>Key comparison table</h3>
+  <table>
+    <tr><th>Feature</th><th>Dijkstra (Link State)</th><th>Bellman-Ford (Distance Vector)</th></tr>
+    <tr><td>Knowledge required</td><td>Full network topology</td><td>Direct neighbor costs only</td></tr>
+    <tr><td>Information exchange</td><td>Broadcast LSPs to ALL routers</td><td>Share table with NEIGHBORS only</td></tr>
+    <tr><td>Convergence</td><td>Fast (one computation)</td><td>Slower (multiple rounds)</td></tr>
+    <tr><td>Count-to-infinity problem</td><td>No</td><td>Yes — can occur on link failure</td></tr>
+    <tr><td>Computation location</td><td>Each router computes independently with same DB</td><td>Distributed — each router updates iteratively</td></tr>
+    <tr><td>Protocol</td><td>OSPF</td><td>RIP</td></tr>
+    <tr><td>Scalability</td><td>Less scalable (full topology flood)</td><td>More scalable (local exchange)</td></tr>
+    <tr><td>Exam format</td><td>Step table + finalized set N</td><td>Per-node distance tables per round</td></tr>
+  </table>
+
+  <div class="warn-box"><p>The exam at C-6 level will ask you to CONSTRUCT the tree or PRODUCE the tables — not just define the algorithm. Practice writing the table rows yourself before checking the answer.</p></div>
+</div>
+
+<!-- DIJKSTRA METHOD -->
+<div id="dijk-method" class="panel">
+  <h3>Dijkstra — exact exam procedure</h3>
+
+  <div class="num-worked">
+    <div class="lbl">Notation you must use in the exam</div>
+    <p><strong>N</strong> = set of finalized nodes (least-cost path confirmed)<br>
+    <strong>D(v)</strong> = current best known cost from source to v<br>
+    <strong>p(v)</strong> = predecessor of v on the least-cost path<br>
+    <strong>c(i,j)</strong> = direct link cost between i and j (∞ if no direct link)<br>
+    <strong>Initialization:</strong> D(source)=0, D(all others)=∞. N={source}.<br>
+    <strong>Each step:</strong> Pick w not in N with smallest D(w). Add w to N. Update all neighbors v of w: D(v) = min(D(v), D(w)+c(w,v))</p>
+  </div>
+
+  <h3>Batch-22 Q5(a) — full hand-written table</h3>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Graph: A–B=3, A–C=1, B–C=7, B–D=5, B–E=1, C–D=2, D–E=2, D–F=6, E–F=6. Source = A.</p>
+  <div style="overflow-x:auto">
+  <table class="dijk-table-ex">
+    <tr><th>Step</th><th>N</th><th>D(B),p(B)</th><th>D(C),p(C)</th><th>D(D),p(D)</th><th>D(E),p(E)</th><th>D(F),p(F)</th></tr>
+    <tr><td>0</td><td class="td-active">A</td><td>3,A</td><td>1,A</td><td>∞,—</td><td>∞,—</td><td>∞,—</td></tr>
+    <tr><td>1</td><td class="td-active">AD</td><td>3,A</td><td class="td-final">1,A</td><td>3,C</td><td>∞,—</td><td>∞,—</td></tr>
+    <tr><td>2</td><td class="td-active">ADB</td><td class="td-final">3,A</td><td class="td-final">1,A</td><td class="td-final">3,C</td><td>4,B</td><td>9,D</td></tr>
+    <tr><td>3</td><td class="td-active">ADBE</td><td class="td-final">3,A</td><td class="td-final">1,A</td><td class="td-final">3,C</td><td class="td-final">4,B</td><td>9,D</td></tr>
+    <tr><td>4</td><td class="td-active">ADBEC</td><td class="td-final">3,A</td><td class="td-final">1,A</td><td class="td-final">3,C</td><td class="td-final">4,B</td><td>9,D</td></tr>
+    <tr><td>5</td><td class="td-final">ADBECF</td><td class="td-final">3,A</td><td class="td-final">1,A</td><td class="td-final">3,C</td><td class="td-final">4,B</td><td class="td-final">9,D</td></tr>
+  </table>
+  </div>
+
+  <h4>Least-cost paths from A:</h4>
+  <div class="card"><div class="card-body">
+    A→B: cost 3 (direct)<br>
+    A→C: cost 1 (direct)<br>
+    A→D: cost 3 (A→C→D, i.e. 1+2)<br>
+    A→E: cost 4 (A→B→E, i.e. 3+1)<br>
+    A→F: cost 9 (A→C→D→F, i.e. 1+2+6)
+  </div></div>
+
+  <div class="num-worked">
+    <div class="lbl">Step-by-step reasoning for the exam</div>
+    <div class="step-row"><span class="step-num">0</span><p>Init: D(A)=0. Direct neighbors: D(B)=3, D(C)=1. Others ∞. N={A}.</p></div>
+    <div class="step-row"><span class="step-num">1</span><p>Smallest D not in N: C (D=1). Add C to N. Update C's neighbors: D(D)=min(∞,1+2)=<strong>3 via C</strong>. B,E,F unchanged.</p></div>
+    <div class="step-row"><span class="step-num">2</span><p>Smallest: B and D both =3. Pick B (alphabetical). Add B to N. Update: D(D)=min(3,3+5)=3 (no change). D(E)=min(∞,3+1)=<strong>4 via B</strong>. D(F) unchanged.</p></div>
+    <div class="step-row"><span class="step-num">3</span><p>Smallest not in N: D (cost=3). Add D to N. Update: D(E)=min(4,3+2)=4 (no change). D(F)=min(∞,3+6)=<strong>9 via D</strong>.</p></div>
+    <div class="step-row"><span class="step-num">4</span><p>Smallest not in N: E (cost=4). Add E to N. Update: D(F)=min(9,4+6)=9 (no change).</p></div>
+    <div class="step-row"><span class="step-num">5</span><p>Only F remains. Add F. All nodes finalized. Done.</p></div>
+  </div>
+</div>
+
+<!-- BELLMAN-FORD METHOD -->
+<div id="bf-method" class="panel">
+  <h3>Bellman-Ford — exact exam procedure</h3>
+
+  <div class="num-worked">
+    <div class="lbl">The Bellman-Ford equation</div>
+    <p><strong>D_x(y) = min over all neighbors v { c(x,v) + D_v(y) }</strong></p>
+    <p style="margin-top:4px">Translation: The cost from node x to destination y = the minimum over all of x's neighbors v of (cost to reach v directly + v's known cost to y).</p>
+    <p style="margin-top:4px">Each node maintains a <strong>distance table</strong> — rows = destinations, columns = cost via each neighbor. The minimum across each row = best known cost.</p>
+  </div>
+
+  <h3>Batch-22 Q5(b) — full worked solution</h3>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Graph: W–X=1, W–Y=3, X–Y=4, X–Z=2, Y–Z=3. Find shortest paths from W using distance vector.</p>
+
+  <h4>Round 0 — Initialization (each node knows only its direct links)</h4>
+  <div style="overflow-x:auto">
+  <table>
+    <tr><th>Node W</th><th>to W</th><th>to X</th><th>to Y</th><th>to Z</th></tr>
+    <tr><td>via X (cost 1)</td><td>1+0=1</td><td>1+0=1</td><td>1+4=5</td><td>1+2=3</td></tr>
+    <tr><td>Direct</td><td>0</td><td>1</td><td>3</td><td>∞</td></tr>
+    <tr><td><strong>Best D(W,·)</strong></td><td><strong>0</strong></td><td><strong>1</strong></td><td><strong>3</strong></td><td><strong>∞</strong></td></tr>
+  </table>
+  </div>
+
+  <h4>Round 1 — After first exchange</h4>
+  <div class="num-worked">
+    <div class="lbl">Applying Bellman-Ford at node W</div>
+    <p>W's neighbors: X (cost 1) and Y (cost 3).<br>
+    After round 0, X has told W: D_X(Z)=2. Y has told W: D_Y(Z)=3.<br><br>
+    <strong>D_W(Z) = min{ c(W,X)+D_X(Z), c(W,Y)+D_Y(Z) }</strong><br>
+    = min{ 1+2, 3+3 } = min{ 3, 6 } = <strong>3 via X</strong><br><br>
+    All other distances unchanged. Tables stabilize after round 1.</p>
+  </div>
+
+  <h4>Final shortest-path tables from all nodes:</h4>
+  <div style="overflow-x:auto">
+  <table>
+    <tr><th>From \ To</th><th>W</th><th>X</th><th>Y</th><th>Z</th></tr>
+    <tr><td><strong>W</strong></td><td>0</td><td>1 (direct)</td><td>3 (direct)</td><td>3 (via X)</td></tr>
+    <tr><td><strong>X</strong></td><td>1 (direct)</td><td>0</td><td>4 (direct)</td><td>2 (direct)</td></tr>
+    <tr><td><strong>Y</strong></td><td>3 (direct)</td><td>4 (direct)</td><td>0</td><td>3 (direct)</td></tr>
+    <tr><td><strong>Z</strong></td><td>3 (via X)</td><td>2 (direct)</td><td>3 (direct)</td><td>0</td></tr>
+  </table>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="panel">
+  <div class="quiz-area">
+    <div class="quiz-q">Q1: In Dijkstra's algorithm, when is a node added to set N?</div>
+    <div class="opt" onclick="ans(this,'wrong','q1')">When all its edges are explored</div>
+    <div class="opt" onclick="ans(this,'correct','q1')">When it has the smallest D(v) among all nodes not yet in N — its shortest path is then confirmed</div>
+    <div class="opt" onclick="ans(this,'wrong','q1')">When it receives an update from a neighbor</div>
+    <div class="opt" onclick="ans(this,'wrong','q1')">At the end of each round, all nodes are added simultaneously</div>
+    <div class="fb" id="q1"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q2: In the Batch-22 graph (A–B=3, A–C=1, C–D=2), what is the least-cost path from A to D and its cost?</div>
+    <div class="opt" onclick="ans(this,'wrong','q2')">A→B→D, cost 8 (3+5)</div>
+    <div class="opt" onclick="ans(this,'correct','q2')">A→C→D, cost 3 (1+2)</div>
+    <div class="opt" onclick="ans(this,'wrong','q2')">A→D direct, cost ∞ (no direct link)</div>
+    <div class="opt" onclick="ans(this,'wrong','q2')">A→B→C→D, cost 11 (3+7+1)</div>
+    <div class="fb" id="q2"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q3: What does D_x(y) = min{ c(x,v) + D_v(y) } mean in plain English?</div>
+    <div class="opt" onclick="ans(this,'wrong','q3')">The cost from x to y equals the sum of all link costs on the path</div>
+    <div class="opt" onclick="ans(this,'correct','q3')">Node x finds the cheapest way to reach y by checking: go to each neighbor v directly, then use v's known best route to y — take the minimum</div>
+    <div class="opt" onclick="ans(this,'wrong','q3')">Node x broadcasts its full routing table to all nodes in the network</div>
+    <div class="opt" onclick="ans(this,'wrong','q3')">The distance from x to y decreases by 1 each round until it converges</div>
+    <div class="fb" id="q3"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q4: In the W–X–Y–Z graph, what is W's shortest path to Z after convergence?</div>
+    <div class="opt" onclick="ans(this,'wrong','q4')">Cost 5 via Y (W→Y→Z = 3+3)</div>
+    <div class="opt" onclick="ans(this,'correct','q4')">Cost 3 via X (W→X→Z = 1+2)</div>
+    <div class="opt" onclick="ans(this,'wrong','q4')">Cost 2 via X (W→X = 1, X→Z = 1)</div>
+    <div class="opt" onclick="ans(this,'wrong','q4')">Cost ∞ — W and Z have no path</div>
+    <div class="fb" id="q4"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q5: What is the key difference between Dijkstra and Bellman-Ford in terms of information required?</div>
+    <div class="opt" onclick="ans(this,'wrong','q5')">Dijkstra needs neighbor costs only; Bellman-Ford needs the full topology</div>
+    <div class="opt" onclick="ans(this,'correct','q5')">Dijkstra needs the complete network topology (link-state); Bellman-Ford only needs direct neighbor costs (distance-vector)</div>
+    <div class="opt" onclick="ans(this,'wrong','q5')">Both require the same information — they differ only in computation speed</div>
+    <div class="opt" onclick="ans(this,'wrong','q5')">Dijkstra uses hop count; Bellman-Ford uses actual link costs</div>
+    <div class="fb" id="q5"></div>
+  </div>
+</div>
+
+<!-- MODEL ANSWERS -->
+<div id="answers" class="panel">
+  <h3>Q5(a) — Model answer framework (5 marks)</h3>
+  <div class="exam-box">
+    <div class="lbl">What to write in the exam</div>
+    <p><strong>1. State the algorithm type (0.5 mark):</strong> Dijkstra's algorithm is a link-state routing algorithm. Each router has a complete map of the network topology obtained via link-state flooding. It computes the least-cost path from one source to all destinations.</p><br>
+    <p><strong>2. Define notation (0.5 mark):</strong> N = set of finalized nodes. D(v) = current least-cost estimate to v. p(v) = predecessor on least-cost path. c(i,j) = direct link cost.</p><br>
+    <p><strong>3. Draw the step table (3 marks):</strong> Show all 5 steps. Each row: N set, D(v),p(v) for all non-source nodes. Highlight which node was added each step. Show the update calculation explicitly at least once.</p><br>
+    <p><strong>4. State the least-cost tree (1 mark):</strong> List all shortest paths: A→C (1), A→B (3), A→D=A→C→D (3), A→E=A→B→E (4), A→F=A→C→D→F (9).</p>
+  </div>
+
+  <h3>Q5(b) — Model answer framework (5 marks)</h3>
+  <div class="exam-box">
+    <div class="lbl">What to write in the exam</div>
+    <p><strong>1. State the algorithm type (0.5 mark):</strong> Bellman-Ford distance-vector algorithm. Each node only knows its direct neighbor costs. Nodes share their distance tables with neighbors. Each applies the Bellman-Ford equation iteratively until convergence.</p><br>
+    <p><strong>2. State the equation (0.5 mark):</strong> D_x(y) = min over all neighbors v { c(x,v) + D_v(y) }</p><br>
+    <p><strong>3. Show Round 0 tables (1.5 marks):</strong> Draw the initial distance table for each node — only direct link costs known, others = ∞.</p><br>
+    <p><strong>4. Show Round 1 update (1.5 marks):</strong> Show the Bellman-Ford calculation for at least one node explicitly. State which entries changed and why. Show the updated tables.</p><br>
+    <p><strong>5. State convergence (1 mark):</strong> State which round the tables stabilized. Give the final shortest-path table. State that the algorithm terminates when no further updates occur.</p>
+  </div>
+
+  <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
+    <button class="btn btn-primary" onclick="sendPrompt('Give me a brand new graph and ask me to apply Dijkstra step by step — different from the exam graph')">Practice new graph</button>
+    <button class="btn btn-primary" onclick="sendPrompt('Give me a 2-day final revision plan covering all 5 questions: Q1 Transport+Security, Q2 TCP Congestion+Crypto, Q3 Multiplexing+Modulation, Q4 IP Subnetting, Q5 Routing')">2-day revision plan</button>
+    <button class="btn" onclick="sendPrompt('Quiz me on all 5 topics in a rapid-fire round — one question per topic, exam style')">Rapid-fire quiz all topics</button>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+const fbs={
+  q1:{correct:'Correct. Once a node has the smallest D(v) among unvisited nodes, no future path can improve it — so it is permanently finalized into N.',
+      wrong:'Wrong. In Dijkstra, a node is added to N when it has the smallest current D(v) among all nodes not yet in N. This greedily finalizes the cheapest unvisited node each step.'},
+  q2:{correct:'Correct. A→C costs 1, C→D costs 2. Total = 3. The direct path A→B→D = 3+5 = 8, which is worse.',
+      wrong:'Wrong. A→C→D = 1+2 = 3. This is cheaper than A→B→D = 3+5 = 8. Always check all routes through intermediate nodes.'},
+  q3:{correct:'Correct. This is the core idea of distance-vector routing — each node asks its neighbors "how far is it from you to each destination?" and adds its own link cost to get the full path cost.',
+      wrong:'Wrong. The equation means: node x finds the cheapest path to y by checking each neighbor v — the cost is c(x,v) + whatever v says it costs to reach y. Take the minimum over all neighbors.'},
+  q4:{correct:'Correct. W→X=1, X→Z=2. Total=3. The alternative W→Y→Z = 3+3=6 is worse. Bellman-Ford finds this in Round 1.',
+      wrong:'Wrong. W can reach Z via X: cost = W→X(1) + X→Z(2) = 3. Or via Y: W→Y(3) + Y→Z(3) = 6. Minimum = 3 via X.'},
+  q5:{correct:'Correct. Dijkstra = link-state: requires flooding the entire topology to all routers first. Bellman-Ford = distance-vector: each node only exchanges tables with its direct neighbors.',
+      wrong:'Wrong. Dijkstra is link-state — it needs the FULL network topology (via link-state advertisements flooded to all). Bellman-Ford is distance-vector — each node only needs its direct neighbor costs, sharing tables iteratively.'},
+};
+function ans(el,verdict,id){
+  el.closest('.quiz-area').querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(verdict);
+  const fb=document.getElementById(id);
+  fb.textContent=fbs[id][verdict];
+  fb.className='fb '+(verdict==='correct'?'fb-ok':'fb-no');
+}
+</script>

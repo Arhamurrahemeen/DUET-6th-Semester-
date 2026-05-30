@@ -1,0 +1,214 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 6px;font-size:12px;color:var(--color-text-secondary)}
+.leg-item{display:flex;align-items:center;gap:5px}
+.leg-dot{width:10px;height:10px;border-radius:50%}
+canvas{width:100%;height:auto;display:block;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)}
+.info-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.info-card{flex:1;min-width:140px;border-radius:var(--border-radius-md);padding:8px 12px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)}
+.info-card .label{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
+.info-card .val{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.event-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:99px;font-weight:500;margin:2px}
+.ev-timeout{background:#FCEBEB;color:#791F1F}
+.ev-dupacks{background:#FAEEDA;color:#633806}
+.ev-newack{background:#EAF3DE;color:#27500A}
+@media(prefers-color-scheme:dark){
+  .ev-timeout{background:#501313;color:#F7C1C1}
+  .ev-dupacks{background:#412402;color:#FAC775}
+  .ev-newack{background:#173404;color:#C0DD97}
+}
+.hint{font-size:11px;color:var(--color-text-tertiary);margin-top:6px;text-align:center}
+</style>
+
+<div style="padding:0.5rem 0">
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#378ADD"></div> cwnd growth</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#E24B4A"></div> ssthresh</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#EF9F27"></div> Timeout event</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#639922"></div> 3 dup ACKs event</div>
+</div>
+
+<canvas id="cwnd-canvas" height="340"></canvas>
+
+<div class="info-row" id="hover-info" style="display:none">
+  <div class="info-card"><div class="label">RTT</div><div class="val" id="h-rtt">—</div></div>
+  <div class="info-card"><div class="label">cwnd (MSS)</div><div class="val" id="h-cwnd">—</div></div>
+  <div class="info-card"><div class="label">ssthresh</div><div class="val" id="h-sst">—</div></div>
+  <div class="info-card"><div class="label">Phase</div><div class="val" id="h-phase">—</div></div>
+</div>
+
+<div class="hint">Hover over the graph to inspect each RTT</div>
+</div>
+
+<script>
+const canvas = document.getElementById('cwnd-canvas');
+const ctx = canvas.getContext('2d');
+
+const W = 680, H = 340;
+canvas.width = W; canvas.height = H;
+
+const PAD = {top:30, right:20, bottom:40, left:48};
+const gW = W - PAD.left - PAD.right;
+const gH = H - PAD.top - PAD.bottom;
+
+const dark = matchMedia('(prefers-color-scheme:dark)').matches;
+const textCol = dark ? '#c2c0b6' : '#3d3d3a';
+const gridCol = dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
+const bgCol = dark ? '#1a1a18' : '#ffffff';
+
+const data = [
+  {rtt:0, cwnd:1,  sst:16, phase:'Slow start',          event:null},
+  {rtt:1, cwnd:2,  sst:16, phase:'Slow start',          event:null},
+  {rtt:2, cwnd:4,  sst:16, phase:'Slow start',          event:null},
+  {rtt:3, cwnd:8,  sst:16, phase:'Slow start',          event:null},
+  {rtt:4, cwnd:16, sst:16, phase:'Slow start',          event:null},
+  {rtt:5, cwnd:17, sst:16, phase:'Congestion avoidance',event:null},
+  {rtt:6, cwnd:18, sst:16, phase:'Congestion avoidance',event:null},
+  {rtt:7, cwnd:1,  sst:9,  phase:'Slow start',          event:'timeout'},
+  {rtt:8, cwnd:2,  sst:9,  phase:'Slow start',          event:null},
+  {rtt:9, cwnd:4,  sst:9,  phase:'Slow start',          event:null},
+  {rtt:10,cwnd:8,  sst:9,  phase:'Slow start',          event:null},
+  {rtt:11,cwnd:9,  sst:9,  phase:'Congestion avoidance',event:null},
+  {rtt:12,cwnd:10, sst:9,  phase:'Congestion avoidance',event:null},
+  {rtt:13,cwnd:11, sst:9,  phase:'Congestion avoidance',event:'3dupACK'},
+  {rtt:14,cwnd:6,  sst:6,  phase:'Fast recovery→CA',    event:null},
+  {rtt:15,cwnd:7,  sst:6,  phase:'Congestion avoidance',event:null},
+  {rtt:16,cwnd:8,  sst:6,  phase:'Congestion avoidance',event:null},
+];
+
+const maxRTT = 16;
+const maxCWND = 20;
+
+function toX(rtt){ return PAD.left + (rtt/maxRTT)*gW; }
+function toY(cwnd){ return PAD.top + (1 - cwnd/maxCWND)*gH; }
+
+function draw(){
+  ctx.fillStyle = bgCol;
+  ctx.fillRect(0,0,W,H);
+
+  ctx.strokeStyle = gridCol;
+  ctx.lineWidth = 0.5;
+  for(let i=0;i<=maxCWND;i+=2){
+    ctx.beginPath();
+    ctx.moveTo(PAD.left, toY(i));
+    ctx.lineTo(W-PAD.right, toY(i));
+    ctx.stroke();
+  }
+  for(let i=0;i<=maxRTT;i+=2){
+    ctx.beginPath();
+    ctx.moveTo(toX(i), PAD.top);
+    ctx.lineTo(toX(i), H-PAD.bottom);
+    ctx.stroke();
+  }
+
+  ctx.strokeStyle = textCol; ctx.lineWidth = 0.5;
+  ctx.beginPath(); ctx.moveTo(PAD.left,PAD.top); ctx.lineTo(PAD.left,H-PAD.bottom); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(PAD.left,H-PAD.bottom); ctx.lineTo(W-PAD.right,H-PAD.bottom); ctx.stroke();
+
+  ctx.fillStyle = textCol; ctx.font = '11px sans-serif'; ctx.textAlign='right';
+  for(let i=0;i<=maxCWND;i+=4){
+    ctx.fillText(i, PAD.left-6, toY(i)+4);
+  }
+  ctx.textAlign='center';
+  for(let i=0;i<=maxRTT;i+=2){
+    ctx.fillText(i, toX(i), H-PAD.bottom+14);
+  }
+  ctx.font='11px sans-serif'; ctx.fillStyle=textCol;
+  ctx.save(); ctx.translate(12, PAD.top+gH/2); ctx.rotate(-Math.PI/2);
+  ctx.textAlign='center'; ctx.fillText('cwnd (MSS)', 0, 0); ctx.restore();
+  ctx.textAlign='center';
+  ctx.fillText('RTTs', PAD.left+gW/2, H-2);
+
+  let sstSegments = [];
+  let seg = {start:0, val:data[0].sst};
+  for(let i=1;i<data.length;i++){
+    if(data[i].sst !== seg.val){
+      sstSegments.push({...seg, end:i-1});
+      seg = {start:i, val:data[i].sst};
+    }
+  }
+  sstSegments.push({...seg, end:data.length-1});
+
+  ctx.setLineDash([5,4]);
+  ctx.lineWidth=1.5; ctx.strokeStyle='#E24B4A';
+  for(const s of sstSegments){
+    ctx.beginPath();
+    ctx.moveTo(toX(data[s.start].rtt), toY(s.val));
+    ctx.lineTo(toX(data[s.end].rtt), toY(s.val));
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  const sstLabels = [{rtt:4,val:16,label:'ssthresh=16'},{rtt:9,val:9,label:'ssthresh=9'},{rtt:14,val:6,label:'ssthresh=6'}];
+  ctx.fillStyle='#E24B4A'; ctx.font='10px sans-serif'; ctx.textAlign='left';
+  for(const l of sstLabels){
+    ctx.fillText(l.label, toX(l.rtt)+4, toY(l.val)-4);
+  }
+
+  ctx.beginPath(); ctx.strokeStyle='#378ADD'; ctx.lineWidth=2;
+  data.forEach((d,i)=>{
+    if(i===0) ctx.moveTo(toX(d.rtt),toY(d.cwnd));
+    else ctx.lineTo(toX(d.rtt),toY(d.cwnd));
+  });
+  ctx.stroke();
+
+  data.forEach(d=>{
+    if(d.event==='timeout'){
+      ctx.beginPath(); ctx.arc(toX(d.rtt),toY(d.cwnd),5,0,Math.PI*2);
+      ctx.fillStyle='#E24B4A'; ctx.fill();
+      ctx.fillStyle='#E24B4A'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Timeout',toX(d.rtt),toY(d.cwnd)-10);
+    }
+    if(d.event==='3dupACK'){
+      ctx.beginPath(); ctx.arc(toX(d.rtt),toY(d.cwnd),5,0,Math.PI*2);
+      ctx.fillStyle='#639922'; ctx.fill();
+      ctx.fillStyle='#639922'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('3 dup ACKs',toX(d.rtt),toY(d.cwnd)-10);
+    }
+  });
+
+  const phaseRegions = [
+    {from:0,to:4,label:'Slow start',col:'rgba(55,138,221,0.07)'},
+    {from:5,to:6,label:'Cong. avoid.',col:'rgba(100,153,34,0.08)'},
+    {from:7,to:10,label:'Slow start',col:'rgba(55,138,221,0.07)'},
+    {from:11,to:12,label:'Cong. avoid.',col:'rgba(100,153,34,0.08)'},
+    {from:14,to:16,label:'Cong. avoid.',col:'rgba(100,153,34,0.08)'},
+  ];
+  for(const r of phaseRegions){
+    const x1=toX(r.from), x2=toX(r.to);
+    ctx.fillStyle=r.col;
+    ctx.fillRect(x1,PAD.top,x2-x1,gH);
+  }
+
+  data.forEach(d=>{
+    ctx.beginPath(); ctx.arc(toX(d.rtt),toY(d.cwnd),3,0,Math.PI*2);
+    ctx.fillStyle='#378ADD'; ctx.fill();
+  });
+}
+
+draw();
+
+canvas.addEventListener('mousemove', e=>{
+  const rect=canvas.getBoundingClientRect();
+  const scaleX = canvas.width/rect.width;
+  const mx = (e.clientX-rect.left)*scaleX;
+  const rttF = (mx-PAD.left)/gW*maxRTT;
+  const closest = data.reduce((a,b)=>Math.abs(b.rtt-rttF)<Math.abs(a.rtt-rttF)?b:a);
+  
+  document.getElementById('hover-info').style.display='flex';
+  document.getElementById('h-rtt').textContent = closest.rtt;
+  document.getElementById('h-cwnd').textContent = closest.cwnd;
+  document.getElementById('h-sst').textContent = closest.sst;
+  document.getElementById('h-phase').textContent = closest.phase + (closest.event ? ' — ' + closest.event : '');
+
+  draw();
+  ctx.beginPath(); ctx.arc(toX(closest.rtt),toY(closest.cwnd),6,0,Math.PI*2);
+  ctx.strokeStyle='#378ADD'; ctx.lineWidth=2; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(toX(closest.rtt),PAD.top); ctx.lineTo(toX(closest.rtt),H-PAD.bottom);
+  ctx.strokeStyle=gridCol; ctx.lineWidth=1; ctx.setLineDash([3,3]); ctx.stroke(); ctx.setLineDash([]);
+});
+
+canvas.addEventListener('mouseleave',()=>{ document.getElementById('hover-info').style.display='none'; });
+</script>

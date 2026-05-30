@@ -1,0 +1,200 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px}
+h3{font-size:15px;font-weight:500;margin:0 0 6px}
+.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:8px 0}
+.btn{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:0.5px solid var(--color-border-primary);cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-primary);transition:background .15s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-primary{background:#0F6E56;color:#E1F5EE;border-color:#085041}
+.btn-primary:hover{background:#085041}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.step-badge{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+canvas{display:block;border-radius:10px;border:0.5px solid var(--color-border-tertiary);width:100%;height:auto;margin-bottom:8px}
+.table-wrap{overflow-x:auto;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-weight:500;padding:6px 10px;border-bottom:1px solid var(--color-border-secondary);color:var(--color-text-secondary);text-align:center}
+td{padding:5px 10px;border-bottom:0.5px solid var(--color-border-tertiary);text-align:center}
+tr:last-child td{border-bottom:none}
+.td-updated{background:#E1F5EE;color:#085041;font-weight:500}
+.td-src{background:#EEEDFE;color:#26215C;font-weight:500}
+@media(prefers-color-scheme:dark){
+  .td-updated{background:#04342C;color:#9FE1CB}
+  .td-src{background:#26215C;color:#CECBF6}
+}
+.phase-banner{border-radius:8px;padding:9px 14px;margin-bottom:8px;font-size:12px;border:0.5px solid;background:#E1F5EE;border-color:#1D9E75;color:#085041}
+@media(prefers-color-scheme:dark){.phase-banner{background:#04342C;border-color:#0F6E56;color:#9FE1CB}}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;color:var(--color-text-secondary)}
+.leg{display:flex;align-items:center;gap:4px}
+.leg-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+</style>
+
+<div style="padding:.5rem 0">
+<h3>Bellman-Ford distance vector — Batch-22 Q5(b) graph</h3>
+<p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Nodes W, X, Y, Z. Step through each round of distance vector exchange. Watch each node's routing table update via the Bellman-Ford equation: <strong>D(dest) = min over all neighbors v of [c(self,v) + D_v(dest)]</strong></p>
+
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:#7F77DD"></div> Source node (table being shown)</div>
+  <div class="leg"><div class="leg-dot" style="background:#1D9E75"></div> Updated value this round</div>
+  <div class="leg"><div class="leg-dot" style="background:#EF9F27"></div> Active link being considered</div>
+</div>
+
+<canvas id="bf-canvas" height="240"></canvas>
+
+<div class="ctrl">
+  <button class="btn btn-primary" id="bf-next" onclick="bfNext()">Next round</button>
+  <button class="btn" onclick="bfReset()">Reset</button>
+  <span class="step-badge" id="bf-label">Round 0 — Initial</span>
+</div>
+
+<div id="bf-banner" class="phase-banner">Round 0 — Initialization: each node only knows its direct neighbors. All other distances = ∞.</div>
+
+<div class="table-wrap" id="bf-tables"></div>
+</div>
+
+<script>
+const dark2 = matchMedia('(prefers-color-scheme:dark)').matches;
+const C2 = {
+  bg:   dark2?'#1a1a18':'#ffffff',
+  text: dark2?'#c2c0b6':'#2c2c2a',
+  edge: dark2?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)',
+  node: dark2?'#185FA5':'#378ADD',
+  cur:  '#EF9F27',
+  upd:  '#1D9E75',
+  src:  '#7F77DD',
+};
+
+const bfNodes = {W:{x:100,y:120},X:{x:100,y:220},Y:{x:360,y:60},Z:{x:580,y:220}};
+const bfEdges = [{u:'W',v:'X',w:1},{u:'W',v:'Y',w:3},{u:'X',v:'Z',w:2},{u:'Y',v:'Z',w:3},{u:'Y',v:'X',w:4},{u:'Y',v:'Y',w:0}];
+const realEdges=[{u:'W',v:'X',w:1},{u:'W',v:'Y',w:3},{u:'X',v:'Z',w:2},{u:'Y',v:'Z',w:3},{u:'X',v:'Y',w:4}];
+const bfExtraEdge={u:'W',v:'Z',w:5};
+
+const INF2=999;
+const bfRounds = [
+  {
+    label:'Round 0 — Initialization',
+    banner:'Each node initializes its distance table from direct link costs only. No exchange has happened yet.',
+    tables:{
+      W:{W:0,X:1,Y:3,Z:INF2},
+      X:{W:1,X:0,Y:4,Z:2},
+      Y:{W:3,X:4,Y:0,Z:3},
+      Z:{W:INF2,X:2,Y:3,Z:0}
+    },
+    updated:{}
+  },
+  {
+    label:'Round 1 — First exchange',
+    banner:'Round 1: Nodes share their tables with neighbors. Each applies Bellman-Ford. W learns W→Z=min(∞, 1+2, 3+3)=3 via X. X learns X→W via Y path. Tables converge partially.',
+    tables:{
+      W:{W:0,X:1,Y:3,Z:3},
+      X:{W:1,X:0,Y:4,Z:2},
+      Y:{W:3,X:4,Y:0,Z:3},
+      Z:{W:3,X:2,Y:3,Z:0}
+    },
+    updated:{W:['Z'],Z:['W']}
+  },
+  {
+    label:'Round 2 — Second exchange',
+    banner:'Round 2: W→Z already 3. No further improvements found for any node. Tables are stable — algorithm converges.',
+    tables:{
+      W:{W:0,X:1,Y:3,Z:3},
+      X:{W:1,X:0,Y:4,Z:2},
+      Y:{W:3,X:4,Y:0,Z:3},
+      Z:{W:3,X:2,Y:3,Z:0}
+    },
+    updated:{}
+  }
+];
+
+let bfStep=0;
+const bfCanvas=document.getElementById('bf-canvas');
+const bfCtx=bfCanvas.getContext('2d');
+bfCanvas.width=680; bfCanvas.height=240;
+
+function drawBF(step){
+  bfCtx.fillStyle=C2.bg; bfCtx.fillRect(0,0,680,240);
+  realEdges.forEach(e=>{
+    const x1=bfNodes[e.u].x,y1=bfNodes[e.u].y,x2=bfNodes[e.v].x,y2=bfNodes[e.v].y;
+    bfCtx.beginPath(); bfCtx.moveTo(x1,y1); bfCtx.lineTo(x2,y2);
+    bfCtx.strokeStyle=C2.edge; bfCtx.lineWidth=1; bfCtx.stroke();
+    const mx=(x1+x2)/2,my=(y1+y2)/2;
+    bfCtx.font='bold 11px sans-serif'; bfCtx.textAlign='center';
+    bfCtx.fillStyle=C2.text; bfCtx.fillText(e.w,mx,my-6);
+  });
+  const ex=bfExtraEdge;
+  const x1=bfNodes[ex.u].x,y1=bfNodes[ex.u].y,x2=bfNodes[ex.v].x,y2=bfNodes[ex.v].y;
+  bfCtx.beginPath(); bfCtx.moveTo(x1,y1); bfCtx.lineTo(x2,y2);
+  bfCtx.strokeStyle=C2.edge; bfCtx.lineWidth=1; bfCtx.setLineDash([4,3]); bfCtx.stroke(); bfCtx.setLineDash([]);
+  bfCtx.font='bold 11px sans-serif'; bfCtx.textAlign='center';
+  bfCtx.fillStyle=C2.text; bfCtx.fillText(ex.w,(x1+x2)/2,(y1+y2)/2-6);
+
+  Object.entries(bfNodes).forEach(([name,pos])=>{
+    bfCtx.beginPath(); bfCtx.arc(pos.x,pos.y,22,0,Math.PI*2);
+    bfCtx.fillStyle=C2.node; bfCtx.fill();
+    bfCtx.strokeStyle=dark2?'rgba(255,255,255,.15)':'rgba(0,0,0,.1)'; bfCtx.lineWidth=0.5; bfCtx.stroke();
+    bfCtx.fillStyle='#fff'; bfCtx.font='bold 14px sans-serif';
+    bfCtx.textAlign='center'; bfCtx.textBaseline='middle';
+    bfCtx.fillText(name,pos.x,pos.y);
+    bfCtx.textBaseline='alphabetic';
+  });
+}
+
+function buildBFTables(step){
+  const s=bfRounds[step];
+  const nodes=['W','X','Y','Z'];
+  let html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">';
+  nodes.forEach(src=>{
+    const upd=s.updated[src]||[];
+    html+=`<div><div style="font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:4px">Node ${src}'s table</div>`;
+    html+='<table><tr><th>Dest</th><th>Cost</th><th>Via</th></tr>';
+    nodes.forEach(dest=>{
+      const cost=s.tables[src][dest];
+      const isUpd=upd.includes(dest);
+      const isSelf=src===dest;
+      const cls=isSelf?'td-src':isUpd?'td-updated':'';
+      const via=dest===src?'—':cost===INF2?'—':getVia(src,dest,s.tables);
+      html+=`<tr><td>${dest}</td><td class="${cls}">${cost===INF2?'∞':cost}</td><td style="color:var(--color-text-secondary)">${via}</td></tr>`;
+    });
+    html+='</table></div>';
+  });
+  html+='</div>';
+  document.getElementById('bf-tables').innerHTML=html;
+}
+
+function getVia(src,dest,tables){
+  if(src===dest) return '—';
+  const direct={W:{X:1,Y:3},X:{W:1,Y:4,Z:2},Y:{W:3,X:4,Z:3},Z:{X:2,Y:3}};
+  const directCost=(direct[src]&&direct[src][dest]!==undefined)?direct[src][dest]:INF2;
+  const table=tables[src];
+  const cost=table[dest];
+  if(cost===INF2) return '—';
+  if(cost===directCost) return dest;
+  const neighbors=Object.keys(direct[src]||{});
+  for(const n of neighbors){
+    const linkCost=direct[src][n];
+    const nCost=tables[n]?tables[n][dest]:INF2;
+    if(linkCost!==undefined&&nCost!==undefined&&linkCost+nCost===cost) return n;
+  }
+  return '?';
+}
+
+function bfNext(){
+  if(bfStep>=bfRounds.length-1) return;
+  bfStep++;
+  drawBF(bfStep);
+  buildBFTables(bfStep);
+  document.getElementById('bf-label').textContent=bfRounds[bfStep].label;
+  document.getElementById('bf-banner').textContent=bfRounds[bfStep].banner;
+  document.getElementById('bf-next').disabled=(bfStep>=bfRounds.length-1);
+}
+
+function bfReset(){
+  bfStep=0;
+  drawBF(0); buildBFTables(0);
+  document.getElementById('bf-label').textContent=bfRounds[0].label;
+  document.getElementById('bf-banner').textContent=bfRounds[0].banner;
+  document.getElementById('bf-next').disabled=false;
+}
+
+drawBF(0); buildBFTables(0);
+</script>

@@ -1,0 +1,538 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px;line-height:1.7}
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font-size:12px;padding:5px 14px;border-radius:99px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);transition:all 0.15s}
+.tab.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+h3{font-size:15px;font-weight:500;margin:0 0 8px}
+h4{font-size:13px;font-weight:500;margin:12px 0 5px}
+p,li{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+ul{padding-left:16px;margin-bottom:8px}
+.card{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:12px 16px;margin-bottom:10px;background:var(--color-background-primary)}
+.card-title{font-size:13px;font-weight:500;margin-bottom:5px}
+.card-body{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:520px){.grid2,.grid3{grid-template-columns:1fr}}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:500;margin-right:3px}
+.b-blue{background:#E6F1FB;color:#0C447C}.b-teal{background:#E1F5EE;color:#085041}.b-amber{background:#FAEEDA;color:#633806}.b-purple{background:#EEEDFE;color:#26215C}.b-coral{background:#FAECE7;color:#712B13}.b-green{background:#EAF3DE;color:#27500A}
+@media(prefers-color-scheme:dark){
+  .b-blue{background:#042C53;color:#B5D4F4}.b-teal{background:#04342C;color:#9FE1CB}.b-amber{background:#412402;color:#FAC775}.b-purple{background:#26215C;color:#CECBF6}.b-coral{background:#4A1B0C;color:#F5C4B3}.b-green{background:#173404;color:#C0DD97}
+}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px}
+th{font-weight:500;text-align:left;padding:6px 10px;border-bottom:1px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+td{padding:6px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.exam-box{border-radius:var(--border-radius-lg);border:0.5px solid #1D9E75;background:#E1F5EE;padding:12px 16px;margin-bottom:12px}
+@media(prefers-color-scheme:dark){.exam-box{background:#04342C;border-color:#0F6E56}}
+.exam-box .lbl{font-size:10px;font-weight:500;color:#085041;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+@media(prefers-color-scheme:dark){.exam-box .lbl{color:#5DCAA5}}
+.exam-box p,.exam-box li{font-size:12px;color:#085041;line-height:1.7}
+@media(prefers-color-scheme:dark){.exam-box p,.exam-box li{color:#9FE1CB}}
+.warn-box{border-radius:var(--border-radius-md);border:0.5px solid #BA7517;background:#FAEEDA;padding:10px 14px;margin-bottom:10px}
+@media(prefers-color-scheme:dark){.warn-box{background:#412402;border-color:#854F0B}}
+.warn-box p{font-size:12px;color:#633806}
+@media(prefers-color-scheme:dark){.warn-box p{color:#FAC775}}
+.formula-box{border-radius:var(--border-radius-md);padding:10px 16px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);margin:8px 0;font-size:13px}
+canvas{display:block;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);width:100%;height:auto}
+.num-worked{border-radius:var(--border-radius-lg);border:0.5px solid #534AB7;background:#EEEDFE;padding:12px 16px;margin-bottom:10px}
+@media(prefers-color-scheme:dark){.num-worked{background:#26215C;border-color:#7F77DD}}
+.num-worked .lbl{font-size:10px;font-weight:500;color:#3C3489;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+@media(prefers-color-scheme:dark){.num-worked .lbl{color:#AFA9EC}}
+.num-worked p,.num-worked li{font-size:12px;color:#3C3489;line-height:1.8}
+@media(prefers-color-scheme:dark){.num-worked p,.num-worked li{color:#CECBF6}}
+.num-worked strong{color:#26215C}
+@media(prefers-color-scheme:dark){.num-worked strong{color:#EEEDFE}}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#534AB7;color:#EEEDFE;font-size:10px;font-weight:500;margin-right:5px;flex-shrink:0}
+@media(prefers-color-scheme:dark){.step-num{background:#7F77DD;color:#26215C}}
+.step-row{display:flex;align-items:flex-start;gap:6px;margin-bottom:6px}
+.calc-box{border-radius:var(--border-radius-md);padding:10px 14px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);margin:8px 0}
+.calc-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.calc-label{font-size:12px;color:var(--color-text-secondary);min-width:120px}
+.calc-val{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.btn{display:inline-block;font-size:12px;font-weight:500;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-primary);cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-primary);margin:3px;transition:background 0.15s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-primary{background:#085041;color:#9FE1CB;border-color:#0F6E56}
+.btn-primary:hover{background:#0F6E56}
+.quiz-area{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);padding:14px 16px;margin-bottom:10px}
+.quiz-q{font-size:13px;font-weight:500;margin-bottom:10px}
+.opt{font-size:12px;padding:8px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-secondary);margin:4px 0;display:block;transition:background 0.15s;color:var(--color-text-primary)}
+.opt:hover{background:var(--color-background-tertiary)}
+.opt.correct{background:#EAF3DE;border-color:#639922;color:#27500A}
+.opt.wrong{background:#FCEBEB;border-color:#A32D2D;color:#791F1F}
+@media(prefers-color-scheme:dark){
+  .opt.correct{background:#173404;border-color:#3B6D11;color:#C0DD97}
+  .opt.wrong{background:#501313;border-color:#791F1F;color:#F7C1C1}
+}
+.fb{display:none;margin-top:8px;font-size:12px;padding:8px 12px;border-radius:var(--border-radius-md)}
+.fb-ok{background:#EAF3DE;border:0.5px solid #639922;color:#27500A;display:block}
+.fb-no{background:#FCEBEB;border:0.5px solid #A32D2D;color:#791F1F;display:block}
+@media(prefers-color-scheme:dark){
+  .fb-ok{background:#173404;color:#C0DD97}
+  .fb-no{background:#501313;color:#F7C1C1}
+}
+</style>
+
+<div style="padding:0.5rem 0">
+<div class="tabs">
+  <button class="tab active" onclick="show('mux')">Multiplexing (FDM/TDM/WDM)</button>
+  <button class="tab" onclick="show('mod')">Modulation (ASK/FSK/PSK)</button>
+  <button class="tab" onclick="show('numerical')">Numericals</button>
+  <button class="tab" onclick="show('quiz')">Quiz</button>
+  <button class="tab" onclick="show('answers')">Model Answers</button>
+</div>
+
+<div id="mux" class="panel active">
+  <h3>What is multiplexing?</h3>
+  <p style="margin-bottom:10px">Multiplexing allows multiple signals to share a single physical channel/medium simultaneously. A multiplexer (MUX) combines signals at the sender; a demultiplexer (DEMUX) separates them at the receiver.</p>
+
+  <canvas id="mux-canvas" height="180"></canvas>
+  <p style="font-size:11px;color:var(--color-text-tertiary);text-align:center;margin:4px 0 12px">FDM assigns frequency bands | TDM assigns time slots | WDM assigns wavelengths (optical)</p>
+
+  <h3>FDM — Frequency Division Multiplexing</h3>
+  <div class="card">
+    <div class="card-title"><span class="badge b-blue">Analog signals</span></div>
+    <div class="card-body">
+      Divides the available bandwidth into non-overlapping frequency bands. Each channel gets a dedicated band. Guard bands separate channels to prevent interference.<br><br>
+      <strong>Key formula:</strong> Total BW = n × (signal BW) + (n−1) × guard band BW<br><br>
+      <strong>Data rate:</strong> Each channel operates at its own rate — not shared.<br>
+      <strong>Synchronization:</strong> Not needed — channels are always active.<br>
+      <strong>Cost:</strong> High — requires bandpass filters and carrier modulation.<br>
+      <strong>Real-world use:</strong> Radio broadcasting, TV, telephone (old PSTN), cable TV.
+    </div>
+  </div>
+
+  <h3>TDM — Time Division Multiplexing</h3>
+  <div class="card">
+    <div class="card-title"><span class="badge b-teal">Digital signals</span></div>
+    <div class="card-body">
+      Divides time into slots. Each channel gets a slot in a repeating frame. Entire bandwidth is available to each channel — but only during its time slot.<br><br>
+      <strong>Two types:</strong><br>
+      — <strong>Synchronous TDM:</strong> Fixed slots per channel, even if channel has no data (wasteful). Simple, requires synchronization.<br>
+      — <strong>Statistical (Asynchronous) TDM:</strong> Slots assigned only when channel has data. More efficient, needs addressing overhead.<br><br>
+      <strong>Data rate:</strong> Link rate = sum of all channel rates (sync TDM).<br>
+      <strong>Synchronization:</strong> Required — frame sync bits used.<br>
+      <strong>Cost:</strong> Lower than FDM — digital, no filters needed.<br>
+      <strong>Real-world use:</strong> ISDN, T1/E1 telephone lines, SONET.
+    </div>
+  </div>
+
+  <h3>WDM — Wavelength Division Multiplexing</h3>
+  <div class="card">
+    <div class="card-title"><span class="badge b-purple">Optical fiber — light wavelengths</span></div>
+    <div class="card-body">
+      Conceptually identical to FDM but applied to optical fiber. Different colors (wavelengths) of light carry different signals on the same fiber.<br><br>
+      <strong>DWDM (Dense WDM):</strong> Packs 160+ channels on one fiber. Used in backbone internet.<br>
+      <strong>Data rate:</strong> Extremely high — each wavelength can carry 10+ Gbps.<br>
+      <strong>Cost:</strong> Very high — requires optical amplifiers (EDFA), precise lasers.<br>
+      <strong>Advantage over FDM:</strong> No electrical conversion — photons travel at c.
+    </div>
+  </div>
+
+  <h3>Comparison table — exam ready</h3>
+  <table>
+    <tr><th>Feature</th><th>FDM</th><th>TDM (sync)</th><th>WDM</th></tr>
+    <tr><td>Signal type</td><td>Analog</td><td>Digital</td><td>Optical (light)</td></tr>
+    <tr><td>Division basis</td><td>Frequency bands</td><td>Time slots</td><td>Light wavelengths</td></tr>
+    <tr><td>Synchronization</td><td>Not needed</td><td>Required</td><td>Not needed</td></tr>
+    <tr><td>Guard bands</td><td>Yes — prevent interference</td><td>No</td><td>Wavelength spacing</td></tr>
+    <tr><td>Efficiency</td><td>Wasted if channel idle</td><td>Wasted if channel idle (sync)</td><td>Very high</td></tr>
+    <tr><td>Cost</td><td>Medium</td><td>Low</td><td>Very high</td></tr>
+    <tr><td>Data rate</td><td>Medium</td><td>High</td><td>Extremely high</td></tr>
+    <tr><td>Noise susceptibility</td><td>Higher (analog)</td><td>Lower (digital)</td><td>Lowest</td></tr>
+    <tr><td>Use case</td><td>Radio, TV, cable</td><td>ISDN, T1, telephony</td><td>Optical backbone</td></tr>
+  </table>
+</div>
+
+<div id="mod" class="panel">
+  <h3>What is modulation?</h3>
+  <p style="margin-bottom:10px">Modulation maps digital data (bits) onto an analog carrier wave by varying one of its properties. The three properties of a sine wave — amplitude, frequency, phase — give us ASK, FSK, and PSK.</p>
+
+  <canvas id="mod-canvas" height="260"></canvas>
+  <p style="font-size:11px;color:var(--color-text-tertiary);text-align:center;margin:4px 0 12px">Bit stream: 1 0 1 1 0 — Each scheme modulates a different property</p>
+
+  <h3>ASK — Amplitude Shift Keying</h3>
+  <div class="card">
+    <div class="card-body">
+      Varies the <strong>amplitude</strong> (height) of the carrier. Bit 1 = high amplitude, Bit 0 = low/zero amplitude.<br><br>
+      <strong>Bandwidth:</strong> B = (1 + d) × S, where S = signal rate (baud), d = 0 for ideal. B = S (minimum). Bandwidth is proportional to baud rate.<br>
+      <strong>Noise susceptibility:</strong> Very HIGH — amplitude is the most susceptible to noise and attenuation. Noise directly corrupts amplitude.<br>
+      <strong>Use:</strong> Optical fiber (simple on/off), RFID. Not used on noisy channels.
+    </div>
+  </div>
+
+  <h3>FSK — Frequency Shift Keying</h3>
+  <div class="card">
+    <div class="card-body">
+      Varies the <strong>frequency</strong> of the carrier. Bit 1 = higher frequency (f₁), Bit 0 = lower frequency (f₀).<br><br>
+      <strong>Bandwidth:</strong> B = (1 + d) × S + 2Δf, where 2Δf is the frequency deviation between f₁ and f₀.<br>
+      B = f₁ − f₀ + 2 × signal rate (approximately).<br>
+      <strong>Noise susceptibility:</strong> MEDIUM — frequency is less affected by noise than amplitude. Better than ASK.<br>
+      <strong>Use:</strong> Caller ID, radio modems, early dial-up modems (Bell 103).
+    </div>
+  </div>
+
+  <h3>PSK — Phase Shift Keying</h3>
+  <div class="card">
+    <div class="card-body">
+      Varies the <strong>phase</strong> of the carrier. Bit 1 = 0° phase, Bit 0 = 180° phase shift.<br><br>
+      <strong>BPSK (Binary):</strong> 2 phases → 1 bit per symbol.<br>
+      <strong>QPSK (Quadrature):</strong> 4 phases (0°, 90°, 180°, 270°) → 2 bits per symbol → double data rate for same bandwidth.<br><br>
+      <strong>Bandwidth:</strong> Same as ASK minimum: B = S. But QPSK carries 2 bits/symbol so effective data rate = 2 × baud rate.<br>
+      <strong>Noise susceptibility:</strong> LOW — phase is harder to corrupt than amplitude or frequency. Most robust.<br>
+      <strong>Use:</strong> Wi-Fi (802.11), 4G LTE, satellite, Bluetooth.
+    </div>
+  </div>
+
+  <h3>QAM — Quadrature Amplitude Modulation (bonus)</h3>
+  <div class="card">
+    <div class="card-body">
+      Combines ASK + PSK — varies both amplitude AND phase simultaneously. Allows many bits per symbol.<br>
+      QAM-16: 4 amplitude levels × 4 phase levels = 16 combinations = 4 bits/symbol.<br>
+      QAM-64: 64 combinations = 6 bits/symbol. Used in cable TV (DOCSIS) and 4G/5G.
+    </div>
+  </div>
+
+  <h3>Comparison table — what examiners want</h3>
+  <table>
+    <tr><th>Feature</th><th>ASK</th><th>FSK</th><th>PSK (BPSK)</th></tr>
+    <tr><td>Property varied</td><td>Amplitude</td><td>Frequency</td><td>Phase</td></tr>
+    <tr><td>Bandwidth (min)</td><td>B = S (baud rate)</td><td>B = f₁−f₀ + 2S</td><td>B = S</td></tr>
+    <tr><td>Bits per symbol</td><td>1 (binary)</td><td>1 (binary)</td><td>1 (BPSK) / 2 (QPSK)</td></tr>
+    <tr><td>Noise susceptibility</td><td>Highest — amplitude corrupts easily</td><td>Medium — freq. more stable</td><td>Lowest — phase most robust</td></tr>
+    <tr><td>Implementation</td><td>Simplest</td><td>Moderate</td><td>Complex</td></tr>
+    <tr><td>Efficiency</td><td>Low</td><td>Low (wider BW)</td><td>High (QPSK)</td></tr>
+    <tr><td>Typical use</td><td>Optical/RFID</td><td>Radio modems</td><td>Wi-Fi, 4G, satellite</td></tr>
+  </table>
+</div>
+
+<div id="numerical" class="panel">
+  <h3>FDM Bandwidth Calculation</h3>
+  <div class="warn-box"><p>This exact type of numerical appeared in Batch-22 Q3 and Mids Q4. Know the FDM formula cold.</p></div>
+
+  <div class="num-worked">
+    <div class="lbl">Worked example — Batch-22 Mids Q4(b) style</div>
+    <p><strong>Problem:</strong> A voice network with 20 source-destination pairs uses FDM to exchange voice data. A voice channel has bandwidth 5 kHz. Guard band = 300 Hz. Find the total bandwidth required.</p><br>
+    <div class="step-row"><span class="step-num">1</span><p><strong>Identify values:</strong> n = 20 channels, channel BW = 5 kHz = 5000 Hz, guard band = 300 Hz</p></div>
+    <div class="step-row"><span class="step-num">2</span><p><strong>Formula:</strong> Total BW = n × (channel BW) + (n − 1) × guard band BW</p></div>
+    <div class="step-row"><span class="step-num">3</span><p><strong>Substitute:</strong> Total BW = 20 × 5000 + (20 − 1) × 300</p></div>
+    <div class="step-row"><span class="step-num">4</span><p><strong>Calculate:</strong> = 100,000 + 19 × 300 = 100,000 + 5,700</p></div>
+    <div class="step-row"><span class="step-num">5</span><p><strong>Answer:</strong> Total BW = <strong>105,700 Hz = 105.7 kHz</strong></p></div>
+  </div>
+
+  <h3>Interactive FDM Calculator</h3>
+  <div class="calc-box">
+    <div class="calc-row">
+      <span class="calc-label">Number of channels (n)</span>
+      <input type="number" id="n-ch" value="20" min="1" style="width:80px;font-size:13px" oninput="calcFDM()">
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">Channel BW (Hz)</span>
+      <input type="number" id="ch-bw" value="5000" min="1" style="width:100px;font-size:13px" oninput="calcFDM()">
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">Guard band (Hz)</span>
+      <input type="number" id="gb" value="300" min="0" style="width:80px;font-size:13px" oninput="calcFDM()">
+    </div>
+    <div style="border-top:0.5px solid var(--color-border-secondary);margin:8px 0 10px"></div>
+    <div class="calc-row">
+      <span class="calc-label">Channel portion</span>
+      <span class="calc-val" id="r-ch">100,000 Hz</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">Guard band portion</span>
+      <span class="calc-val" id="r-gb">5,700 Hz</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label" style="font-weight:500;color:var(--color-text-primary)">Total BW</span>
+      <span class="calc-val" id="r-total" style="font-size:16px;color:#0C447C">105,700 Hz</span>
+    </div>
+    <div class="calc-row">
+      <span class="calc-label"></span>
+      <span style="font-size:12px;color:var(--color-text-secondary)" id="r-khz">= 105.70 kHz</span>
+    </div>
+  </div>
+
+  <h3>TDM Frame Rate Calculation</h3>
+  <div class="num-worked">
+    <div class="lbl">Worked example — TDM link rate</div>
+    <p><strong>Problem:</strong> 4 channels, each sending at 100 kbps, are multiplexed using synchronous TDM. Each frame has 1 bit per channel. What is the link (frame) rate?</p><br>
+    <div class="step-row"><span class="step-num">1</span><p><strong>Frame size:</strong> 1 bit × 4 channels = 4 bits per frame</p></div>
+    <div class="step-row"><span class="step-num">2</span><p><strong>Link rate:</strong> = sum of all channel rates = 4 × 100 kbps = <strong>400 kbps</strong></p></div>
+    <div class="step-row"><span class="step-num">3</span><p><strong>Frame rate:</strong> = link rate / frame size = 400,000 / 4 = <strong>100,000 frames/sec</strong></p></div>
+    <p style="margin-top:6px"><strong>General formula:</strong> Link rate = n × individual channel rate (for synchronous TDM with equal rates)</p>
+  </div>
+
+  <h3>ASK / FSK / PSK Bandwidth</h3>
+  <div class="num-worked">
+    <div class="lbl">Worked example — Mids Q4(a) style</div>
+    <p><strong>Problem:</strong> Data rate = 1 Mbps. Find minimum bandwidth for ASK, FSK (Δf=200 kHz), BPSK, QPSK.</p><br>
+    <div class="step-row"><span class="step-num">1</span><p><strong>Baud rate (S):</strong> For binary (1 bit/symbol): S = 1 Mbps ÷ 1 = 1 Mbaud</p></div>
+    <div class="step-row"><span class="step-num">2</span><p><strong>ASK BW:</strong> B = S = <strong>1 MHz</strong></p></div>
+    <div class="step-row"><span class="step-num">3</span><p><strong>FSK BW:</strong> B = 2Δf + S = 2(200,000) + 1,000,000 = <strong>1.4 MHz</strong></p></div>
+    <div class="step-row"><span class="step-num">4</span><p><strong>BPSK BW:</strong> B = S = <strong>1 MHz</strong> (same as ASK)</p></div>
+    <div class="step-row"><span class="step-num">5</span><p><strong>QPSK BW:</strong> Baud rate = 1 Mbps ÷ 2 bits/symbol = 0.5 Mbaud → B = <strong>0.5 MHz</strong> (QPSK is twice as efficient!)</p></div>
+  </div>
+</div>
+
+<div id="quiz" class="panel">
+  <div class="quiz-area">
+    <div class="quiz-q">Q1: Which multiplexing technique requires synchronization between sender and receiver?</div>
+    <div class="opt" onclick="ans(this,'wrong','f1')">FDM — frequency bands need synchronization</div>
+    <div class="opt" onclick="ans(this,'correct','f1')">TDM — time slots must be synchronized between MUX and DEMUX</div>
+    <div class="opt" onclick="ans(this,'wrong','f1')">WDM — wavelengths must be synced optically</div>
+    <div class="opt" onclick="ans(this,'wrong','f1')">All three require synchronization</div>
+    <div class="fb" id="f1"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q2: 10 channels, each 4 kHz wide, multiplexed using FDM with 500 Hz guard bands. Total bandwidth?</div>
+    <div class="opt" onclick="ans(this,'wrong','f2')">40,000 Hz — just 10 × 4 kHz</div>
+    <div class="opt" onclick="ans(this,'wrong','f2')">44,500 Hz — 10 × 4000 + 10 × 500</div>
+    <div class="opt" onclick="ans(this,'correct','f2')">44,500 Hz — 10×4000 + 9×500 = 40,000 + 4,500 = 44,500 Hz</div>
+    <div class="opt" onclick="ans(this,'wrong','f2')">45,000 Hz — 10 × 4500</div>
+    <div class="fb" id="f2"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q3: Which modulation scheme has the lowest noise susceptibility and why?</div>
+    <div class="opt" onclick="ans(this,'wrong','f3')">ASK — simplest to implement</div>
+    <div class="opt" onclick="ans(this,'wrong','f3')">FSK — uses two different frequencies</div>
+    <div class="opt" onclick="ans(this,'correct','f3')">PSK — phase is the hardest property for noise to corrupt compared to amplitude or frequency</div>
+    <div class="opt" onclick="ans(this,'wrong','f3')">QAM — uses both amplitude and phase</div>
+    <div class="fb" id="f3"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q4: QPSK sends 2 bits per symbol. If data rate = 4 Mbps, what is the minimum bandwidth?</div>
+    <div class="opt" onclick="ans(this,'wrong','f4')">4 MHz — same as BPSK</div>
+    <div class="opt" onclick="ans(this,'correct','f4')">2 MHz — baud rate = 4 Mbps ÷ 2 bits/symbol = 2 Mbaud → B = 2 MHz</div>
+    <div class="opt" onclick="ans(this,'wrong','f4')">8 MHz — QPSK uses twice the bandwidth</div>
+    <div class="opt" onclick="ans(this,'wrong','f4')">1 MHz — QPSK compresses to quarter bandwidth</div>
+    <div class="fb" id="f4"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q5: What is the main difference between FDM and TDM in terms of signal type?</div>
+    <div class="opt" onclick="ans(this,'correct','f5')">FDM is used for analog signals; TDM is used for digital signals</div>
+    <div class="opt" onclick="ans(this,'wrong','f5')">FDM is digital; TDM is analog</div>
+    <div class="opt" onclick="ans(this,'wrong','f5')">Both work on the same signal types</div>
+    <div class="opt" onclick="ans(this,'wrong','f5')">FDM is for optical; TDM is for wireless</div>
+    <div class="fb" id="f5"></div>
+  </div>
+</div>
+
+<div id="answers" class="panel">
+  <h3>Q3(a) — Model answer: multiplexing (5 marks)</h3>
+  <div class="exam-box">
+    <div class="lbl">Exam answer framework</div>
+    <p><strong>Define multiplexing (1 mark):</strong> Multiplexing is a technique that allows multiple signals from different sources to be transmitted simultaneously over a single shared communication channel. A MUX combines signals at the sender; a DEMUX separates them at the receiver.</p><br>
+    <p><strong>FDM (1.5 marks):</strong> Divides available bandwidth into non-overlapping frequency bands. Each channel gets a dedicated band separated by guard bands to prevent interference. Analog signals. No synchronization needed. Total BW = n×(channel BW) + (n−1)×guard band. Used in radio, TV, cable.</p><br>
+    <p><strong>TDM (1.5 marks):</strong> Divides time into slots organized in repeating frames. Each channel gets a slot in every frame. Digital signals. Synchronization required. Link rate = sum of all channel rates. Two types: synchronous (fixed slots) and statistical/asynchronous (dynamic allocation). Used in ISDN, T1, telephony.</p><br>
+    <p><strong>WDM (1 mark):</strong> Uses different wavelengths of light on optical fiber — conceptually identical to FDM but for photons. DWDM packs 160+ channels. Extremely high data rate. Used in internet backbone fiber.</p><br>
+    <p><strong>Comparison (examiners love this):</strong> FDM — analog, no sync, guard bands, medium cost. TDM — digital, sync needed, no guard bands, low cost. WDM — optical only, highest capacity.</p>
+  </div>
+
+  <h3>Q3(b) — Model answer: modulation (5 marks)</h3>
+  <div class="exam-box">
+    <div class="lbl">Exam answer framework</div>
+    <p><strong>Define modulation (0.5 mark):</strong> Modulation encodes digital data onto an analog carrier wave by varying one of its properties (amplitude, frequency, or phase).</p><br>
+    <p><strong>ASK (1 mark):</strong> Varies amplitude. Bit 1 = high, Bit 0 = low/zero. BW = S (baud rate). Highest noise susceptibility — amplitude is most affected by channel noise and attenuation.</p><br>
+    <p><strong>FSK (1.5 marks):</strong> Varies frequency. Bit 1 = f₁, Bit 0 = f₀. BW = f₁−f₀ + 2S (wider than ASK). Medium noise susceptibility — frequency is more stable than amplitude but requires more bandwidth.</p><br>
+    <p><strong>PSK (1.5 marks):</strong> Varies phase. BPSK: 2 phases, 1 bit/symbol, BW = S. QPSK: 4 phases, 2 bits/symbol, BW = S/2 (half the bandwidth for same data rate). Lowest noise susceptibility — phase is hardest to corrupt. Most spectrally efficient.</p><br>
+    <p><strong>If asked to draw waveforms:</strong> Draw a sine wave carrier, then show the transitions at each bit boundary. ASK: amplitude drops for 0. FSK: wavelength shortens for 1. PSK: waveform inverts (180° shift) for 0.</p>
+  </div>
+
+  <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
+    <button class="btn btn-primary" onclick="sendPrompt('Now start preparing Q5 — Dijkstra algorithm and Bellman-Ford distance vector routing with step-by-step examples')">Next: Q5 Routing</button>
+    <button class="btn btn-primary" onclick="sendPrompt('Now start preparing Q4 — IP addressing, classful addressing, subnetting and CIDR with examples')">Next: Q4 Subnetting</button>
+    <button class="btn" onclick="sendPrompt('Give me a harder FDM numerical: 15 channels, each 8 kHz, guard band 1 kHz — solve step by step')">More FDM numericals</button>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+const dark = matchMedia('(prefers-color-scheme:dark)').matches;
+const textCol = dark?'#c2c0b6':'#3d3d3a';
+const gridCol = dark?'rgba(255,255,255,0.07)':'rgba(0,0,0,0.06)';
+const bgCol   = dark?'#1a1a18':'#ffffff';
+
+function drawMux(){
+  const c = document.getElementById('mux-canvas');
+  const W=680, H=180; c.width=W; c.height=H;
+  const cx = c.getContext('2d');
+  cx.fillStyle=bgCol; cx.fillRect(0,0,W,H);
+
+  const colors = ['#378ADD','#1D9E75','#EF9F27','#D85A30'];
+  const labels = ['Ch 1','Ch 2','Ch 3','Ch 4'];
+
+  cx.font='11px sans-serif'; cx.fillStyle=textCol; cx.textAlign='center';
+  cx.fillText('FDM — frequency bands',120,16);
+  const freqBands=[{y:28,h:30},{y:62,h:30},{y:96,h:30},{y:130,h:30}];
+  freqBands.forEach((b,i)=>{
+    cx.fillStyle=colors[i]+(dark?'55':'33');
+    cx.fillRect(20,b.y,190,b.h);
+    cx.strokeStyle=colors[i]; cx.lineWidth=1;
+    cx.strokeRect(20,b.y,190,b.h);
+    cx.fillStyle=colors[i]; cx.font='10px sans-serif'; cx.textAlign='left';
+    cx.fillText(labels[i]+' (f'+(i+1)+')',26,b.y+b.h/2+4);
+    if(i<3){
+      cx.fillStyle=textCol; cx.globalAlpha=0.3;
+      cx.fillRect(20,b.y+b.h,190,2);
+      cx.globalAlpha=1;
+    }
+  });
+  cx.fillStyle=textCol; cx.font='9px sans-serif'; cx.textAlign='center';
+  cx.fillText('guard band',115,64);
+
+  cx.font='11px sans-serif'; cx.fillStyle=textCol; cx.textAlign='center';
+  cx.fillText('TDM — time slots in a frame',395,16);
+  const frameX=240, slotW=43, slotH=60, frameY=35;
+  labels.forEach((l,i)=>{
+    cx.fillStyle=colors[i]+(dark?'55':'33');
+    cx.fillRect(frameX+i*slotW,frameY,slotW,slotH);
+    cx.strokeStyle=colors[i]; cx.lineWidth=0.5;
+    cx.strokeRect(frameX+i*slotW,frameY,slotW,slotH);
+    cx.fillStyle=colors[i]; cx.font='10px sans-serif'; cx.textAlign='center';
+    cx.fillText(l,frameX+i*slotW+slotW/2,frameY+slotH/2+4);
+  });
+  cx.strokeStyle=textCol; cx.lineWidth=0.5; cx.setLineDash([3,3]);
+  cx.strokeRect(frameX,frameY,slotW*4,slotH);
+  cx.setLineDash([]);
+  cx.fillStyle=textCol; cx.font='9px sans-serif'; cx.textAlign='center';
+  cx.fillText('← Frame →',frameX+slotW*2,frameY+slotH+14);
+
+  labels.forEach((l,i)=>{
+    cx.fillStyle=colors[i]+(dark?'55':'33');
+    cx.fillRect(frameX+i*slotW,frameY+slotH+22,slotW,slotH-10);
+    cx.strokeStyle=colors[i]; cx.lineWidth=0.5;
+    cx.strokeRect(frameX+i*slotW,frameY+slotH+22,slotW,slotH-10);
+  });
+  cx.fillStyle=textCol; cx.font='9px sans-serif'; cx.textAlign='center';
+  cx.fillText('next frame →',frameX+slotW*2,frameY+slotH*2+22);
+
+  cx.font='11px sans-serif'; cx.fillStyle=textCol; cx.textAlign='center';
+  cx.fillText('WDM — light wavelengths',600,16);
+  const wColors=['#E24B4A','#EF9F27','#639922','#378ADD'];
+  const wLabels=['λ1 (red)','λ2 (amber)','λ3 (green)','λ4 (blue)'];
+  const fiberX=520, fiberW=140;
+  wColors.forEach((col,i)=>{
+    const y=30+i*34;
+    cx.strokeStyle=col; cx.lineWidth=2;
+    cx.beginPath(); cx.moveTo(fiberX,y+10); cx.lineTo(fiberX+fiberW,y+10); cx.stroke();
+    cx.fillStyle=col; cx.font='9px sans-serif'; cx.textAlign='left';
+    cx.fillText(wLabels[i],fiberX+fiberW+4,y+14);
+  });
+  cx.strokeStyle=textCol; cx.lineWidth=0.5;
+  cx.strokeRect(fiberX-2,24,fiberW+4,4*34);
+  cx.fillStyle=textCol; cx.font='9px sans-serif'; cx.textAlign='center';
+  cx.fillText('optical fiber',fiberX+fiberW/2,172);
+}
+
+function drawMod(){
+  const c = document.getElementById('mod-canvas');
+  const W=680,H=260; c.width=W; c.height=H;
+  const cx = c.getContext('2d');
+  cx.fillStyle=bgCol; cx.fillRect(0,0,W,H);
+
+  const bits=[1,0,1,1,0];
+  const bitW=80, startX=60;
+  const rowH=70, rowY=[30,110,190];
+  const labels=['ASK','FSK','PSK'];
+  const rowCols=['#378ADD','#1D9E75','#7F77DD'];
+
+  bits.forEach((b,i)=>{
+    const x=startX+i*bitW;
+    cx.fillStyle=b?'#EAF3DE':'#FCEBEB';
+    cx.fillRect(x,10,bitW,16);
+    cx.strokeStyle=b?'#639922':'#A32D2D'; cx.lineWidth=0.5;
+    cx.strokeRect(x,10,bitW,16);
+    cx.fillStyle=b?'#27500A':'#791F1F'; cx.font='11px sans-serif'; cx.textAlign='center';
+    cx.fillText(b?'1':'0',x+bitW/2,22);
+  });
+  cx.fillStyle=textCol; cx.font='10px sans-serif'; cx.textAlign='left';
+  cx.fillText('Bits:',startX-38,22);
+
+  function wave(cx,x,y,freq,amp,phase,len){
+    cx.beginPath();
+    for(let i=0;i<=len;i++){
+      const px=x+i;
+      const py=y-Math.sin((i/len)*freq*Math.PI*2+phase)*amp;
+      i===0?cx.moveTo(px,py):cx.lineTo(px,py);
+    }
+    cx.stroke();
+  }
+
+  labels.forEach((lbl,row)=>{
+    const cy=rowY[row]+rowH/2;
+    cx.strokeStyle=gridCol; cx.lineWidth=0.5;
+    cx.beginPath(); cx.moveTo(startX,cy); cx.lineTo(startX+bits.length*bitW,cy); cx.stroke();
+
+    cx.fillStyle=rowCols[row]; cx.font='11px sans-serif'; cx.textAlign='right';
+    cx.fillText(lbl,startX-8,cy+4);
+
+    bits.forEach((b,i)=>{
+      const x=startX+i*bitW;
+      cx.strokeStyle=rowCols[row]; cx.lineWidth=1.5;
+      if(row===0){
+        const amp=b?18:4;
+        wave(cx,x,cy,3,amp,0,bitW);
+      } else if(row===1){
+        const freq=b?4:2;
+        wave(cx,x,cy,freq,16,0,bitW);
+      } else {
+        const phase=b?0:Math.PI;
+        wave(cx,x,cy,3,16,phase,bitW);
+      }
+    });
+  });
+
+  cx.fillStyle=textCol; cx.font='9px sans-serif'; cx.textAlign='center';
+  cx.fillText('ASK: amplitude high=1, low=0',W/2,258);
+}
+
+function calcFDM(){
+  const n=parseInt(document.getElementById('n-ch').value)||0;
+  const bw=parseFloat(document.getElementById('ch-bw').value)||0;
+  const gb=parseFloat(document.getElementById('gb').value)||0;
+  const chPart=n*bw, gbPart=(n-1)*gb, total=chPart+gbPart;
+  document.getElementById('r-ch').textContent=chPart.toLocaleString()+' Hz';
+  document.getElementById('r-gb').textContent=gbPart.toLocaleString()+' Hz';
+  document.getElementById('r-total').textContent=total.toLocaleString()+' Hz';
+  document.getElementById('r-khz').textContent='= '+(total/1000).toFixed(2)+' kHz';
+}
+
+const feedbacks={
+  f1:{correct:'Correct. TDM requires frame synchronization — the DEMUX must know when each frame starts to assign slots correctly. FDM and WDM do not need this.',
+      wrong:'Wrong. Only TDM needs synchronization — the DEMUX must know exactly when each time slot starts. FDM uses separate frequency bands which are self-separating.'},
+  f2:{correct:'Correct. Total BW = n×channelBW + (n−1)×guardBW = 10×4000 + 9×500 = 40,000 + 4,500 = 44,500 Hz. Key: guard bands = n−1, not n.',
+      wrong:'Wrong. Formula: n×channelBW + (n−1)×guardBW. Guard bands go between channels, so there are n−1 of them. = 10×4000 + 9×500 = 44,500 Hz.'},
+  f3:{correct:'Correct. PSK has the lowest noise susceptibility because phase is inherently more stable than amplitude (which degrades with attenuation) or frequency (which can drift).',
+      wrong:'Wrong. PSK has the lowest noise susceptibility. Phase is the hardest signal property to corrupt — amplitude is easiest (noise adds/subtracts directly to amplitude).'},
+  f4:{correct:'Correct. QPSK: 2 bits per symbol → baud rate = data rate ÷ 2 = 4M÷2 = 2 Mbaud → BW = 2 MHz. QPSK halves the bandwidth requirement vs BPSK.',
+      wrong:'Wrong. QPSK sends 2 bits per symbol. Baud rate = data rate ÷ bits/symbol = 4 Mbps ÷ 2 = 2 Mbaud. Bandwidth = baud rate = 2 MHz.'},
+  f5:{correct:'Correct. FDM works with analog signals (divides frequency spectrum). TDM works with digital signals (divides time into slots).',
+      wrong:'Wrong. FDM is for analog signals — it divides the frequency spectrum. TDM is for digital signals — it divides time into slots.'},
+};
+
+function ans(el,verdict,id){
+  el.closest('.quiz-area').querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(verdict);
+  const fb=document.getElementById(id);
+  fb.textContent=feedbacks[id][verdict];
+  fb.className='fb '+(verdict==='correct'?'fb-ok':'fb-no');
+}
+
+drawMux();
+drawMod();
+calcFDM();
+</script>

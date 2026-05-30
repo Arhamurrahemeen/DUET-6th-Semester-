@@ -1,0 +1,351 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans); color: var(--color-text-primary); }
+  .container { padding: 1.5rem 0; }
+  h2 { font-size: 18px; font-weight: 500; margin-bottom: 1rem; color: var(--color-text-primary); }
+  h3 { font-size: 15px; font-weight: 500; margin: 1.2rem 0 0.5rem; color: var(--color-text-primary); }
+  .section { margin-bottom: 2rem; }
+
+  .topic-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .topic-card { border-radius: var(--border-radius-lg); padding: 12px 14px; cursor: pointer; transition: opacity 0.15s; border: 0.5px solid; }
+  .topic-card:hover { opacity: 0.85; }
+  .topic-card .label { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .topic-card .sub { font-size: 11px; }
+  .topic-card .tags { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 6px; }
+  .tag { font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 500; }
+
+  .high { background: #FAECE7; border-color: #F0997B; }
+  .high .label { color: #712B13; }
+  .high .sub { color: #993C1D; }
+  .high .tag { background: #F0997B; color: #4A1B0C; }
+  @media (prefers-color-scheme: dark) {
+    .high { background: #4A1B0C; border-color: #D85A30; }
+    .high .label { color: #F5C4B3; }
+    .high .sub { color: #F0997B; }
+    .high .tag { background: #993C1D; color: #F5C4B3; }
+  }
+
+  .medium { background: #FAEEDA; border-color: #EF9F27; }
+  .medium .label { color: #633806; }
+  .medium .sub { color: #854F0B; }
+  .medium .tag { background: #EF9F27; color: #412402; }
+  @media (prefers-color-scheme: dark) {
+    .medium { background: #412402; border-color: #BA7517; }
+    .medium .label { color: #FAC775; }
+    .medium .sub { color: #EF9F27; }
+    .medium .tag { background: #854F0B; color: #FAC775; }
+  }
+
+  .low { background: #E1F5EE; border-color: #1D9E75; }
+  .low .label { color: #04342C; }
+  .low .sub { color: #0F6E56; }
+  .low .tag { background: #5DCAA5; color: #04342C; }
+  @media (prefers-color-scheme: dark) {
+    .low { background: #04342C; border-color: #1D9E75; }
+    .low .label { color: #9FE1CB; }
+    .low .sub { color: #5DCAA5; }
+    .low .tag { background: #0F6E56; color: #9FE1CB; }
+  }
+
+  .q-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .q-item { border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; border: 0.5px solid var(--color-border-secondary); cursor: pointer; transition: background 0.15s; }
+  .q-item:hover { background: var(--color-background-secondary); }
+  .q-item .q-label { font-weight: 500; margin-bottom: 3px; color: var(--color-text-primary); }
+  .q-item .q-note { color: var(--color-text-secondary); font-size: 11px; }
+  .badge { display: inline-block; font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 500; margin-right: 5px; vertical-align: middle; }
+  .b-high { background: #F0997B; color: #4A1B0C; }
+  .b-med { background: #FAC775; color: #412402; }
+  .b-num { background: #AFA9EC; color: #26215C; }
+  @media (prefers-color-scheme: dark) {
+    .b-high { background: #D85A30; color: #FAECE7; }
+    .b-med { background: #BA7517; color: #FAEEDA; }
+    .b-num { background: #534AB7; color: #EEEDFE; }
+  }
+
+  .coverage-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .coverage-table th { font-weight: 500; text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--color-border-secondary); color: var(--color-text-secondary); }
+  .coverage-table td { padding: 7px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-primary); vertical-align: top; }
+  .coverage-table tr:last-child td { border-bottom: none; }
+  .pill { display: inline-block; font-size: 10px; padding: 1px 7px; border-radius: 99px; margin: 1px 2px; }
+  .p-yes { background: #EAF3DE; color: #27500A; }
+  .p-no { background: #FCEBEB; color: #791F1F; }
+  .p-partial { background: #FAEEDA; color: #633806; }
+  @media (prefers-color-scheme: dark) {
+    .p-yes { background: #173404; color: #C0DD97; }
+    .p-no { background: #501313; color: #F7C1C1; }
+    .p-partial { background: #412402; color: #FAC775; }
+  }
+
+  .paper-box { border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-secondary); overflow: hidden; margin-bottom: 12px; }
+  .paper-header { padding: 10px 14px; background: var(--color-background-secondary); font-size: 13px; font-weight: 500; }
+  .paper-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+  .paper-q { font-size: 12px; color: var(--color-text-secondary); padding: 6px 10px; border-radius: var(--border-radius-md); background: var(--color-background-tertiary); }
+  .paper-q strong { color: var(--color-text-primary); font-weight: 500; }
+
+  .alert { border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 12px; margin-bottom: 10px; }
+  .alert-warn { background: #FAEEDA; color: #633806; border: 0.5px solid #EF9F27; }
+  @media (prefers-color-scheme: dark) { .alert-warn { background: #412402; color: #FAC775; border-color: #BA7517; } }
+  .alert-info { background: #E6F1FB; color: #0C447C; border: 0.5px solid #378ADD; }
+  @media (prefers-color-scheme: dark) { .alert-info { background: #042C53; color: #B5D4F4; border-color: #185FA5; } }
+
+  .btn { display: inline-block; font-size: 12px; font-weight: 500; padding: 7px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-primary); cursor: pointer; background: var(--color-background-secondary); color: var(--color-text-primary); transition: background 0.15s; margin: 3px; }
+  .btn:hover { background: var(--color-background-tertiary); }
+  .btn-primary { background: #534AB7; color: #EEEDFE; border-color: #3C3489; }
+  .btn-primary:hover { background: #3C3489; }
+
+  .tabs { display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap; }
+  .tab { font-size: 12px; padding: 5px 12px; border-radius: 99px; cursor: pointer; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); transition: all 0.15s; }
+  .tab.active { background: var(--color-text-primary); color: var(--color-background-primary); border-color: transparent; }
+
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
+</style>
+
+<div class="container">
+  <div class="alert alert-info">
+    📁 Analyzed: Lec-01 (syllabus), Lec-12 (Network Layer), Lec-14 (Routing), Lec-15 (Transport), Lec-16 (Security) + Midterm paper (Batch-23) + Final paper (Batch-22) + Assignment-01. <strong>Lec-13 (IP Addressing & Subnetting) is missing — request it ASAP.</strong>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('topics')">🔥 Hot topics</button>
+    <button class="tab" onclick="showTab('predicted')">🎯 Predicted paper</button>
+    <button class="tab" onclick="showTab('coverage')">📚 Lecture coverage</button>
+    <button class="tab" onclick="showTab('prepare')">⚡ Start prep</button>
+  </div>
+
+  <!-- TAB 1: HOT TOPICS -->
+  <div id="tab-topics" class="section-panel active">
+    <h3>High priority — almost certain to appear (C-6 level: Design/Evaluate)</h3>
+    <div class="topic-grid">
+      <div class="topic-card high" onclick="sendPrompt('Explain Dijkstra algorithm with a step-by-step example like in the exam')">
+        <div class="label">Dijkstra's Algorithm</div>
+        <div class="sub">Appeared in Batch-22 final Q5(a). In Lec-14 with full example table.</div>
+        <div class="tags">
+          <span class="tag">Lec-14 ✓</span>
+          <span class="tag">Past paper</span>
+          <span class="tag">C-6 Design</span>
+        </div>
+      </div>
+      <div class="topic-card high" onclick="sendPrompt('Explain Bellman-Ford distance vector routing with step-by-step shortest path tables like in the exam')">
+        <div class="label">Bellman-Ford / Distance Vector Routing</div>
+        <div class="sub">Appeared in Batch-22 final Q5(b). Lec-14 covers Bellman-Ford equation & steps.</div>
+        <div class="tags">
+          <span class="tag">Lec-14 ✓</span>
+          <span class="tag">Past paper</span>
+          <span class="tag">C-6 Design</span>
+        </div>
+      </div>
+      <div class="topic-card high" onclick="sendPrompt('Explain IP addressing: classful addressing, subnetting and CIDR with examples from the final paper')">
+        <div class="label">IP Addressing & Subnetting (CIDR)</div>
+        <div class="sub">Q4(a) and Q4(b) Batch-22 final. Heavy numerical. Covered in Lec-13 (MISSING!).</div>
+        <div class="tags">
+          <span class="tag">Lec-13 ❌ MISSING</span>
+          <span class="tag">Past paper</span>
+          <span class="tag">Numerical</span>
+        </div>
+      </div>
+      <div class="topic-card high" onclick="sendPrompt('Explain TCP congestion control: slow start, congestion avoidance, fast retransmit with the cwnd graph')">
+        <div class="label">TCP Congestion Control</div>
+        <div class="sub">Q2(a) Batch-22 final — cwnd graph, ssthresh, timeout, 3 dup ACKs. Lec-15 covers TCP but congestion details may be in Lec-13.</div>
+        <div class="tags">
+          <span class="tag">Lec-15 partial</span>
+          <span class="tag">Past paper</span>
+          <span class="tag">Graph analysis</span>
+        </div>
+      </div>
+      <div class="topic-card high" onclick="sendPrompt('Explain substitution cipher encryption and decryption with an example using my name')">
+        <div class="label">Cryptography — Substitution Cipher</div>
+        <div class="sub">Q2(b) Batch-22 final — encrypt your own name. Additive/shift cipher in Lec-16.</div>
+        <div class="tags">
+          <span class="tag">Lec-16 ✓</span>
+          <span class="tag">Past paper</span>
+          <span class="tag">Numerical</span>
+        </div>
+      </div>
+      <div class="topic-card high" onclick="sendPrompt('Explain Transport Layer: role, TCP vs UDP, socket addresses, three-way handshake, client-server vs peer-to-peer')">
+        <div class="label">Transport Layer — TCP & Application Paradigms</div>
+        <div class="sub">Q1(a) Batch-22 — TCP/IP sockets, client-server vs peer-to-peer. Full Lec-15.</div>
+        <div class="tags">
+          <span class="tag">Lec-15 ✓</span>
+          <span class="tag">Past paper</span>
+          <span class="tag">C-2 Understand</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Medium priority — strong chance (repeat patterns from both papers)</h3>
+    <div class="topic-grid">
+      <div class="topic-card medium" onclick="sendPrompt('Compare MANET and VANET with significance and real-life applications')">
+        <div class="label">MANET vs VANET</div>
+        <div class="sub">Q1(b) Batch-22 final. In syllabus. Not directly in uploaded lectures.</div>
+        <div class="tags"><span class="tag">No lecture ❌</span><span class="tag">Past paper</span></div>
+      </div>
+      <div class="topic-card medium" onclick="sendPrompt('Explain multiplexing: FDM, TDM, WDM with data rate, bandwidth and channel capacity comparison')">
+        <div class="label">Multiplexing (FDM / TDM / WDM)</div>
+        <div class="sub">Q3(a) Batch-22 & Assignment Q2 & Mids Q4. Repeats across ALL papers.</div>
+        <div class="tags"><span class="tag">No lecture ❌</span><span class="tag">3x repeat</span><span class="tag">Numerical</span></div>
+      </div>
+      <div class="topic-card medium" onclick="sendPrompt('Explain network security: CIA goals, attack types (snooping, DoS, masquerading), IPSec, SSL, firewalls')">
+        <div class="label">Network Security — Goals, Attacks & IPSec</div>
+        <div class="sub">Lec-16 covers fully. Syllabus endpoint. Likely a full question.</div>
+        <div class="tags"><span class="tag">Lec-16 ✓</span><span class="tag">Syllabus end</span></div>
+      </div>
+      <div class="topic-card medium" onclick="sendPrompt('Explain OSI model: select 4 layers, describe roles, addressing, and data transfer direction')">
+        <div class="label">OSI Model (4 layers deep)</div>
+        <div class="sub">Mids Q1(a). Likely revised/extended version in finals. Core concept.</div>
+        <div class="tags"><span class="tag">Lec-12 partial</span><span class="tag">Mids repeat</span></div>
+      </div>
+      <div class="topic-card medium" onclick="sendPrompt('Explain link-state routing vs distance-vector routing with OSPF and RIP protocols')">
+        <div class="label">Link-State Routing (OSPF)</div>
+        <div class="sub">Lec-14 fully covers OSPF, link-state DB, LSAs. Complementary to DV routing.</div>
+        <div class="tags"><span class="tag">Lec-14 ✓</span><span class="tag">C-3 Analyze</span></div>
+      </div>
+      <div class="topic-card medium" onclick="sendPrompt('Explain network performance: delay types, throughput, packet loss, and congestion control methods')">
+        <div class="label">Network Layer Performance</div>
+        <div class="sub">Lec-12 — delay (transmission, propagation, processing, queuing), throughput.</div>
+        <div class="tags"><span class="tag">Lec-12 ✓</span><span class="tag">C-3 Analyze</span></div>
+      </div>
+    </div>
+
+    <h3>Lower priority — possible but less likely</h3>
+    <div class="topic-grid">
+      <div class="topic-card low" onclick="sendPrompt('Explain ASK, PSK, FSK modulation: bandwidth and noise susceptibility')">
+        <div class="label">Modulation (ASK/FSK/PSK)</div>
+        <div class="sub">Mids + Assignment. Pre-mids topic — may appear briefly or as part-b.</div>
+        <div class="tags"><span class="tag">No lecture ❌</span><span class="tag">Pre-mids</span></div>
+      </div>
+      <div class="topic-card low" onclick="sendPrompt('Explain CRC error detection with example: data 1011, divisor 1011')">
+        <div class="label">CRC Error Detection</div>
+        <div class="sub">Assignment Q3/Q4 + Mids Q3. Pre-mids but numerical — could be a part-b.</div>
+        <div class="tags"><span class="tag">No lecture ❌</span><span class="tag">Pre-mids</span></div>
+      </div>
+      <div class="topic-card low" onclick="sendPrompt('Explain digital signature and message digest for data integrity')">
+        <div class="label">Digital Signatures & Data Integrity</div>
+        <div class="sub">Lec-16 — message digest, digital signature comparison. Security subtopic.</div>
+        <div class="tags"><span class="tag">Lec-16 ✓</span><span class="tag">Subtopic</span></div>
+      </div>
+      <div class="topic-card low" onclick="sendPrompt('Explain BGP and path-vector routing for interdomain routing')">
+        <div class="label">BGP / Path-Vector Routing</div>
+        <div class="sub">Lec-14. Interdomain routing. Less likely to be a standalone question.</div>
+        <div class="tags"><span class="tag">Lec-14 ✓</span><span class="tag">Subtopic</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: PREDICTED PAPER -->
+  <div id="tab-predicted" class="section-panel">
+    <div class="alert alert-warn">
+      ⚠️ Based on pattern analysis: Batch-22 final + Batch-23 mids + assignment. Finals are 50 marks, 5 questions, 10 marks each (5 per part). Taxonomy is C-3 to C-6.
+    </div>
+    <div class="paper-box">
+      <div class="paper-header"><span class="badge b-num">Q1</span> Transport Layer + Network Security (very likely)</div>
+      <div class="paper-body">
+        <div class="paper-q"><strong>(a)</strong> Explain the Transport Layer. Describe TCP vs UDP. Discuss three-way handshake, socket addresses, and client-server vs peer-to-peer paradigm. <span class="badge b-med">Lec-15 ✓</span></div>
+        <div class="paper-q"><strong>(b)</strong> Discuss the major security attacks (snooping, DoS, masquerading, replay). Explain how IPSec/SSL provide security at different layers. OR: Encrypt/decrypt a word using substitution cipher. <span class="badge b-high">Lec-16 ✓</span></div>
+      </div>
+    </div>
+    <div class="paper-box">
+      <div class="paper-header"><span class="badge b-num">Q2</span> TCP Congestion Control + Cryptography</div>
+      <div class="paper-body">
+        <div class="paper-q"><strong>(a)</strong> Explain TCP congestion control. Identify slow start, congestion avoidance, fast retransmit on a cwnd-vs-RTT graph. Justify reasons for using each mechanism. <span class="badge b-high">Past paper repeat</span></div>
+        <div class="paper-q"><strong>(b)</strong> Perform substitution cipher (additive) to encrypt and decrypt a given message or your name. OR: Explain modern ciphers (DES, asymmetric key). <span class="badge b-high">Lec-16 ✓</span></div>
+      </div>
+    </div>
+    <div class="paper-box">
+      <div class="paper-header"><span class="badge b-num">Q3</span> Multiplexing + Modulation (pre-mids but repeats)</div>
+      <div class="paper-body">
+        <div class="paper-q"><strong>(a)</strong> Examine FDM, TDM, WDM in terms of data rate, cost, synchronization, channel capacity. Numerical calculation likely. <span class="badge b-high">3× repeat</span></div>
+        <div class="paper-q"><strong>(b)</strong> Illustrate ASK, FSK, PSK: bandwidth and noise susceptibility comparison. OR: NRZ-L and Manchester encoding waveforms. <span class="badge b-med">Mids repeat</span></div>
+      </div>
+    </div>
+    <div class="paper-box">
+      <div class="paper-header"><span class="badge b-num">Q4</span> IP Addressing / Subnetting (Lec-13 MISSING — find it!)</div>
+      <div class="paper-body">
+        <div class="paper-q"><strong>(a)</strong> Design a network with classful/CIDR addressing: select a class, give network address, host addresses, broadcast, mask, slash notation. <span class="badge b-high">Batch-22 Q4(a)</span></div>
+        <div class="paper-q"><strong>(b)</strong> Given an IP address with subnet mask, find: number of subnets, hosts per subnet, range of first 5 subnets. <span class="badge b-high">Batch-22 Q4(b) — direct repeat</span></div>
+      </div>
+    </div>
+    <div class="paper-box">
+      <div class="paper-header"><span class="badge b-num">Q5</span> Routing Algorithms (Dijkstra + Bellman-Ford)</div>
+      <div class="paper-body">
+        <div class="paper-q"><strong>(a)</strong> Given a graph, apply Dijkstra's algorithm from node X. Construct the least-cost tree. Show step-by-step table. <span class="badge b-high">Batch-22 Q5(a) — direct repeat</span></div>
+        <div class="paper-q"><strong>(b)</strong> Apply distance vector routing using Bellman-Ford. Produce shortest path tables for a given graph. <span class="badge b-high">Batch-22 Q5(b) — direct repeat</span></div>
+      </div>
+    </div>
+    <div style="margin-top: 14px; display: flex; flex-wrap: wrap;">
+      <button class="btn btn-primary" onclick="sendPrompt('Start preparing Q5 first — Dijkstra and Bellman-Ford step by step with examples')">Start with Q5 (Routing)</button>
+      <button class="btn btn-primary" onclick="sendPrompt('Start preparing Q4 — IP addressing and subnetting with examples from the Batch-22 paper')">Start with Q4 (IP / Subnetting)</button>
+      <button class="btn" onclick="sendPrompt('Start preparing Q1 — Transport layer and security')">Q1: Transport + Security</button>
+      <button class="btn" onclick="sendPrompt('Start preparing Q2 — TCP congestion control and cryptography')">Q2: TCP Congestion</button>
+      <button class="btn" onclick="sendPrompt('Start preparing Q3 — multiplexing and modulation')">Q3: Multiplexing</button>
+    </div>
+  </div>
+
+  <!-- TAB 3: LECTURE COVERAGE -->
+  <div id="tab-coverage" class="section-panel">
+    <table class="coverage-table">
+      <tr><th>Topic</th><th>In your lectures?</th><th>Action</th></tr>
+      <tr><td>Network Layer: functions, packetizing, fragmentation</td><td><span class="pill p-yes">Lec-12 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>IP Addressing (classful, CIDR, subnetting)</td><td><span class="pill p-no">Lec-13 ❌ Missing</span></td><td><strong>Get from teacher ASAP</strong></td></tr>
+      <tr><td>Network performance: delays, throughput, packet loss</td><td><span class="pill p-yes">Lec-12 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>Congestion control (open/closed loop)</td><td><span class="pill p-partial">Lec-12 partial</span></td><td>TCP details in Lec-13/15</td></tr>
+      <tr><td>Distance-vector routing (Bellman-Ford, RIP)</td><td><span class="pill p-yes">Lec-14 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>Link-state routing (Dijkstra, OSPF)</td><td><span class="pill p-yes">Lec-14 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>BGP / Path-vector / Autonomous Systems</td><td><span class="pill p-yes">Lec-14 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>Transport Layer: ports, socket, TCP/UDP</td><td><span class="pill p-yes">Lec-15 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>TCP: 3-way handshake, header, flow control</td><td><span class="pill p-yes">Lec-15 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>TCP congestion control (slow start, cwnd, ssthresh)</td><td><span class="pill p-no">Not in Lec-15</span></td><td>Need Lec-13 or book</td></tr>
+      <tr><td>Security: CIA, attacks, cryptography goals</td><td><span class="pill p-yes">Lec-16 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>Substitution / transposition / additive cipher</td><td><span class="pill p-yes">Lec-16 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>IPSec (AH, ESP, transport & tunnel mode)</td><td><span class="pill p-yes">Lec-16 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>SSL/TLS, firewalls (packet-filter, proxy)</td><td><span class="pill p-yes">Lec-16 ✓</span></td><td>Ready to revise</td></tr>
+      <tr><td>Multiplexing (FDM/TDM/WDM)</td><td><span class="pill p-no">Pre-mids ❌</span></td><td>Use book/notes</td></tr>
+      <tr><td>Modulation (ASK/FSK/PSK)</td><td><span class="pill p-no">Pre-mids ❌</span></td><td>Use book/notes</td></tr>
+      <tr><td>MANET / VANET</td><td><span class="pill p-no">Not in uploads</span></td><td>Use book/Lec-01 syllabus</td></tr>
+      <tr><td>CRC Error Detection</td><td><span class="pill p-no">Pre-mids ❌</span></td><td>Use assignment answers</td></tr>
+    </table>
+  </div>
+
+  <!-- TAB 4: PREPARE -->
+  <div id="tab-prepare" class="section-panel">
+    <h3>Recommended 2-day plan</h3>
+    <div class="alert alert-info">Finals = 50 marks, 5 Qs, 10 marks each. You need to ace 4 of 5 to get a strong grade. Focus on Q4 (IP), Q5 (Routing) — they repeat directly. Then Q1–Q2 (Transport + Security).</div>
+
+    <div class="paper-box">
+      <div class="paper-header">📅 Day 1 — High-yield numerical topics</div>
+      <div class="paper-body">
+        <div class="paper-q"><strong>Morning (2-3 hrs):</strong> Q5 — Dijkstra's algorithm + Bellman-Ford. Practice the full step-table on 2-3 graphs. These are guaranteed marks.</div>
+        <div class="paper-q"><strong>Afternoon (2-3 hrs):</strong> Q4 — IP Addressing, classful, subnetting, CIDR. Work through the exact Batch-22 Q4 questions. <em>Wait for Lec-13 if possible.</em></div>
+        <div class="paper-q"><strong>Evening (1-2 hrs):</strong> Q2 — TCP congestion control cwnd graph + additive cipher encryption. Both are numerical/applied.</div>
+      </div>
+    </div>
+    <div class="paper-box">
+      <div class="paper-header">📅 Day 2 — Theory + Security + Revision</div>
+      <div class="paper-body">
+        <div class="paper-q"><strong>Morning (2-3 hrs):</strong> Q1 — Transport Layer (TCP 3-way handshake, socket, TCP header fields, client-server vs P2P). Q3 — Multiplexing FDM/TDM/WDM with numerical.</div>
+        <div class="paper-q"><strong>Afternoon (2 hrs):</strong> Q1(b) — Network Security attacks + IPSec + SSL + Firewalls (Lec-16 full pass).</div>
+        <div class="paper-q"><strong>Evening (1 hr):</strong> Full mock — attempt Q5 + Q4 from Batch-22 paper under timed conditions (20 min each).</div>
+      </div>
+    </div>
+
+    <h3>Start prep now</h3>
+    <div style="display: flex; flex-wrap: wrap; margin-top: 8px;">
+      <button class="btn btn-primary" onclick="sendPrompt('Teach me Dijkstra algorithm step by step with the exact example from Batch-22 final paper Q5a — nodes A,B,C,D,E with the given weights')">🔢 Dijkstra (Q5a)</button>
+      <button class="btn btn-primary" onclick="sendPrompt('Teach me Bellman-Ford distance vector routing with step-by-step tables — use the graph from Batch-22 Q5b with nodes W,X,Y,Z')">🔢 Bellman-Ford (Q5b)</button>
+      <button class="btn btn-primary" onclick="sendPrompt('Teach me IP subnetting: classful addressing, CIDR, and solve Batch-22 Q4b: 172.16.0.0/20 and 172.25.0.0 with mask 255.255.248.0/21')">🌐 IP Subnetting (Q4)</button>
+      <button class="btn" onclick="sendPrompt('Explain TCP congestion control: slow start, ssthresh, fast retransmit with the cwnd graph analysis')">📈 TCP Congestion (Q2a)</button>
+      <button class="btn" onclick="sendPrompt('Teach me substitution cipher: additive cipher encryption and decryption with key 15, and do it with the name Arham')">🔐 Cipher (Q2b)</button>
+      <button class="btn" onclick="sendPrompt('Revise Network Security from Lec-16: CIA goals, attack types, IPSec, SSL, firewalls — exam-ready summary')">🛡️ Security (Q1b)</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>

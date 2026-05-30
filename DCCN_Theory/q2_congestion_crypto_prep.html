@@ -1,0 +1,349 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px;line-height:1.7}
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font-size:12px;padding:5px 14px;border-radius:99px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);transition:all 0.15s}
+.tab.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+h3{font-size:15px;font-weight:500;margin:0 0 8px;color:var(--color-text-primary)}
+h4{font-size:13px;font-weight:500;margin:12px 0 4px}
+p,li{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+ul{padding-left:16px;margin-bottom:8px}
+.card{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:12px 16px;margin-bottom:10px;background:var(--color-background-primary)}
+.card-title{font-size:13px;font-weight:500;margin-bottom:5px}
+.card-body{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:500px){.grid2{grid-template-columns:1fr}}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:540px){.grid3{grid-template-columns:1fr}}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:500;margin-right:3px}
+.b-blue{background:#E6F1FB;color:#0C447C}.b-green{background:#EAF3DE;color:#27500A}.b-red{background:#FCEBEB;color:#791F1F}.b-amber{background:#FAEEDA;color:#633806}.b-purple{background:#EEEDFE;color:#26215C}.b-teal{background:#E1F5EE;color:#085041}
+@media(prefers-color-scheme:dark){
+  .b-blue{background:#042C53;color:#B5D4F4}.b-green{background:#173404;color:#C0DD97}.b-red{background:#501313;color:#F7C1C1}.b-amber{background:#412402;color:#FAC775}.b-purple{background:#26215C;color:#CECBF6}.b-teal{background:#04342C;color:#9FE1CB}
+}
+.exam-box{border-radius:var(--border-radius-lg);border:0.5px solid #1D9E75;background:#E1F5EE;padding:12px 16px;margin-bottom:12px}
+@media(prefers-color-scheme:dark){.exam-box{background:#04342C;border-color:#0F6E56}}
+.exam-box .lbl{font-size:10px;font-weight:500;color:#085041;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+@media(prefers-color-scheme:dark){.exam-box .lbl{color:#5DCAA5}}
+.exam-box p,.exam-box li{font-size:12px;color:#085041;line-height:1.7}
+@media(prefers-color-scheme:dark){.exam-box p,.exam-box li{color:#9FE1CB}}
+.warn-box{border-radius:var(--border-radius-md);border:0.5px solid #BA7517;background:#FAEEDA;padding:10px 14px;margin-bottom:10px}
+@media(prefers-color-scheme:dark){.warn-box{background:#412402;border-color:#854F0B}}
+.warn-box p{font-size:12px;color:#633806}
+@media(prefers-color-scheme:dark){.warn-box p{color:#FAC775}}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px}
+th{font-weight:500;text-align:left;padding:6px 10px;border-bottom:1px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+td{padding:6px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.phase-box{border-radius:var(--border-radius-md);padding:10px 14px;margin-bottom:8px;border:0.5px solid}
+.ph-ss{background:#E6F1FB;border-color:#378ADD}
+@media(prefers-color-scheme:dark){.ph-ss{background:#042C53;border-color:#185FA5}}
+.ph-ca{background:#EAF3DE;border-color:#639922}
+@media(prefers-color-scheme:dark){.ph-ca{background:#173404;border-color:#3B6D11}}
+.ph-fr{background:#EEEDFE;border-color:#534AB7}
+@media(prefers-color-scheme:dark){.ph-fr{background:#26215C;border-color:#7F77DD}}
+.ph-ss .t,.ph-ca .t,.ph-fr .t{font-size:13px;font-weight:500;margin-bottom:4px}
+.ph-ss .t{color:#0C447C} @media(prefers-color-scheme:dark){.ph-ss .t{color:#B5D4F4}}
+.ph-ca .t{color:#27500A} @media(prefers-color-scheme:dark){.ph-ca .t{color:#C0DD97}}
+.ph-fr .t{color:#3C3489} @media(prefers-color-scheme:dark){.ph-fr .t{color:#CECBF6}}
+.ph-ss p,.ph-ca p,.ph-fr p{font-size:12px;line-height:1.6}
+.ph-ss p{color:#185FA5} @media(prefers-color-scheme:dark){.ph-ss p{color:#85B7EB}}
+.ph-ca p{color:#3B6D11} @media(prefers-color-scheme:dark){.ph-ca p{color:#97C459}}
+.ph-fr p{color:#534AB7} @media(prefers-color-scheme:dark){.ph-fr p{color:#AFA9EC}}
+.event-row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.ev-card{flex:1;min-width:180px;border-radius:var(--border-radius-md);padding:8px 12px;border:0.5px solid var(--color-border-secondary)}
+.stepper{display:flex;flex-direction:column;gap:0}
+.step{display:flex;gap:12px;position:relative}
+.step-line{display:flex;flex-direction:column;align-items:center;gap:0}
+.step-dot{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;z-index:1}
+.step-connector{width:1px;flex:1;min-height:20px;background:var(--color-border-secondary)}
+.step-content{padding-bottom:16px;flex:1}
+.step-content .st{font-size:13px;font-weight:500;margin-bottom:2px}
+.step-content .sd{font-size:12px;color:var(--color-text-secondary)}
+.btn{display:inline-block;font-size:12px;font-weight:500;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-primary);cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-primary);margin:3px;transition:background 0.15s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-primary{background:#085041;color:#9FE1CB;border-color:#0F6E56}
+.btn-primary:hover{background:#0F6E56}
+
+.quiz-area{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);padding:14px 16px;margin-top:10px}
+.quiz-q{font-size:13px;font-weight:500;margin-bottom:10px}
+.quiz-opt{display:flex;flex-direction:column;gap:6px}
+.opt{font-size:12px;padding:8px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-secondary);transition:background 0.15s;color:var(--color-text-primary)}
+.opt:hover{background:var(--color-background-tertiary)}
+.opt.correct{background:#EAF3DE;border-color:#639922;color:#27500A}
+.opt.wrong{background:#FCEBEB;border-color:#A32D2D;color:#791F1F}
+@media(prefers-color-scheme:dark){
+  .opt.correct{background:#173404;border-color:#3B6D11;color:#C0DD97}
+  .opt.wrong{background:#501313;border-color:#791F1F;color:#F7C1C1}
+}
+.quiz-feedback{display:none;margin-top:8px;font-size:12px;padding:8px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary)}
+.feedback-ok{background:#EAF3DE;border-color:#639922;color:#27500A;display:block}
+.feedback-no{background:#FCEBEB;border-color:#A32D2D;color:#791F1F;display:block}
+@media(prefers-color-scheme:dark){
+  .feedback-ok{background:#173404;color:#C0DD97}
+  .feedback-no{background:#501313;color:#F7C1C1}
+}
+</style>
+
+<div style="padding:0.5rem 0">
+<div class="tabs">
+  <button class="tab active" onclick="show('cc')">Q2(a) Congestion Control</button>
+  <button class="tab" onclick="show('crypto')">Q2(b) Modern Cryptography</button>
+  <button class="tab" onclick="show('quiz')">Self-Test Quiz</button>
+  <button class="tab" onclick="show('answers')">Model Answers</button>
+</div>
+
+<div id="cc" class="panel active">
+  <h3>Why congestion happens</h3>
+  <p style="margin-bottom:12px">Congestion = too many packets in the network, routers start dropping them. TCP detects congestion and controls how many unacknowledged bytes it injects into the network using <strong>cwnd (congestion window)</strong>.</p>
+
+  <h3>The three phases — know each trigger, action, and formula</h3>
+
+  <div class="phase-box ph-ss">
+    <div class="t">Slow Start (SS)</div>
+    <p><strong>Trigger:</strong> Connection starts, OR after a timeout event.<br>
+    <strong>Rule:</strong> cwnd doubles every RTT (exponential growth). Starts at 1 MSS.<br>
+    <strong>Formula:</strong> cwnd = cwnd × 2 each RTT<br>
+    <strong>Ends when:</strong> cwnd reaches ssthresh → switch to Congestion Avoidance.<br>
+    <strong>Memory hook:</strong> "Slow" is the name — the growth is actually exponential/fast.</p>
+  </div>
+
+  <div class="phase-box ph-ca">
+    <div class="t">Congestion Avoidance (CA)</div>
+    <p><strong>Trigger:</strong> cwnd ≥ ssthresh.<br>
+    <strong>Rule:</strong> cwnd increases by 1 MSS per RTT (linear/additive growth — AIMD).<br>
+    <strong>Formula:</strong> cwnd = cwnd + 1 each RTT<br>
+    <strong>Ends when:</strong> A congestion event is detected (timeout or 3 dup ACKs).</p>
+  </div>
+
+  <div class="phase-box ph-fr">
+    <div class="t">Fast Retransmit / Fast Recovery (FR)</div>
+    <p><strong>Trigger:</strong> 3 duplicate ACKs received (mild congestion signal).<br>
+    <strong>Action:</strong> Retransmit missing segment immediately (don't wait for timeout).<br>
+    <strong>New ssthresh:</strong> ssthresh = cwnd / 2<br>
+    <strong>New cwnd:</strong> cwnd = new ssthresh (jump to CA — no slow start!)<br>
+    <strong>Why different from timeout:</strong> 3 dup ACKs means some packets still getting through — less severe than full timeout.</p>
+  </div>
+
+  <h3 style="margin-top:4px">Two congestion events — the key difference</h3>
+  <div class="event-row">
+    <div class="ev-card">
+      <div style="font-size:12px;font-weight:500;color:var(--color-text-danger,#A32D2D);margin-bottom:4px">Timeout (severe)</div>
+      <div class="card-body">
+        Network is very congested. No ACKs arriving.<br><br>
+        <strong>ssthresh = cwnd / 2</strong><br>
+        <strong>cwnd = 1 MSS</strong> (restart from scratch)<br>
+        Phase: Back to Slow Start
+      </div>
+    </div>
+    <div class="ev-card">
+      <div style="font-size:12px;font-weight:500;color:#3B6D11;margin-bottom:4px">3 Duplicate ACKs (mild)</div>
+      <div class="card-body">
+        Packet lost but later ones arrived. Partial connectivity.<br><br>
+        <strong>ssthresh = cwnd / 2</strong><br>
+        <strong>cwnd = ssthresh</strong> (NOT back to 1)<br>
+        Phase: Go directly to Congestion Avoidance
+      </div>
+    </div>
+  </div>
+
+  <h3>Reading the Batch-22 exam graph — step by step</h3>
+  <div class="warn-box"><p>The exam shows you a cwnd graph and asks you to identify phases, explain events, and give reasons. Here is the exact reading of the graph used in Q2(a).</p></div>
+
+  <table>
+    <tr><th>RTT range</th><th>cwnd behaviour</th><th>Phase</th><th>Reason</th></tr>
+    <tr><td>1 → 5</td><td>1→2→4→8→16 (doubles)</td><td>Slow Start</td><td>cwnd &lt; ssthresh(16), exponential growth</td></tr>
+    <tr><td>5 → 7</td><td>16→17→18 (+ 1 each)</td><td>Congestion Avoidance</td><td>cwnd reached ssthresh=16, linear growth</td></tr>
+    <tr><td>RTT 7</td><td>cwnd drops to 1, ssthresh→9</td><td>Timeout event</td><td>ssthresh=18/2=9, cwnd reset to 1</td></tr>
+    <tr><td>8 → 11</td><td>1→2→4→8→9 (doubles to sst)</td><td>Slow Start again</td><td>Restart after timeout, stops at new ssthresh=9</td></tr>
+    <tr><td>11 → 13</td><td>9→10→11 (+ 1 each)</td><td>Congestion Avoidance</td><td>cwnd ≥ ssthresh, linear growth</td></tr>
+    <tr><td>RTT 13</td><td>3 dup ACKs, cwnd→6, ssthresh→6</td><td>Fast Retransmit</td><td>ssthresh=11/2≈6, cwnd=ssthresh (NOT 1)</td></tr>
+    <tr><td>14 → 16</td><td>6→7→8 (+ 1 each)</td><td>Congestion Avoidance</td><td>Skip slow start after 3 dup ACKs</td></tr>
+  </table>
+</div>
+
+<div id="crypto" class="panel">
+  <h3>Modern ciphers — beyond substitution</h3>
+  <p style="margin-bottom:12px">Q2(b) can ask about modern ciphers (DES, asymmetric key) OR about performing a substitution cipher. Either way, understand both.</p>
+
+  <h3>Traditional vs Modern</h3>
+  <table>
+    <tr><th>Feature</th><th>Traditional</th><th>Modern</th></tr>
+    <tr><td>Orientation</td><td>Character-oriented</td><td>Bit-oriented</td></tr>
+    <tr><td>Security</td><td>Weak (simple patterns)</td><td>Strong (complex permutations)</td></tr>
+    <tr><td>Examples</td><td>Additive, Vigenère, transposition</td><td>DES, AES, RSA</td></tr>
+    <tr><td>Key types</td><td>Single simple key</td><td>Long keys (56-bit DES, 128/256-bit AES)</td></tr>
+  </table>
+
+  <h3>Modern block cipher components</h3>
+  <div class="grid2">
+    <div class="card">
+      <div class="card-title"><span class="badge b-blue">P-boxes (Permutation)</span></div>
+      <div class="card-body">Transposition units — rearrange bits without changing them. Straight P-box, compression P-box, expansion P-box.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge b-purple">S-boxes (Substitution)</span></div>
+      <div class="card-body">Substitution units — replace bit patterns with other bit patterns using a lookup table. Core of DES security.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge b-teal">Operations used</span></div>
+      <div class="card-body">XOR, Bit shifting, Swapping elements, Splitting, Combining. These make the cipher nonlinear and hard to reverse.</div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="badge b-amber">Stream vs Block</span></div>
+      <div class="card-body"><strong>Stream cipher:</strong> Encrypts one symbol at a time.<br><strong>Block cipher:</strong> Encrypts groups of m bits at a time. DES uses 64-bit blocks.</div>
+    </div>
+  </div>
+
+  <h3>DES — Data Encryption Standard</h3>
+  <div class="card"><div class="card-body">
+    Input: 64-bit plaintext → Output: 64-bit ciphertext<br>
+    Key: 56-bit secret key (64-bit with parity)<br>
+    Uses 16 rounds of P-box + S-box operations<br>
+    Symmetric — same key for encrypt and decrypt<br>
+    <strong>Weakness:</strong> 56-bit key is too short → brute-force crackable today → replaced by 3DES and AES
+  </div></div>
+
+  <h3>Asymmetric key cryptography (RSA concept)</h3>
+  <div class="stepper">
+    <div class="step">
+      <div class="step-line"><div class="step-dot" style="background:#EEEDFE;color:#3C3489;border:0.5px solid #534AB7">1</div><div class="step-connector"></div></div>
+      <div class="step-content"><div class="st">Key generation</div><div class="sd">Each user generates a key pair: public key (shared openly) and private key (kept secret). Mathematically linked but computationally infeasible to derive one from the other.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-line"><div class="step-dot" style="background:#EEEDFE;color:#3C3489;border:0.5px solid #534AB7">2</div><div class="step-connector"></div></div>
+      <div class="step-content"><div class="st">Encryption</div><div class="sd">Sender uses recipient's public key to encrypt. C = E(public_key, P). Anyone can encrypt for you — only your private key decrypts.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-line"><div class="step-dot" style="background:#EEEDFE;color:#3C3489;border:0.5px solid #534AB7">3</div><div class="step-connector"></div></div>
+      <div class="step-content"><div class="st">Decryption</div><div class="sd">Recipient uses their private key. P = D(private_key, C). Only the private key holder can read the message.</div></div>
+    </div>
+    <div class="step">
+      <div class="step-line"><div class="step-dot" style="background:#EEEDFE;color:#3C3489;border:0.5px solid #534AB7">4</div><div class="step-connector"></div></div>
+      <div class="step-content"><div class="st">Digital signatures (reverse use)</div><div class="sd">Sign with private key, verify with public key. Proves authenticity and non-repudiation. Hash the message → sign the hash → recipient verifies with public key.</div></div>
+    </div>
+  </div>
+
+  <h3>Data integrity — message digest</h3>
+  <div class="card"><div class="card-body">
+    A message digest (hash) is a fixed-size fingerprint of a message. Any change to the message completely changes the digest. Used to verify integrity — not confidentiality.<br><br>
+    <strong>Process:</strong> Sender: message → hash function → digest. Sends message + digest. Receiver: rehashes message, compares digest. If different → message was tampered.
+  </div></div>
+</div>
+
+<div id="quiz" class="panel">
+  <h3>Self-test — congestion control</h3>
+  <div class="quiz-area" id="q1-area">
+    <div class="quiz-q">Q1: TCP is in Slow Start with cwnd=8 and ssthresh=16. A timeout occurs. What are the new cwnd and ssthresh values?</div>
+    <div class="quiz-opt">
+      <div class="opt" onclick="answer(this,'wrong','q1')">cwnd=8, ssthresh=8 — timeout halves both</div>
+      <div class="opt" onclick="answer(this,'correct','q1')">cwnd=1, ssthresh=4 — timeout resets cwnd to 1, ssthresh=8/2=4</div>
+      <div class="opt" onclick="answer(this,'wrong','q1')">cwnd=4, ssthresh=4 — timeout halves cwnd to ssthresh</div>
+      <div class="opt" onclick="answer(this,'wrong','q1')">cwnd=1, ssthresh=16 — ssthresh unchanged on timeout</div>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <div class="quiz-area" id="q2-area" style="margin-top:10px">
+    <div class="quiz-q">Q2: cwnd=12, ssthresh=8. Three duplicate ACKs arrive. What happens?</div>
+    <div class="quiz-opt">
+      <div class="opt" onclick="answer(this,'wrong','q2')">cwnd=1, ssthresh=6 — 3 dup ACKs treated like timeout</div>
+      <div class="opt" onclick="answer(this,'wrong','q2')">cwnd=12, ssthresh=6 — cwnd stays, ssthresh halved</div>
+      <div class="opt" onclick="answer(this,'correct','q2')">cwnd=6, ssthresh=6 — ssthresh=12/2=6, cwnd=ssthresh, enter CA directly</div>
+      <div class="opt" onclick="answer(this,'wrong','q2')">cwnd=8, ssthresh=8 — revert to previous ssthresh</div>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <div class="quiz-area" id="q3-area" style="margin-top:10px">
+    <div class="quiz-q">Q3: What is the key difference between Slow Start and Congestion Avoidance?</div>
+    <div class="quiz-opt">
+      <div class="opt" onclick="answer(this,'wrong','q3')">Slow Start uses linear growth; CA uses exponential growth</div>
+      <div class="opt" onclick="answer(this,'correct','q3')">Slow Start doubles cwnd each RTT; CA increases by 1 MSS per RTT</div>
+      <div class="opt" onclick="answer(this,'wrong','q3')">Slow Start only runs once per connection; CA runs repeatedly</div>
+      <div class="opt" onclick="answer(this,'wrong','q3')">Both grow at the same rate — they differ only in the ssthresh threshold</div>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <div class="quiz-area" id="q4-area" style="margin-top:10px">
+    <div class="quiz-q">Q4: Which is more severe — a timeout or 3 duplicate ACKs? Why?</div>
+    <div class="quiz-opt">
+      <div class="opt" onclick="answer(this,'correct','q4')">Timeout is more severe — no ACKs means total congestion; 3 dup ACKs means some packets still arriving</div>
+      <div class="opt" onclick="answer(this,'wrong','q4')">3 dup ACKs are more severe — they indicate multiple lost packets</div>
+      <div class="opt" onclick="answer(this,'wrong','q4')">Both are equally severe — they trigger the same response</div>
+      <div class="opt" onclick="answer(this,'wrong','q4')">Timeout is less severe — the sender just waits and retries</div>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+</div>
+
+<div id="answers" class="panel">
+  <h3>Q2(a) — Model answer (5 marks)</h3>
+  <div class="exam-box">
+    <div class="lbl">Exam answer framework</div>
+    <p><strong>Para 1 — What is congestion control:</strong> Congestion occurs when too many datagrams enter the network, causing routers to drop packets. TCP uses congestion control to regulate the rate of data injection using a congestion window (cwnd). The effective window = min(cwnd, receiver window).</p><br>
+    <p><strong>Para 2 — Slow Start:</strong> TCP begins with cwnd=1 MSS. cwnd doubles every RTT (exponential). Continues until cwnd reaches ssthresh, then switches to Congestion Avoidance.</p><br>
+    <p><strong>Para 3 — Congestion Avoidance:</strong> cwnd increases by 1 MSS per RTT (linear/additive). This is the AIMD phase — Additive Increase, Multiplicative Decrease.</p><br>
+    <p><strong>Para 4 — Timeout event:</strong> Severe congestion signal. ssthresh = cwnd/2. cwnd reset to 1. Return to Slow Start. This is the multiplicative decrease.</p><br>
+    <p><strong>Para 5 — 3 Dup ACKs / Fast Retransmit:</strong> Mild congestion. Missing segment retransmitted immediately. ssthresh = cwnd/2. cwnd = ssthresh. Jump directly to Congestion Avoidance — not Slow Start. This avoids the performance penalty of restarting from 1.</p><br>
+    <p><strong>For the graph:</strong> Label each phase region. Mark timeout and 3-dup-ACK points with arrows. Show ssthresh as a dashed horizontal line. State the cwnd and ssthresh values at each event.</p>
+  </div>
+
+  <h3>Q2(b) — Model answer: cipher (5 marks)</h3>
+  <div class="exam-box">
+    <div class="lbl">Exam answer framework</div>
+    <p><strong>If asked to perform a cipher on a word/name:</strong></p>
+    <ul>
+      <li>Write the formula: C = (P + k) mod 26 for encryption; P = (C − k + 26) mod 26 for decryption</li>
+      <li>Draw the full working table: plain letter → numeric value → + key → mod 26 → ciphertext value → cipher letter</li>
+      <li>Show both encryption AND decryption to verify</li>
+      <li>State the cipher type: monoalphabetic substitution (additive/Caesar cipher)</li>
+    </ul>
+    <br>
+    <p><strong>If asked to explain modern ciphers:</strong></p>
+    <ul>
+      <li>Distinguish traditional (character-based) vs modern (bit-based)</li>
+      <li>Explain stream cipher (one symbol at a time) vs block cipher (m bits at a time)</li>
+      <li>Describe DES: 64-bit input, 56-bit key, 16 rounds of P-box + S-box operations</li>
+      <li>Explain asymmetric key: two keys (public + private), encrypt with public, decrypt with private, used in digital signatures</li>
+    </ul>
+  </div>
+
+  <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
+    <button class="btn btn-primary" onclick="sendPrompt('Quiz me on TCP congestion control: give me a graph scenario and ask me to identify the phase and event')">Graph quiz</button>
+    <button class="btn btn-primary" onclick="sendPrompt('Now start preparing Q5 — Dijkstra algorithm and Bellman-Ford distance vector routing')">Next: Q5 Routing</button>
+    <button class="btn" onclick="sendPrompt('Now start preparing Q4 — IP addressing and subnetting')">Next: Q4 Subnetting</button>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+const feedbacks = {
+  'q1':{ correct:'Correct. Timeout always: ssthresh = cwnd/2 (8/2=4), cwnd = 1. Back to Slow Start.',
+         wrong:'Wrong. On timeout: ssthresh = cwnd/2 = 4, cwnd resets to 1 MSS. Return to Slow Start.' },
+  'q2':{ correct:'Correct. 3 dup ACKs: ssthresh = cwnd/2 = 6, cwnd = new ssthresh = 6. Enter CA directly — NOT slow start.',
+         wrong:'Wrong. 3 dup ACKs is milder than timeout. ssthresh=cwnd/2=6, cwnd=ssthresh=6, go straight to Congestion Avoidance.' },
+  'q3':{ correct:'Correct. Slow Start is exponential (doubles). CA is linear (+1 MSS per RTT). Same ssthresh threshold separates them.',
+         wrong:'Wrong. Slow Start is exponential — cwnd doubles each RTT. Congestion Avoidance is linear — +1 MSS per RTT.' },
+  'q4':{ correct:'Correct. Timeout = no ACKs at all = severe congestion → reset cwnd to 1. 3 dup ACKs = some ACKs still arriving = mild congestion → cwnd halved, not reset.',
+         wrong:'Wrong. Timeout means NO packets getting through → severe. 3 dup ACKs means packets still arriving → milder. That is why timeout resets cwnd to 1 while 3 dup ACKs only halves it.' },
+};
+
+function answer(el, verdict, qid){
+  const area = document.getElementById(qid+'-area');
+  area.querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(verdict);
+  const fb = document.getElementById(qid+'-fb');
+  fb.textContent = feedbacks[qid][verdict];
+  fb.className = 'quiz-feedback ' + (verdict==='correct' ? 'feedback-ok' : 'feedback-no');
+}
+</script>

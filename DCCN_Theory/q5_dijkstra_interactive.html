@@ -1,0 +1,215 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px}
+.dark{color-scheme:dark}
+h3{font-size:15px;font-weight:500;margin:0 0 8px}
+.ctrl{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.btn{font-size:12px;font-weight:500;padding:6px 14px;border-radius:8px;border:0.5px solid var(--color-border-primary);cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-primary);transition:background .15s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-primary{background:#185FA5;color:#E6F1FB;border-color:#0C447C}
+.btn-primary:hover{background:#0C447C}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.step-badge{font-size:11px;padding:3px 10px;border-radius:99px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+canvas{display:block;border-radius:10px;border:0.5px solid var(--color-border-tertiary);width:100%;height:auto;margin-bottom:8px}
+.table-wrap{overflow-x:auto;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-weight:500;padding:6px 10px;border-bottom:1px solid var(--color-border-secondary);color:var(--color-text-secondary);text-align:center;white-space:nowrap}
+td{padding:5px 10px;border-bottom:0.5px solid var(--color-border-tertiary);text-align:center;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+.td-done{background:#EAF3DE;color:#27500A;font-weight:500}
+.td-cur{background:#E6F1FB;color:#0C447C;font-weight:500}
+.td-inf{color:var(--color-text-tertiary)}
+@media(prefers-color-scheme:dark){
+  .td-done{background:#173404;color:#C0DD97}
+  .td-cur{background:#042C53;color:#B5D4F4}
+}
+.phase-banner{border-radius:8px;padding:9px 14px;margin-bottom:8px;font-size:12px;border:0.5px solid}
+.ph-visit{background:#E6F1FB;border-color:#378ADD;color:#0C447C}
+.ph-done{background:#EAF3DE;border-color:#639922;color:#27500A}
+@media(prefers-color-scheme:dark){
+  .ph-visit{background:#042C53;border-color:#185FA5;color:#B5D4F4}
+  .ph-done{background:#173404;border-color:#3B6D11;color:#C0DD97}
+}
+.legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;font-size:11px;color:var(--color-text-secondary)}
+.leg{display:flex;align-items:center;gap:4px}
+.leg-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+</style>
+
+<div style="padding:.5rem 0">
+<h3>Dijkstra's algorithm — Batch-22 Q5(a) graph</h3>
+<p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">Source node: <strong>A</strong>. Step through the algorithm and watch the least-cost tree build. This is the exact graph from the past paper.</p>
+
+<div class="legend">
+  <div class="leg"><div class="leg-dot" style="background:#378ADD"></div> Unvisited</div>
+  <div class="leg"><div class="leg-dot" style="background:#EF9F27"></div> Current node</div>
+  <div class="leg"><div class="leg-dot" style="background:#1D9E75"></div> Finalized (in N)</div>
+  <div class="leg"><div class="leg-dot" style="background:#E24B4A"></div> Least-cost path edge</div>
+</div>
+
+<canvas id="dijk-canvas" height="280"></canvas>
+
+<div class="ctrl">
+  <button class="btn btn-primary" id="btn-next" onclick="nextStep()">Next step</button>
+  <button class="btn" onclick="resetDijk()">Reset</button>
+  <span class="step-badge" id="step-label">Step 0 of 5</span>
+</div>
+
+<div id="phase-banner" class="phase-banner ph-visit">Initialization: set D(A)=0, all others = ∞</div>
+
+<div class="table-wrap">
+<table id="dijk-table">
+<thead><tr><th>Step</th><th>N (finalized)</th><th>D(B),p(B)</th><th>D(C),p(C)</th><th>D(D),p(D)</th><th>D(E),p(E)</th><th>D(F),p(F)</th></tr></thead>
+<tbody id="dijk-tbody"></tbody>
+</table>
+</div>
+</div>
+
+<script>
+const dark = matchMedia('(prefers-color-scheme:dark)').matches;
+const COL = {
+  bg:    dark?'#1a1a18':'#ffffff',
+  text:  dark?'#c2c0b6':'#2c2c2a',
+  edge:  dark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.12)',
+  unvis: dark?'#185FA5':'#378ADD',
+  cur:   '#EF9F27',
+  done:  '#1D9E75',
+  path:  '#E24B4A',
+  label: dark?'#c2c0b6':'#2c2c2a',
+};
+
+const nodes = {
+  A:{x:100,y:140}, B:{x:280,y:60}, C:{x:280,y:220},
+  D:{x:460,y:220}, E:{x:460,y:60}, F:{x:600,y:140}
+};
+const edges = [
+  {u:'A',v:'B',w:3},{u:'A',v:'C',w:1},
+  {u:'B',v:'C',w:7},{u:'B',v:'D',w:5},{u:'B',v:'E',w:1},
+  {u:'C',v:'D',w:2},{u:'D',v:'E',w:2},{u:'D',v:'F',w:6},
+  {u:'E',v:'F',w:6}
+];
+
+const INF = 999;
+const steps = [
+  {N:'A', D:{B:[3,'A'],C:[1,'A'],D:[INF,'-'],E:[INF,'-'],F:[INF,'-']}, cur:'A', newEdges:[]},
+  {N:'AD',D:{B:[3,'A'],C:[1,'A'],D:[3,'C'],E:[INF,'-'],F:[INF,'-']}, cur:'C', newEdges:['A-C']},
+  {N:'ADB',D:{B:[3,'A'],C:[1,'A'],D:[3,'C'],E:[4,'B'],F:[INF,'-']}, cur:'D', newEdges:['A-C','C-D']},
+  {N:'ADBE',D:{B:[3,'A'],C:[1,'A'],D:[3,'C'],E:[4,'B'],F:[9,'D']}, cur:'B', newEdges:['A-C','C-D','A-B']},
+  {N:'ADBEC',D:{B:[3,'A'],C:[1,'A'],D:[3,'C'],E:[4,'B'],F:[9,'D']}, cur:'E', newEdges:['A-C','C-D','A-B','B-E']},
+  {N:'ADBECF',D:{B:[3,'A'],C:[1,'A'],D:[3,'C'],E:[4,'B'],F:[9,'D']}, cur:'F', newEdges:['A-C','C-D','A-B','B-E','D-F']},
+];
+
+let curStep = 0;
+const canvas = document.getElementById('dijk-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = 680; canvas.height = 280;
+
+function edgeKey(u,v){return [u,v].sort().join('-')}
+
+function drawGraph(stepIdx){
+  ctx.fillStyle = COL.bg;
+  ctx.fillRect(0,0,680,280);
+  const s = steps[stepIdx];
+  const pathEdgeKeys = new Set((s.newEdges||[]).map(e=>{const p=e.split('-');return edgeKey(p[0],p[1]);}));
+  const finalSet = new Set((s.N||'').split(''));
+
+  edges.forEach(e=>{
+    const key = edgeKey(e.u,e.v);
+    const isPath = pathEdgeKeys.has(key);
+    const x1=nodes[e.u].x, y1=nodes[e.u].y, x2=nodes[e.v].x, y2=nodes[e.v].y;
+    ctx.beginPath();
+    ctx.moveTo(x1,y1); ctx.lineTo(x2,y2);
+    ctx.strokeStyle = isPath ? COL.path : COL.edge;
+    ctx.lineWidth = isPath ? 2.5 : 1;
+    ctx.stroke();
+    const mx=(x1+x2)/2, my=(y1+y2)/2;
+    ctx.font='bold 11px sans-serif'; ctx.textAlign='center'; ctx.fillStyle=COL.text;
+    ctx.fillText(e.w, mx+1, my-5);
+  });
+
+  Object.entries(nodes).forEach(([name,pos])=>{
+    const isFinal = finalSet.has(name);
+    const isCur = s.cur===name && stepIdx>0;
+    const color = isCur ? COL.cur : isFinal ? COL.done : COL.unvis;
+    ctx.beginPath();
+    ctx.arc(pos.x,pos.y,22,0,Math.PI*2);
+    ctx.fillStyle = color; ctx.fill();
+    ctx.strokeStyle = dark?'rgba(255,255,255,0.2)':'rgba(0,0,0,0.15)';
+    ctx.lineWidth=0.5; ctx.stroke();
+    ctx.fillStyle = '#fff'; ctx.font='bold 14px sans-serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(name, pos.x, pos.y);
+
+    const d = s.D[name];
+    if(d!==undefined){
+      const dval = d[0]===INF ? '∞' : d[0];
+      const pval = d[1]==='-' ? '' : ','+d[1];
+      ctx.font='10px sans-serif'; ctx.fillStyle=COL.label; ctx.textBaseline='alphabetic';
+      ctx.fillText(dval+pval, pos.x, pos.y+36);
+    } else {
+      ctx.font='10px sans-serif'; ctx.fillStyle=COL.label; ctx.textBaseline='alphabetic';
+      ctx.fillText('0,—', pos.x, pos.y+36);
+    }
+  });
+}
+
+function buildTable(){
+  const tbody = document.getElementById('dijk-tbody');
+  tbody.innerHTML='';
+  const rowLabels=['0 (init)','1','2','3','4','5'];
+  steps.forEach((s,i)=>{
+    if(i===0&&curStep===0){
+      const tr=document.createElement('tr');
+      tr.innerHTML=`<td>${rowLabels[0]}</td><td class="td-cur">A</td>`+
+        ['B','C','D','E','F'].map(n=>{
+          const d=s.D[n]; const v=d[0]===INF?'∞,—':`${d[0]},${d[1]}`;
+          return `<td>${v}</td>`;
+        }).join('');
+      tbody.appendChild(tr);
+      return;
+    }
+    if(i===0||i>curStep) return;
+    const tr=document.createElement('tr');
+    const isDone = i<curStep;
+    tr.innerHTML=`<td>${rowLabels[i]}</td><td class="${isDone?'td-done':'td-cur'}">${s.N}</td>`+
+      ['B','C','D','E','F'].map(n=>{
+        const d=s.D[n];
+        const v=d[0]===INF?'<span class="td-inf">∞,—</span>':`${d[0]},${d[1]}`;
+        return `<td>${v}</td>`;
+      }).join('');
+    tbody.appendChild(tr);
+  });
+}
+
+const banners = [
+  'Initialization: D(A)=0, all other nodes = ∞. N = {A}.',
+  'Visit C (D=1, closest unvisited). Update neighbors: D(D) = min(∞, 1+2)=3 via C.',
+  'Visit D (D=3). Update neighbors: D(F)=min(∞,3+6)=9 via D. D(E) unchanged.',
+  'Visit B (D=3, tied — pick alphabetically). Update: D(E)=min(∞,3+1)=4 via B.',
+  'Visit E (D=4). D(F)=min(9,4+6)=9 — no improvement. F still via D.',
+  'Visit F (D=9). All nodes finalized. Least-cost tree complete.',
+];
+
+function nextStep(){
+  if(curStep>=steps.length-1) return;
+  curStep++;
+  drawGraph(curStep);
+  buildTable();
+  document.getElementById('step-label').textContent=`Step ${curStep} of ${steps.length-1}`;
+  document.getElementById('phase-banner').textContent=banners[curStep];
+  document.getElementById('phase-banner').className='phase-banner '+(curStep===steps.length-1?'ph-done':'ph-visit');
+  document.getElementById('btn-next').disabled=(curStep>=steps.length-1);
+}
+
+function resetDijk(){
+  curStep=0;
+  drawGraph(0);
+  buildTable();
+  document.getElementById('step-label').textContent=`Step 0 of ${steps.length-1}`;
+  document.getElementById('phase-banner').textContent=banners[0];
+  document.getElementById('phase-banner').className='phase-banner ph-visit';
+  document.getElementById('btn-next').disabled=false;
+}
+
+drawGraph(0); buildTable();
+</script>

@@ -1,0 +1,452 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:13px;line-height:1.7}
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font-size:12px;padding:5px 14px;border-radius:99px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);transition:all 0.15s}
+.tab.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+h3{font-size:15px;font-weight:500;margin:0 0 8px}
+h4{font-size:13px;font-weight:500;margin:10px 0 4px}
+p,li{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+ul{padding-left:16px;margin-bottom:8px}
+.card{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:12px 16px;margin-bottom:10px;background:var(--color-background-primary)}
+.card-title{font-size:13px;font-weight:500;margin-bottom:5px}
+.card-body{font-size:12px;color:var(--color-text-secondary);line-height:1.65}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+@media(max-width:520px){.grid2{grid-template-columns:1fr}}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:500;margin-right:3px;vertical-align:middle}
+.b-blue{background:#E6F1FB;color:#0C447C}.b-teal{background:#E1F5EE;color:#085041}.b-amber{background:#FAEEDA;color:#633806}.b-purple{background:#EEEDFE;color:#26215C}.b-coral{background:#FAECE7;color:#712B13}.b-green{background:#EAF3DE;color:#27500A}.b-red{background:#FCEBEB;color:#791F1F}
+@media(prefers-color-scheme:dark){
+  .b-blue{background:#042C53;color:#B5D4F4}.b-teal{background:#04342C;color:#9FE1CB}.b-amber{background:#412402;color:#FAC775}.b-purple{background:#26215C;color:#CECBF6}.b-coral{background:#4A1B0C;color:#F5C4B3}.b-green{background:#173404;color:#C0DD97}.b-red{background:#501313;color:#F7C1C1}
+}
+table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:10px}
+th{font-weight:500;text-align:left;padding:7px 10px;border-bottom:1px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+td{padding:6px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.exam-box{border-radius:var(--border-radius-lg);border:0.5px solid #1D9E75;background:#E1F5EE;padding:12px 16px;margin-bottom:12px}
+@media(prefers-color-scheme:dark){.exam-box{background:#04342C;border-color:#0F6E56}}
+.exam-box .lbl{font-size:10px;font-weight:500;color:#085041;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+@media(prefers-color-scheme:dark){.exam-box .lbl{color:#5DCAA5}}
+.exam-box p,.exam-box li{font-size:12px;color:#085041;line-height:1.8}
+@media(prefers-color-scheme:dark){.exam-box p,.exam-box li{color:#9FE1CB}}
+.num-worked{border-radius:var(--border-radius-lg);border:0.5px solid #534AB7;background:#EEEDFE;padding:12px 16px;margin-bottom:12px}
+@media(prefers-color-scheme:dark){.num-worked{background:#26215C;border-color:#7F77DD}}
+.num-worked .lbl{font-size:10px;font-weight:500;color:#3C3489;margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+@media(prefers-color-scheme:dark){.num-worked .lbl{color:#AFA9EC}}
+.num-worked p,.num-worked li{font-size:12px;color:#3C3489;line-height:1.8}
+@media(prefers-color-scheme:dark){.num-worked p,.num-worked li{color:#CECBF6}}
+.step-row{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px}
+.step-num{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#534AB7;color:#EEEDFE;font-size:10px;font-weight:500;flex-shrink:0;margin-top:1px}
+@media(prefers-color-scheme:dark){.step-num{background:#7F77DD;color:#26215C}}
+.warn-box{border-radius:var(--border-radius-md);border:0.5px solid #BA7517;background:#FAEEDA;padding:10px 14px;margin-bottom:10px}
+@media(prefers-color-scheme:dark){.warn-box{background:#412402;border-color:#854F0B}}
+.warn-box p{font-size:12px;color:#633806}
+@media(prefers-color-scheme:dark){.warn-box p{color:#FAC775}}
+.calc-wrap{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);padding:14px 16px;background:var(--color-background-secondary);margin-bottom:12px}
+.calc-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.calc-label{font-size:12px;color:var(--color-text-secondary);min-width:130px}
+input[type=text],input[type=number]{font-size:13px;padding:5px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary)}
+.result-table td{font-size:12px;padding:5px 8px}
+.result-table .net{background:#E6F1FB;color:#0C447C;font-weight:500}
+.result-table .host{background:#EAF3DE;color:#27500A}
+.result-table .bcast{background:#FCEBEB;color:#791F1F}
+.result-table .range{color:var(--color-text-secondary)}
+@media(prefers-color-scheme:dark){
+  .result-table .net{background:#042C53;color:#B5D4F4}
+  .result-table .host{background:#173404;color:#C0DD97}
+  .result-table .bcast{background:#501313;color:#F7C1C1}
+}
+.btn{display:inline-block;font-size:12px;font-weight:500;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-primary);cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-primary);margin:3px;transition:background 0.15s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-primary{background:#085041;color:#9FE1CB;border-color:#0F6E56}
+.btn-primary:hover{background:#0F6E56}
+.mono{font-family:var(--font-mono);font-size:12px;background:var(--color-background-secondary);padding:2px 6px;border-radius:4px;border:0.5px solid var(--color-border-tertiary)}
+.ip-bar{display:flex;gap:2px;margin:8px 0;flex-wrap:nowrap}
+.ip-octet{flex:1;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;border:0.5px solid}
+.quiz-area{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);padding:14px 16px;margin-bottom:10px}
+.quiz-q{font-size:13px;font-weight:500;margin-bottom:10px}
+.opt{font-size:12px;padding:8px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);cursor:pointer;background:var(--color-background-secondary);margin:4px 0;display:block;transition:background 0.15s;color:var(--color-text-primary)}
+.opt:hover{background:var(--color-background-tertiary)}
+.opt.correct{background:#EAF3DE;border-color:#639922;color:#27500A}
+.opt.wrong{background:#FCEBEB;border-color:#A32D2D;color:#791F1F}
+@media(prefers-color-scheme:dark){.opt.correct{background:#173404;border-color:#3B6D11;color:#C0DD97}.opt.wrong{background:#501313;border-color:#791F1F;color:#F7C1C1}}
+.fb{display:none;margin-top:8px;font-size:12px;padding:8px 12px;border-radius:var(--border-radius-md);border:0.5px solid}
+.fb-ok{background:#EAF3DE;border-color:#639922;color:#27500A;display:block}
+.fb-no{background:#FCEBEB;border-color:#A32D2D;color:#791F1F;display:block}
+@media(prefers-color-scheme:dark){.fb-ok{background:#173404;color:#C0DD97}.fb-no{background:#501313;color:#F7C1C1}}
+</style>
+
+<div style="padding:0.5rem 0">
+<div class="tabs">
+  <button class="tab active" onclick="show('classful')">Classful Addressing</button>
+  <button class="tab" onclick="show('cidr')">CIDR & Subnetting</button>
+  <button class="tab" onclick="show('batch22')">Batch-22 Q4 Solved</button>
+  <button class="tab" onclick="show('calc')">Subnet Calculator</button>
+  <button class="tab" onclick="show('quiz')">Quiz</button>
+</div>
+
+<!-- TAB 1: CLASSFUL -->
+<div id="classful" class="panel active">
+  <h3>IPv4 address structure</h3>
+  <p style="margin-bottom:8px">A 32-bit address written as four octets in dotted decimal. Hierarchically split into network prefix + host suffix.</p>
+  <div class="ip-bar">
+    <div class="ip-octet" style="background:#E6F1FB;border-color:#378ADD;color:#0C447C">10</div>
+    <div class="ip-octet" style="background:#E6F1FB;border-color:#378ADD;color:#0C447C">20</div>
+    <div class="ip-octet" style="background:#EAF3DE;border-color:#639922;color:#27500A">30</div>
+    <div class="ip-octet" style="background:#EAF3DE;border-color:#639922;color:#27500A">40</div>
+  </div>
+  <p style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:12px">Blue = network part &nbsp;|&nbsp; Green = host part &nbsp;(example: Class B, 10.20.30.40)</p>
+
+  <h3>The 5 classes — memorize this table</h3>
+  <table>
+    <tr><th>Class</th><th>1st octet range</th><th>Default mask</th><th>Network bits</th><th>Host bits</th><th>Max hosts/net</th><th>Purpose</th></tr>
+    <tr>
+      <td><span class="badge b-blue">A</span></td>
+      <td>1 – 126</td>
+      <td><span class="mono">255.0.0.0 /8</span></td>
+      <td>8</td><td>24</td>
+      <td>2²⁴ − 2 = <strong>16,777,214</strong></td>
+      <td>Very large orgs</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-teal">B</span></td>
+      <td>128 – 191</td>
+      <td><span class="mono">255.255.0.0 /16</span></td>
+      <td>16</td><td>16</td>
+      <td>2¹⁶ − 2 = <strong>65,534</strong></td>
+      <td>Large orgs/ISPs</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-amber">C</span></td>
+      <td>192 – 223</td>
+      <td><span class="mono">255.255.255.0 /24</span></td>
+      <td>24</td><td>8</td>
+      <td>2⁸ − 2 = <strong>254</strong></td>
+      <td>Small networks</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-purple">D</span></td>
+      <td>224 – 239</td>
+      <td>N/A</td>
+      <td>—</td><td>—</td><td>—</td>
+      <td>Multicast</td>
+    </tr>
+    <tr>
+      <td><span class="badge b-coral">E</span></td>
+      <td>240 – 255</td>
+      <td>N/A</td>
+      <td>—</td><td>—</td><td>—</td>
+      <td>Reserved/research</td>
+    </tr>
+  </table>
+
+  <div class="warn-box"><p>Exam tip: 127.x.x.x is loopback — not Class A usable. Max hosts = 2ⁿ − 2 always (subtract network address and broadcast address). Number of networks in Class A = 2⁷ − 2 = 126.</p></div>
+
+  <h3>Four key addresses for any network block</h3>
+  <div class="grid2">
+    <div class="card"><div class="card-title"><span class="badge b-blue">Network address</span></div><div class="card-body">All host bits = 0. First address in the block. Cannot be assigned to a host. Identifies the network itself.<br>Example: 192.168.1.<strong>0</strong></div></div>
+    <div class="card"><div class="card-title"><span class="badge b-red">Broadcast address</span></div><div class="card-body">All host bits = 1. Last address in the block. Cannot be assigned to a host. Packets sent to this reach all hosts.<br>Example: 192.168.1.<strong>255</strong></div></div>
+    <div class="card"><div class="card-title"><span class="badge b-green">First host</span></div><div class="card-body">Network address + 1. First usable address.<br>Example: 192.168.1.<strong>1</strong></div></div>
+    <div class="card"><div class="card-title"><span class="badge b-teal">Last host</span></div><div class="card-body">Broadcast address − 1. Last usable address.<br>Example: 192.168.1.<strong>254</strong></div></div>
+  </div>
+
+  <h3>Slash notation (CIDR prefix) — how to read it</h3>
+  <div class="card"><div class="card-body">
+    <span class="mono">172.16.0.0/20</span> means: 20 bits are the network prefix, 12 bits are the host part.<br><br>
+    Subnet mask: first 20 bits = 1, remaining 12 bits = 0<br>
+    Binary: <span class="mono">11111111.11111111.11110000.00000000</span><br>
+    Decimal: <span class="mono">255.255.240.0</span><br><br>
+    Quick conversion trick: the "interesting octet" is the one that is not 0 or 255. Here it is the 3rd octet: 20 − 16 = 4 bits set → 11110000 = 240.
+  </div></div>
+</div>
+
+<!-- TAB 2: CIDR & SUBNETTING -->
+<div id="cidr" class="panel">
+  <h3>Subnetting — the core process</h3>
+  <p style="margin-bottom:10px">Subnetting borrows bits from the host part to create multiple smaller networks (subnets) from one larger block.</p>
+
+  <div class="card"><div class="card-body">
+    <strong>Key formulas (memorize all four):</strong><br><br>
+    Number of subnets = <strong>2ˢ</strong> &nbsp;&nbsp;(s = borrowed subnet bits)<br>
+    Hosts per subnet = <strong>2ʰ − 2</strong> &nbsp;&nbsp;(h = remaining host bits)<br>
+    Block size (subnet increment) = <strong>256 − interesting octet of mask</strong><br>
+    Total addresses per subnet = <strong>2ʰ</strong> &nbsp;&nbsp;(includes network + broadcast)
+  </div></div>
+
+  <h3>Step-by-step subnetting method</h3>
+  <div class="num-worked">
+    <div class="lbl">General procedure</div>
+    <div class="step-row"><span class="step-num">1</span><p>Write the IP address and subnet mask in binary. Identify the slash prefix.</p></div>
+    <div class="step-row"><span class="step-num">2</span><p>Find the "interesting octet" — the octet where the mask is neither 0 nor 255.</p></div>
+    <div class="step-row"><span class="step-num">3</span><p>Block size = 256 − (interesting octet value of mask). This is the increment between subnets.</p></div>
+    <div class="step-row"><span class="step-num">4</span><p>Subnets start at 0, block size, 2×block size, 3×block size… in the interesting octet.</p></div>
+    <div class="step-row"><span class="step-num">5</span><p>For each subnet: Network = first address. Broadcast = next network − 1. Hosts = network+1 to broadcast−1.</p></div>
+    <div class="step-row"><span class="step-num">6</span><p>Number of subnets = 2ˢ. Hosts per subnet = 2ʰ − 2. Verify your work.</p></div>
+  </div>
+
+  <h3>Mask to binary — the important octets cheat sheet</h3>
+  <table>
+    <tr><th>Bits set</th><th>Binary</th><th>Decimal</th><th>Block size</th></tr>
+    <tr><td>/25 (1 bit)</td><td>10000000</td><td>128</td><td>128</td></tr>
+    <tr><td>/26 (2 bits)</td><td>11000000</td><td>192</td><td>64</td></tr>
+    <tr><td>/27 (3 bits)</td><td>11100000</td><td>224</td><td>32</td></tr>
+    <tr><td>/28 (4 bits)</td><td>11110000</td><td>240</td><td>16</td></tr>
+    <tr><td>/29 (5 bits)</td><td>11111000</td><td>248</td><td>8</td></tr>
+    <tr><td>/30 (6 bits)</td><td>11111100</td><td>252</td><td>4</td></tr>
+    <tr><td>/20 (4 bits in 3rd octet)</td><td>11110000 in octet 3</td><td>240 in octet 3</td><td>16 (in octet 3)</td></tr>
+    <tr><td>/21 (5 bits in 3rd octet)</td><td>11111000 in octet 3</td><td>248 in octet 3</td><td>8 (in octet 3)</td></tr>
+  </table>
+</div>
+
+<!-- TAB 3: BATCH-22 Q4 FULLY SOLVED -->
+<div id="batch22" class="panel">
+  <div class="warn-box"><p>These are the exact questions from Batch-22 Final Q4. Your paper will very likely be the same style — possibly the same IP addresses. Solve these until you can do them in 15 minutes.</p></div>
+
+  <h3>Q4(a) — Classful network design</h3>
+  <div class="exam-box">
+    <div class="lbl">Exact question — Batch-22 Final Q4(a)</div>
+    <p>A famous communication service provider company needs to establish an internetwork comprised of several networks. Design the internetwork based upon networks and number of hosts in each network. Provide your assumption by selecting any single class of IP4 addressing. Provide the network address, masking values, slash notation, host addresses, and broadcast address of each network and defend the selection of that specific class for the interconnection of networks.</p>
+  </div>
+
+  <div class="num-worked">
+    <div class="lbl">Model answer — Class C example design</div>
+    <div class="step-row"><span class="step-num">1</span><p><strong>Assumption:</strong> Selected Class C addressing. First octet range: 192–223. Default mask: 255.255.255.0 (/24). Reason: Class C supports up to 254 hosts per network — suitable for small-to-medium branch offices of a communication company.</p></div>
+    <div class="step-row"><span class="step-num">2</span><p><strong>Network 1:</strong> IP = 192.168.1.0/24<br>
+    Network address: 192.168.1.0<br>
+    Subnet mask: 255.255.255.0<br>
+    Host range: 192.168.1.1 – 192.168.1.254<br>
+    Broadcast: 192.168.1.255<br>
+    Max hosts: 2⁸ − 2 = 254</p></div>
+    <div class="step-row"><span class="step-num">3</span><p><strong>Network 2:</strong> IP = 192.168.2.0/24<br>
+    Network address: 192.168.2.0<br>
+    Subnet mask: 255.255.255.0<br>
+    Host range: 192.168.2.1 – 192.168.2.254<br>
+    Broadcast: 192.168.2.255</p></div>
+    <div class="step-row"><span class="step-num">4</span><p><strong>Defense of Class C:</strong> Class C was chosen because each network serves a branch office with fewer than 254 hosts. Class A (16M hosts/net) and Class B (65K hosts/net) would waste vast IP space for small offices. Class C provides the right granularity and efficient address utilization.</p></div>
+    <p style="margin-top:6px;font-size:12px;color:var(--color-text-secondary)">Note: You can choose Class A or B — the examiner rewards the correct class properties and a logical defense. Marks = correct addresses (2) + correct defense (1) + correct mask/slash (2).</p>
+  </div>
+
+  <h3>Q4(b) — Subnetting: the main numerical</h3>
+  <div class="exam-box">
+    <div class="lbl">Exact question — Batch-22 Final Q4(b)</div>
+    <p>A commercial bank in Karachi has requested to devise a plan for interconnecting its branches across the city. The network engineer has selected the IP address 172.16.0.0 with subnet mask 255.255.240.0/20 and 172.25.0.0 with subnet mask 255.255.248.0/21. Design the subnets for this organization by finding out the number of subnets, number of hosts, and range of IP addresses of the first five subnets.</p>
+  </div>
+
+  <h4 style="margin-top:4px">Part 1: 172.16.0.0 / 255.255.240.0 (/20)</h4>
+  <div class="num-worked">
+    <div class="lbl">Full solution — 172.16.0.0/20</div>
+    <div class="step-row"><span class="step-num">1</span><p><strong>Identify class and prefix:</strong> 172.x → Class B (128–191). Default mask = /16. Subnet mask = /20 → borrowed 20−16 = <strong>4 bits</strong> from host part.</p></div>
+    <div class="step-row"><span class="step-num">2</span><p><strong>Mask in binary:</strong><br>
+    <span class="mono">11111111.11111111.11110000.00000000</span><br>
+    = 255.255.240.0 ✓ &nbsp;&nbsp;Interesting octet = 3rd octet (240)</p></div>
+    <div class="step-row"><span class="step-num">3</span><p><strong>Number of subnets:</strong> 2⁴ = <strong>16 subnets</strong></p></div>
+    <div class="step-row"><span class="step-num">4</span><p><strong>Host bits remaining:</strong> 32 − 20 = 12 bits<br>
+    Hosts per subnet = 2¹² − 2 = 4096 − 2 = <strong>4094 hosts</strong></p></div>
+    <div class="step-row"><span class="step-num">5</span><p><strong>Block size:</strong> 256 − 240 = <strong>16</strong> &nbsp;(increment in 3rd octet)</p></div>
+    <div class="step-row"><span class="step-num">6</span><p><strong>First 5 subnets:</strong></p></div>
+    <div style="overflow-x:auto;margin-top:4px">
+    <table class="result-table">
+      <tr><th>Subnet #</th><th>Network address</th><th>Subnet mask</th><th>First host</th><th>Last host</th><th>Broadcast</th></tr>
+      <tr><td>1</td><td class="net">172.16.0.0</td><td>255.255.240.0</td><td class="host">172.16.0.1</td><td class="host">172.16.15.254</td><td class="bcast">172.16.15.255</td></tr>
+      <tr><td>2</td><td class="net">172.16.16.0</td><td>255.255.240.0</td><td class="host">172.16.16.1</td><td class="host">172.16.31.254</td><td class="bcast">172.16.31.255</td></tr>
+      <tr><td>3</td><td class="net">172.16.32.0</td><td>255.255.240.0</td><td class="host">172.16.32.1</td><td class="host">172.16.47.254</td><td class="bcast">172.16.47.255</td></tr>
+      <tr><td>4</td><td class="net">172.16.48.0</td><td>255.255.240.0</td><td class="host">172.16.48.1</td><td class="host">172.16.63.254</td><td class="bcast">172.16.63.255</td></tr>
+      <tr><td>5</td><td class="net">172.16.64.0</td><td>255.255.240.0</td><td class="host">172.16.64.1</td><td class="host">172.16.79.254</td><td class="bcast">172.16.79.255</td></tr>
+    </table>
+    </div>
+    <p style="margin-top:6px;font-size:12px;color:var(--color-text-secondary)">Pattern: 3rd octet goes 0, 16, 32, 48, 64… (block size = 16). Last host in each subnet: 3rd octet = next network's 3rd octet − 1, 4th octet = 254. Broadcast: same but 4th octet = 255.</p>
+  </div>
+
+  <h4>Part 2: 172.25.0.0 / 255.255.248.0 (/21)</h4>
+  <div class="num-worked">
+    <div class="lbl">Full solution — 172.25.0.0/21</div>
+    <div class="step-row"><span class="step-num">1</span><p><strong>Class B</strong> (172.x). Default /16. Borrowed = 21−16 = <strong>5 bits</strong>.</p></div>
+    <div class="step-row"><span class="step-num">2</span><p><strong>Mask binary:</strong> <span class="mono">11111111.11111111.11111000.00000000</span> = 255.255.248.0 ✓<br>Interesting octet = 3rd (248)</p></div>
+    <div class="step-row"><span class="step-num">3</span><p><strong>Subnets:</strong> 2⁵ = <strong>32 subnets</strong></p></div>
+    <div class="step-row"><span class="step-num">4</span><p><strong>Host bits:</strong> 32 − 21 = 11 bits → 2¹¹ − 2 = 2048 − 2 = <strong>2046 hosts per subnet</strong></p></div>
+    <div class="step-row"><span class="step-num">5</span><p><strong>Block size:</strong> 256 − 248 = <strong>8</strong> (increment in 3rd octet)</p></div>
+    <div style="overflow-x:auto;margin-top:6px">
+    <table class="result-table">
+      <tr><th>Subnet #</th><th>Network address</th><th>Subnet mask</th><th>First host</th><th>Last host</th><th>Broadcast</th></tr>
+      <tr><td>1</td><td class="net">172.25.0.0</td><td>255.255.248.0</td><td class="host">172.25.0.1</td><td class="host">172.25.7.254</td><td class="bcast">172.25.7.255</td></tr>
+      <tr><td>2</td><td class="net">172.25.8.0</td><td>255.255.248.0</td><td class="host">172.25.8.1</td><td class="host">172.25.15.254</td><td class="bcast">172.25.15.255</td></tr>
+      <tr><td>3</td><td class="net">172.25.16.0</td><td>255.255.248.0</td><td class="host">172.25.16.1</td><td class="host">172.25.23.254</td><td class="bcast">172.25.23.255</td></tr>
+      <tr><td>4</td><td class="net">172.25.24.0</td><td>255.255.248.0</td><td class="host">172.25.24.1</td><td class="host">172.25.31.254</td><td class="bcast">172.25.31.255</td></tr>
+      <tr><td>5</td><td class="net">172.25.32.0</td><td>255.255.248.0</td><td class="host">172.25.32.1</td><td class="host">172.25.39.254</td><td class="bcast">172.25.39.255</td></tr>
+    </table>
+    </div>
+    <p style="margin-top:6px;font-size:12px;color:var(--color-text-secondary)">Pattern: 3rd octet increments by 8. Last host 4th octet always 254. Broadcast 4th octet always 255.</p>
+  </div>
+</div>
+
+<!-- TAB 4: CALCULATOR -->
+<div id="calc" class="panel">
+  <h3>Subnet calculator — practice any scenario</h3>
+  <p style="margin-bottom:10px">Enter any Class B or C network address and CIDR prefix. The calculator generates the first 5 subnets exactly like the exam expects.</p>
+  <div class="calc-wrap">
+    <div class="calc-row">
+      <span class="calc-label">Network IP</span>
+      <input type="text" id="ip-in" value="172.16.0.0" style="width:140px" oninput="calcSubnet()">
+    </div>
+    <div class="calc-row">
+      <span class="calc-label">CIDR prefix (/n)</span>
+      <input type="number" id="prefix-in" value="20" min="8" max="30" style="width:70px" oninput="calcSubnet()">
+    </div>
+    <div id="calc-summary" style="margin:8px 0;font-size:12px;color:var(--color-text-secondary)"></div>
+    <div id="calc-error" style="display:none;color:#A32D2D;font-size:12px;margin-bottom:8px"></div>
+    <div style="overflow-x:auto">
+      <table class="result-table" id="calc-table">
+        <tr><th>Subnet</th><th>Network address</th><th>First host</th><th>Last host</th><th>Broadcast</th></tr>
+      </table>
+    </div>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">
+    <button class="btn" onclick="setCalc('172.16.0.0',20)">172.16.0.0/20</button>
+    <button class="btn" onclick="setCalc('172.25.0.0',21)">172.25.0.0/21</button>
+    <button class="btn" onclick="setCalc('192.168.1.0',26)">192.168.1.0/26</button>
+    <button class="btn" onclick="setCalc('10.0.0.0',8)">10.0.0.0/8</button>
+    <button class="btn" onclick="setCalc('192.168.10.0',28)">192.168.10.0/28</button>
+  </div>
+</div>
+
+<!-- TAB 5: QUIZ -->
+<div id="quiz" class="panel">
+  <div class="quiz-area">
+    <div class="quiz-q">Q1: How many host bits does 255.255.240.0 leave for hosts in a Class B network?</div>
+    <div class="opt" onclick="ans(this,'wrong','q1')">8 bits — last octet only</div>
+    <div class="opt" onclick="ans(this,'wrong','q1')">16 bits — Class B default</div>
+    <div class="opt" onclick="ans(this,'correct','q1')">12 bits — /20 means 20 network bits, leaving 32−20=12 for hosts</div>
+    <div class="opt" onclick="ans(this,'wrong','q1')">4 bits — only the borrowed subnet bits</div>
+    <div class="fb" id="q1"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q2: For 172.16.0.0/20, what is the broadcast address of the THIRD subnet?</div>
+    <div class="opt" onclick="ans(this,'wrong','q2')">172.16.32.255 — only 4th octet matters</div>
+    <div class="opt" onclick="ans(this,'correct','q2')">172.16.47.255 — subnet 3 starts at .32.0, block size=16, so ends at .47.255</div>
+    <div class="opt" onclick="ans(this,'wrong','q2')">172.16.48.255 — that is subnet 4's broadcast</div>
+    <div class="opt" onclick="ans(this,'wrong','q2')">172.16.31.255 — that is subnet 2's broadcast</div>
+    <div class="fb" id="q2"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q3: What is the block size for subnet mask 255.255.248.0?</div>
+    <div class="opt" onclick="ans(this,'wrong','q3')">16 — common mistake</div>
+    <div class="opt" onclick="ans(this,'correct','q3')">8 — block size = 256 − 248 = 8</div>
+    <div class="opt" onclick="ans(this,'wrong','q3')">248 — that is the mask value</div>
+    <div class="opt" onclick="ans(this,'wrong','q3')">4 — confusing with /30</div>
+    <div class="fb" id="q3"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q4: An IP address starts with 172. Which class is it, and what is the default mask?</div>
+    <div class="opt" onclick="ans(this,'wrong','q4')">Class A — 255.0.0.0</div>
+    <div class="opt" onclick="ans(this,'correct','q4')">Class B — 255.255.0.0 (/16), because first octet 172 is in range 128–191</div>
+    <div class="opt" onclick="ans(this,'wrong','q4')">Class C — 255.255.255.0</div>
+    <div class="opt" onclick="ans(this,'wrong','q4')">Class B — 255.255.255.0</div>
+    <div class="fb" id="q4"></div>
+  </div>
+
+  <div class="quiz-area">
+    <div class="quiz-q">Q5: How many usable hosts per subnet does 172.25.0.0/21 provide?</div>
+    <div class="opt" onclick="ans(this,'wrong','q5')">2048 — forgot to subtract 2</div>
+    <div class="opt" onclick="ans(this,'wrong','q5')">4094 — that is /20</div>
+    <div class="opt" onclick="ans(this,'correct','q5')">2046 — host bits = 32−21 = 11 → 2¹¹−2 = 2046</div>
+    <div class="opt" onclick="ans(this,'wrong','q5')">254 — that is Class C default</div>
+    <div class="fb" id="q5"></div>
+  </div>
+
+  <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
+    <button class="btn btn-primary" onclick="sendPrompt('Now start preparing Q5 — Dijkstra algorithm and Bellman-Ford distance vector routing with step-by-step worked examples from the Batch-22 paper')">Next: Q5 Routing</button>
+    <button class="btn" onclick="sendPrompt('Give me a new subnetting problem to solve: different IP address and mask, not from the paper')">Practice new problem</button>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function ipToInt(ip){
+  const parts=ip.trim().split('.').map(Number);
+  if(parts.length!==4||parts.some(p=>isNaN(p)||p<0||p>255)) return null;
+  return (parts[0]<<24)|(parts[1]<<16)|(parts[2]<<8)|parts[3];
+}
+
+function intToIp(n){
+  return [((n>>>24)&255),((n>>>16)&255),((n>>>8)&255),(n&255)].join('.');
+}
+
+function calcSubnet(){
+  const ipStr=document.getElementById('ip-in').value.trim();
+  const prefix=parseInt(document.getElementById('prefix-in').value)||0;
+  const errEl=document.getElementById('calc-error');
+  const sumEl=document.getElementById('calc-summary');
+  const tbl=document.getElementById('calc-table');
+
+  errEl.style.display='none';
+  if(prefix<8||prefix>30){errEl.textContent='Prefix must be 8–30';errEl.style.display='block';return;}
+  const netInt=ipToInt(ipStr);
+  if(netInt===null){errEl.textContent='Invalid IP address';errEl.style.display='block';return;}
+
+  const maskInt=(prefix===0)?0:((0xFFFFFFFF<<(32-prefix))>>>0);
+  const hostBits=32-prefix;
+  const blockInt=(1<<hostBits)>>>0;
+  const numSubnets=Math.pow(2,prefix<=16?prefix-16+prefix:prefix-(prefix<=24?16:24));
+
+  const firstOctet=(netInt>>>24)&255;
+  let defaultPrefix=firstOctet<128?8:firstOctet<192?16:24;
+  const borrowedBits=prefix-defaultPrefix;
+  const actualSubnets=borrowedBits>=0?Math.pow(2,borrowedBits):1;
+  const hostsPerSubnet=Math.pow(2,hostBits)-2;
+
+  sumEl.innerHTML=`<strong>Mask:</strong> ${intToIp(maskInt)} &nbsp;|&nbsp; <strong>Subnets:</strong> 2<sup>${borrowedBits>=0?borrowedBits:'?'}</sup> = ${actualSubnets>=0?actualSubnets.toLocaleString():'—'} &nbsp;|&nbsp; <strong>Hosts/subnet:</strong> 2<sup>${hostBits}</sup>−2 = ${hostsPerSubnet.toLocaleString()} &nbsp;|&nbsp; <strong>Block size:</strong> ${blockInt}`;
+
+  const baseNet=(netInt&maskInt)>>>0;
+  let rows='<tr><th>Subnet</th><th>Network address</th><th>First host</th><th>Last host</th><th>Broadcast</th></tr>';
+  for(let i=0;i<5;i++){
+    const net=(baseNet+(i*blockInt))>>>0;
+    const bcast=(net+blockInt-1)>>>0;
+    const first=(net+1)>>>0;
+    const last=(bcast-1)>>>0;
+    rows+=`<tr><td>${i+1}</td><td class="net">${intToIp(net)}</td><td class="host">${intToIp(first)}</td><td class="host">${intToIp(last)}</td><td class="bcast">${intToIp(bcast)}</td></tr>`;
+  }
+  tbl.innerHTML=rows;
+}
+
+function setCalc(ip,prefix){
+  document.getElementById('ip-in').value=ip;
+  document.getElementById('prefix-in').value=prefix;
+  calcSubnet();
+  show('calc');
+  document.querySelectorAll('.tab')[3].classList.add('active');
+}
+
+const fbs={
+  q1:{correct:'Correct. /20 = 20 network bits. Host bits = 32−20 = 12. Subnets = 2^(20−16) = 16. Hosts per subnet = 2¹²−2 = 4094.',
+      wrong:'Wrong. The prefix /20 means 20 bits are the network part. Host bits = 32−20 = 12. This gives 4094 usable hosts per subnet.'},
+  q2:{correct:'Correct. Block size = 16. Subnet 3 starts at 172.16.32.0 (0, 16, 32…). It ends at 172.16.47.255 (32+16−1=47 in 3rd octet, 255 in 4th).',
+      wrong:'Wrong. Block size = 256−240 = 16. Subnet 1: .0.0–.15.255 | Subnet 2: .16.0–.31.255 | Subnet 3: .32.0–.47.255. Broadcast = .47.255.'},
+  q3:{correct:'Correct. Block size = 256 − (interesting octet of mask) = 256 − 248 = 8. This is the increment between subnet starting addresses.',
+      wrong:'Wrong. Block size = 256 − mask value in interesting octet = 256 − 248 = 8. Subnets start at 0, 8, 16, 24, 32…'},
+  q4:{correct:'Correct. First octet 172 falls in 128–191 → Class B. Default mask = 255.255.0.0 (/16).',
+      wrong:'Wrong. 128–191 → Class B. Default mask = 255.255.0.0 (/16). Class A = 1–126 (/8). Class C = 192–223 (/24).'},
+  q5:{correct:'Correct. /21 → host bits = 32−21 = 11 → 2¹¹ − 2 = 2048 − 2 = 2046 usable hosts per subnet.',
+      wrong:'Wrong. Host bits = 32−21 = 11. Usable hosts = 2¹¹ − 2 = 2046. Always subtract 2 (network address + broadcast address).'},
+};
+
+function ans(el,verdict,id){
+  el.closest('.quiz-area').querySelectorAll('.opt').forEach(o=>o.style.pointerEvents='none');
+  el.classList.add(verdict);
+  const fb=document.getElementById(id);
+  fb.textContent=fbs[id][verdict];
+  fb.className='fb '+(verdict==='correct'?'fb-ok':'fb-no');
+}
+
+calcSubnet();
+</script>

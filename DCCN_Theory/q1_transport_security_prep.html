@@ -1,0 +1,349 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary);font-size:14px;line-height:1.7}
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font-size:12px;padding:5px 14px;border-radius:99px;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);transition:all 0.15s}
+.tab.active{background:var(--color-text-primary);color:var(--color-background-primary);border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+.section{margin-bottom:1.5rem}
+h3{font-size:15px;font-weight:500;margin-bottom:8px;color:var(--color-text-primary)}
+h4{font-size:13px;font-weight:500;margin:10px 0 4px;color:var(--color-text-primary)}
+p,li{font-size:13px;color:var(--color-text-secondary);line-height:1.7}
+ul{padding-left:16px}
+.card{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:12px 16px;margin-bottom:10px;background:var(--color-background-primary)}
+.card-title{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.card-body{font-size:12px;color:var(--color-text-secondary);line-height:1.6}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:500;margin-right:4px}
+.b-teal{background:#E1F5EE;color:#085041}.b-purple{background:#EEEDFE;color:#26215C}.b-coral{background:#FAECE7;color:#712B13}.b-amber{background:#FAEEDA;color:#633806}
+@media(prefers-color-scheme:dark){
+  .b-teal{background:#04342C;color:#9FE1CB}.b-purple{background:#26215C;color:#CECBF6}.b-coral{background:#4A1B0C;color:#F5C4B3}.b-amber{background:#412402;color:#FAC775}
+}
+.table-wrap{overflow-x:auto;margin:8px 0}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{font-weight:500;text-align:left;padding:6px 10px;border-bottom:1px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+td{padding:6px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.exam-box{border-radius:var(--border-radius-lg);border:0.5px solid #1D9E75;background:#E1F5EE;padding:12px 16px;margin-bottom:10px}
+@media(prefers-color-scheme:dark){.exam-box{background:#04342C;border-color:#0F6E56}}
+.exam-box .label{font-size:11px;font-weight:500;color:#085041;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.04em}
+@media(prefers-color-scheme:dark){.exam-box .label{color:#5DCAA5}}
+.exam-box p,.exam-box li{font-size:12px;color:#085041;line-height:1.7}
+@media(prefers-color-scheme:dark){.exam-box p,.exam-box li{color:#9FE1CB}}
+.warn-box{border-radius:var(--border-radius-lg);border:0.5px solid #BA7517;background:#FAEEDA;padding:10px 14px;margin-bottom:10px}
+@media(prefers-color-scheme:dark){.warn-box{background:#412402;border-color:#854F0B}}
+.warn-box p{font-size:12px;color:#633806}
+@media(prefers-color-scheme:dark){.warn-box p{color:#FAC775}}
+.btn{display:inline-block;font-size:12px;font-weight:500;padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-primary);cursor:pointer;background:var(--color-background-secondary);color:var(--color-text-primary);margin:3px;transition:background 0.15s}
+.btn:hover{background:var(--color-background-tertiary)}
+.btn-primary{background:#085041;color:#9FE1CB;border-color:#0F6E56}
+.btn-primary:hover{background:#0F6E56}
+.cipher-box{border-radius:var(--border-radius-md);padding:10px 14px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);margin:8px 0;font-size:13px}
+.cipher-row{display:flex;gap:4px;flex-wrap:wrap;margin:6px 0}
+.cipher-cell{min-width:28px;height:28px;border-radius:4px;border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;background:var(--color-background-primary)}
+.cipher-cell.active{background:#EEEDFE;border-color:#534AB7;color:#26215C}
+@media(prefers-color-scheme:dark){.cipher-cell.active{background:#26215C;border-color:#7F77DD;color:#CECBF6}}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:500px){.grid2{grid-template-columns:1fr}}
+</style>
+
+<div style="padding:1rem 0">
+<div class="tabs">
+  <button class="tab active" onclick="show('transport')">Q1(a) Transport Layer</button>
+  <button class="tab" onclick="show('security')">Q1(b) Security</button>
+  <button class="tab" onclick="show('cipher')">Cipher Practice</button>
+  <button class="tab" onclick="show('answers')">Model Answers</button>
+</div>
+
+<div id="transport" class="panel active">
+  <div class="section">
+    <h3>Transport Layer — core concepts</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title">What it does</div>
+        <div class="card-body">Provides logical (process-to-process) communication between applications on different hosts. Works above Network Layer (host-to-host). Uses port numbers to identify processes.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Addressing at each layer</div>
+        <div class="card-body">
+          Data Link → MAC address (node-to-node)<br>
+          Network → IP address (host-to-host)<br>
+          <strong>Transport → Port number (process-to-process)</strong>
+        </div>
+      </div>
+    </div>
+
+    <h3>Socket address — the key concept</h3>
+    <div class="card">
+      <div class="card-body">
+        A <strong>socket address</strong> = IP address + port number. It uniquely identifies a process on a host.<br><br>
+        Transport layer needs <em>a pair</em>: client socket address + server socket address.<br><br>
+        Example: Client 192.168.1.5:<strong>50123</strong> connects to Server 142.250.1.1:<strong>80</strong> (HTTP)
+      </div>
+    </div>
+
+    <h3>Port number ranges (memorize this)</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Range</th><th>Type</th><th>Details</th></tr>
+        <tr><td>0 – 1023</td><td>Well-known ports</td><td>Controlled by IANA. HTTP=80, FTP=21, SMTP=25, DNS=53, HTTPS=443</td></tr>
+        <tr><td>1024 – 49151</td><td>Registered ports</td><td>IANA registers; apps may use. MySQL=3306, RDP=3389</td></tr>
+        <tr><td>49152 – 65535</td><td>Dynamic/ephemeral</td><td>Assigned temporarily to clients</td></tr>
+      </table>
+    </div>
+
+    <h3>TCP vs UDP — know this table cold</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Feature</th><th>TCP</th><th>UDP</th></tr>
+        <tr><td>Connection</td><td>Connection-oriented (3-way handshake)</td><td>Connectionless</td></tr>
+        <tr><td>Reliability</td><td>Reliable (+ve / -ve ACK)</td><td>Unreliable, no ACK</td></tr>
+        <tr><td>Flow control</td><td>Yes (sliding window)</td><td>No</td></tr>
+        <tr><td>Error control</td><td>End-to-end</td><td>Checksum only</td></tr>
+        <tr><td>Speed</td><td>Slower (overhead)</td><td>Faster</td></tr>
+        <tr><td>Use cases</td><td>HTTP, FTP, Email</td><td>DNS, VoIP, Video streaming</td></tr>
+        <tr><td>Stream type</td><td>Stream-oriented, buffered</td><td>Message-oriented</td></tr>
+      </table>
+    </div>
+
+    <h3>Three-way handshake — step by step</h3>
+    <div class="card"><div class="card-body">
+      <strong>Step 1 — SYN:</strong> Client sends segment with SYN=1, seq=x. Client enters SYN SENT state.<br>
+      <strong>Step 2 — SYN+ACK:</strong> Server replies SYN=1, ACK=1, seq=y, ack=x+1. Server enters SYN RECEIVED.<br>
+      <strong>Step 3 — ACK:</strong> Client sends ACK=1, ack=y+1. Both sides enter ESTABLISHED state. Data transfer begins.
+    </div></div>
+
+    <h3>TCP Header fields — exam loves asking these</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Field</th><th>Size</th><th>Purpose</th></tr>
+        <tr><td>Source port</td><td>16 bits</td><td>Port of sending application</td></tr>
+        <tr><td>Destination port</td><td>16 bits</td><td>Port of receiving application</td></tr>
+        <tr><td>Sequence number</td><td>32 bits</td><td>Number of the first byte in this segment</td></tr>
+        <tr><td>Acknowledgement</td><td>32 bits</td><td>Next byte receiver expects</td></tr>
+        <tr><td>Header length</td><td>4 bits</td><td>Length of TCP header</td></tr>
+        <tr><td>Window size</td><td>16 bits</td><td>Flow control — receiver's buffer size</td></tr>
+        <tr><td>Checksum</td><td>16 bits</td><td>Error detection</td></tr>
+        <tr><td>Urgent pointer</td><td>16 bits</td><td>Valid when URG flag set — urgent data location</td></tr>
+      </table>
+    </div>
+
+    <h3>Client-server vs Peer-to-peer</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title"><span class="badge b-teal">Client-Server</span></div>
+        <div class="card-body">
+          Dedicated server waits on a well-known port. Clients initiate connections. Server is always on, has fixed IP. Examples: HTTP (web), FTP, Email (SMTP/IMAP).<br><br>
+          <em>Socket pair:</em> Client socket + Server socket (well-known port like 80).
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="badge b-purple">Peer-to-Peer</span></div>
+        <div class="card-body">
+          Each peer acts as both client and server. No dedicated server. Peers connect directly using TCP/IP sockets. Examples: BitTorrent, Skype (historically), blockchain nodes.<br><br>
+          <em>More scalable</em> but harder to manage.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="security" class="panel">
+  <div class="section">
+    <h3>Security goals — CIA + A (memorize the acronym)</h3>
+    <div class="grid2">
+      <div class="card"><div class="card-title"><span class="badge b-teal">Confidentiality</span></div><div class="card-body">Data hidden from unauthorized users. Broken by snooping and traffic analysis.</div></div>
+      <div class="card"><div class="card-title"><span class="badge b-purple">Integrity</span></div><div class="card-body">Data protected from unauthorized modification. Broken by modification, masquerading, replaying, repudiation.</div></div>
+      <div class="card"><div class="card-title"><span class="badge b-coral">Availability</span></div><div class="card-body">Services accessible to authorized users. Broken by Denial of Service (DoS) attacks.</div></div>
+      <div class="card"><div class="card-title"><span class="badge b-amber">Authenticity</span></div><div class="card-body">Verify the identity of the communicating entity. Ensured via digital signatures.</div></div>
+    </div>
+
+    <h3>Attack types — map each to CIA</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Attack</th><th>Goal broken</th><th>How it works</th></tr>
+        <tr><td>Snooping</td><td>Confidentiality</td><td>Unauthorized access to data in transit</td></tr>
+        <tr><td>Traffic analysis</td><td>Confidentiality</td><td>Monitor traffic patterns to infer info even if encrypted</td></tr>
+        <tr><td>Modification</td><td>Integrity</td><td>Attacker intercepts and changes message content</td></tr>
+        <tr><td>Masquerading</td><td>Integrity/Auth</td><td>Attacker impersonates a legitimate user</td></tr>
+        <tr><td>Replaying</td><td>Integrity</td><td>Intercept and re-send old message (e.g. repeat payment)</td></tr>
+        <tr><td>Repudiation</td><td>Integrity</td><td>Sender/receiver denies past transaction</td></tr>
+        <tr><td>DoS</td><td>Availability</td><td>Flood server with bogus requests to overwhelm it</td></tr>
+      </table>
+    </div>
+
+    <h3>Cryptography — symmetric vs asymmetric</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-title"><span class="badge b-teal">Symmetric (same key)</span></div>
+        <div class="card-body">
+          Same key used for encryption AND decryption. Fast. Key must be shared securely (face-to-face or trusted channel).<br><br>
+          C = E<sub>k</sub>(P) &nbsp;&nbsp; P = D<sub>k</sub>(C)<br><br>
+          Types: Traditional (substitution, transposition) and Modern (DES, AES).
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="badge b-purple">Asymmetric (public/private)</span></div>
+        <div class="card-body">
+          Two keys: public key (shared openly) + private key (kept secret). Encrypt with public key, decrypt with private key. Used in digital signatures — sign with private, verify with public.
+        </div>
+      </div>
+    </div>
+
+    <h3>Traditional ciphers — substitution</h3>
+    <div class="card"><div class="card-body">
+      <strong>Additive (Caesar/shift) cipher:</strong> Each letter shifted by key k.<br>
+      Formula: C = (P + k) mod 26 &nbsp;&nbsp; Decrypt: P = (C − k) mod 26<br><br>
+      <strong>Monoalphabetic:</strong> One plaintext letter always maps to same ciphertext letter.<br>
+      <strong>Polyalphabetic:</strong> Same plaintext letter maps to different ciphertext depending on position (harder to crack).
+    </div></div>
+
+    <h3>IPSec — security at Network Layer</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Mode</th><th>Protects</th><th>IP header</th></tr>
+        <tr><td>Transport mode</td><td>Payload only (from Transport Layer)</td><td>NOT protected</td></tr>
+        <tr><td>Tunnel mode</td><td>Entire IP packet including header</td><td>Protected — new IP header added</td></tr>
+      </table>
+    </div>
+    <div class="grid2">
+      <div class="card"><div class="card-title">AH (Authentication Header)</div><div class="card-body">Provides source authentication + data integrity. Does NOT provide confidentiality (no encryption).</div></div>
+      <div class="card"><div class="card-title">ESP (Encapsulating Security Payload)</div><div class="card-body">Provides source authentication + integrity + confidentiality. Encrypts payload.</div></div>
+    </div>
+
+    <h3>SSL/TLS and Firewalls</h3>
+    <div class="grid2">
+      <div class="card"><div class="card-title">SSL/TLS — Transport Layer security</div><div class="card-body">Provides security between application and transport layers. HTTP uses SSL → HTTPS. Creates cryptographic session keys via handshake.</div></div>
+      <div class="card"><div class="card-title">Firewalls — two types</div><div class="card-body">
+        <strong>Packet-filter:</strong> Filters at Network/Transport layer (IP, port). Simple, fast.<br>
+        <strong>Proxy firewall:</strong> Filters at Application layer. Understands application protocols — more intelligent.
+      </div></div>
+    </div>
+  </div>
+</div>
+
+<div id="cipher" class="panel">
+  <div class="section">
+    <h3>Additive cipher practice — encrypt your name</h3>
+    <p style="margin-bottom:10px">This is exactly what Q2(b) / Q1(b) asks: encrypt using additive cipher with a given key. Practice with key = 15 (used in Lec-16 example).</p>
+
+    <div class="cipher-box">
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px">
+        <div>
+          <label style="font-size:12px;color:var(--color-text-secondary)">Plaintext (letters only)</label><br>
+          <input type="text" id="plain-in" value="ARHAM" oninput="doCipher()" style="width:160px;margin-top:4px;font-size:13px">
+        </div>
+        <div>
+          <label style="font-size:12px;color:var(--color-text-secondary)">Key (0–25)</label><br>
+          <input type="number" id="key-in" value="15" min="0" max="25" oninput="doCipher()" style="width:70px;margin-top:4px;font-size:13px">
+        </div>
+      </div>
+
+      <div style="margin-bottom:8px">
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500">Plaintext (P)</div>
+        <div class="cipher-row" id="row-plain"></div>
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500">P value (0–25)</div>
+        <div class="cipher-row" id="row-pval"></div>
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500">C = (P + key) mod 26</div>
+        <div class="cipher-row" id="row-cval"></div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500">Ciphertext (C)</div>
+        <div class="cipher-row" id="row-cipher"></div>
+      </div>
+    </div>
+
+    <div class="warn-box"><p>In the exam: show the full working table (P letter → P value → + key → mod 26 → C value → C letter). Never just write the answer — show every step.</p></div>
+
+    <h3 style="margin-top:12px">Decryption: P = (C − key + 26) mod 26</h3>
+    <div class="cipher-box">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:8px">Decrypting the ciphertext above (same key):</div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500">Ciphertext (C)</div>
+        <div class="cipher-row" id="row-d-cipher"></div>
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500">C value</div>
+        <div class="cipher-row" id="row-d-cval"></div>
+      </div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500">P = (C − key + 26) mod 26</div>
+        <div class="cipher-row" id="row-d-pval"></div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:4px;font-weight:500">Recovered plaintext</div>
+        <div class="cipher-row" id="row-d-plain"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="answers" class="panel">
+  <div class="section">
+    <h3>Q1(a) — Model answer structure (5 marks)</h3>
+    <div class="exam-box">
+      <div class="label">Exam answer framework — Q1(a)</div>
+      <p><strong>Para 1 — Role of Transport Layer:</strong> The transport layer provides process-to-process (end-to-end) delivery using port numbers. It sits above the network layer (which provides host-to-host delivery) and receives data from application layer processes. It performs: segmentation, end-to-end error control, flow control, multiplexing/demultiplexing.</p><br>
+      <p><strong>Para 2 — TCP/IP Socket:</strong> A socket address is the combination of IP address and port number. Transport layer needs a pair — client socket and server socket — to establish communication. TCP uses this socket pair to create a virtual circuit (connection-oriented).</p><br>
+      <p><strong>Para 3 — Client-Server:</strong> In this model, the server runs permanently on a well-known port. Clients initiate connections. Example: HTTP client connects to port 80. The server socket address is fixed; the client uses an ephemeral port.</p><br>
+      <p><strong>Para 4 — Peer-to-Peer:</strong> Each peer acts as both client and server simultaneously. There is no dedicated server; peers discover each other and connect directly using TCP/IP sockets. Examples: BitTorrent file sharing, distributed blockchain nodes.</p>
+    </div>
+
+    <h3>Q1(b) — Model answer structure (5 marks)</h3>
+    <div class="exam-box">
+      <div class="label">Exam answer framework — Q1(b): Attacks + Cipher</div>
+      <p><strong>Part i — Security Goals (1 mark):</strong> CIA + Authenticity. Define each briefly.</p><br>
+      <p><strong>Part ii — Important attacks (2 marks):</strong> List and explain 2–3: snooping (breaks confidentiality by intercepting plain data), DoS (breaks availability by flooding server), masquerading (breaks integrity/auth by impersonating), replaying (breaks integrity by re-sending old messages).</p><br>
+      <p><strong>Part iii — Substitution cipher (2 marks):</strong> Show the full working table. Formula: C = (P + k) mod 26. Do encrypt and decrypt both. Show all steps — the marks are for the working, not just the answer.</p><br>
+      <p><em>Key exam tip:</em> If your name is Arham, the paper says "encrypt the name of the student" — use your own name. Practice it now using the Cipher tab.</p>
+    </div>
+
+    <div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:6px">
+      <button class="btn btn-primary" onclick="sendPrompt('Quiz me on Q1: ask me one exam-style question on Transport Layer and tell me if my answer is correct')">Quiz me on Q1(a)</button>
+      <button class="btn btn-primary" onclick="sendPrompt('Quiz me on Network Security: ask me one exam-style question about attacks or IPSec and evaluate my answer')">Quiz me on Q1(b)</button>
+      <button class="btn" onclick="sendPrompt('Now start preparing Q5 — Dijkstra and Bellman-Ford routing algorithms')">Next: Q5 Routing</button>
+      <button class="btn" onclick="sendPrompt('Now start preparing Q4 — IP addressing and subnetting')">Next: Q4 Subnetting</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function cell(val, highlight){
+  return `<div class="cipher-cell${highlight?' active':''}">${val}</div>`;
+}
+
+function doCipher(){
+  const raw = (document.getElementById('plain-in').value||'').toUpperCase().replace(/[^A-Z]/g,'');
+  const k = Math.max(0, Math.min(25, parseInt(document.getElementById('key-in').value)||0));
+  const letters = raw.split('');
+
+  const pVals = letters.map(l => l.charCodeAt(0)-65);
+  const cVals = pVals.map(p => (p+k)%26);
+  const cLetters = cVals.map(v => String.fromCharCode(v+65));
+
+  document.getElementById('row-plain').innerHTML = letters.map(l=>cell(l,true)).join('');
+  document.getElementById('row-pval').innerHTML = pVals.map(v=>cell(v,false)).join('');
+  document.getElementById('row-cval').innerHTML = cVals.map(v=>cell(v,false)).join('');
+  document.getElementById('row-cipher').innerHTML = cLetters.map(l=>cell(l,true)).join('');
+
+  document.getElementById('row-d-cipher').innerHTML = cLetters.map(l=>cell(l,true)).join('');
+  document.getElementById('row-d-cval').innerHTML = cVals.map(v=>cell(v,false)).join('');
+  const dVals = cVals.map(c=>(c-k+26)%26);
+  document.getElementById('row-d-pval').innerHTML = dVals.map(v=>cell(v,false)).join('');
+  document.getElementById('row-d-plain').innerHTML = dVals.map(v=>cell(String.fromCharCode(v+65),true)).join('');
+}
+
+doCipher();
+</script>
