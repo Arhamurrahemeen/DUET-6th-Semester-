@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DBMS Finals · Arham · 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d0f;
+  --surface: #16161a;
+  --surface2: #1e1e24;
+  --surface3: #26262e;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #f0efe8;
+  --muted: #888884;
+  --accent: #e8c547;
+  --accent2: #5b8af5;
+  --accent3: #7ee8a2;
+  --accent4: #f5855b;
+  --accent5: #c47af5;
+  --danger: #f55b5b;
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+  --radius: 10px;
+  --radius-lg: 16px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 15px; line-height: 1.7; min-height: 100vh; }
+a { color: var(--accent2); text-decoration: none; }
+
+/* NAV */
+nav { position: sticky; top: 0; z-index: 100; background: rgba(13,13,15,0.92); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); padding: 0 2rem; display: flex; align-items: center; gap: 0; height: 56px; }
+.nav-brand { font-family: var(--font-display); font-weight: 800; font-size: 15px; color: var(--accent); margin-right: auto; letter-spacing: -0.3px; }
+.nav-links { display: flex; gap: 2px; }
+.nav-link { padding: 6px 12px; border-radius: 8px; font-size: 13px; color: var(--muted); cursor: pointer; border: none; background: none; font-family: var(--font-body); transition: all 0.15s; white-space: nowrap; }
+.nav-link:hover { color: var(--text); background: var(--surface2); }
+.nav-link.active { color: var(--accent); background: rgba(232,197,71,0.1); }
+
+/* HERO */
+.hero { padding: 4rem 2rem 3rem; max-width: 900px; margin: 0 auto; }
+.hero-tag { display: inline-block; font-size: 11px; font-family: var(--font-mono); color: var(--accent); border: 1px solid rgba(232,197,71,0.3); padding: 3px 10px; border-radius: 100px; margin-bottom: 1.5rem; letter-spacing: 1px; text-transform: uppercase; }
+.hero h1 { font-family: var(--font-display); font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; letter-spacing: -1px; margin-bottom: 1rem; }
+.hero h1 span { color: var(--accent); }
+.hero-desc { font-size: 16px; color: var(--muted); max-width: 580px; line-height: 1.7; margin-bottom: 2rem; }
+.hero-pills { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { padding: 5px 14px; border-radius: 100px; font-size: 12px; font-family: var(--font-mono); border: 1px solid var(--border2); color: var(--muted); }
+.pill.hot { border-color: rgba(245,133,91,0.4); color: var(--accent4); background: rgba(245,133,91,0.06); }
+.pill.sure { border-color: rgba(126,232,162,0.4); color: var(--accent3); background: rgba(126,232,162,0.06); }
+.pill.key { border-color: rgba(91,138,245,0.4); color: var(--accent2); background: rgba(91,138,245,0.06); }
+
+/* LAYOUT */
+.page { display: none; padding: 0 2rem 4rem; max-width: 900px; margin: 0 auto; }
+.page.active { display: block; }
+.section-title { font-family: var(--font-display); font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; margin-top: 3rem; }
+.section-title:first-child { margin-top: 0; }
+
+/* CARDS */
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 12px; }
+.card.hot { border-color: rgba(245,133,91,0.35); }
+.card.sure { border-color: rgba(126,232,162,0.25); }
+.card.key { border-color: rgba(91,138,245,0.25); }
+.card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 0.5rem; }
+.card-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); }
+.badge { font-size: 11px; font-family: var(--font-mono); padding: 3px 8px; border-radius: 6px; white-space: nowrap; }
+.badge.hot { background: rgba(245,133,91,0.15); color: var(--accent4); }
+.badge.sure { background: rgba(126,232,162,0.15); color: var(--accent3); }
+.badge.med { background: rgba(232,197,71,0.15); color: var(--accent); }
+.badge.key { background: rgba(91,138,245,0.15); color: var(--accent2); }
+.card p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+.card .marks { font-size: 12px; font-family: var(--font-mono); color: var(--accent); margin-top: 8px; }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media(max-width:640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+/* CONCEPT BLOCKS */
+.concept-block { background: var(--surface2); border-radius: var(--radius); padding: 1rem 1.25rem; margin-bottom: 8px; border-left: 3px solid var(--border2); }
+.concept-block.accent { border-left-color: var(--accent); }
+.concept-block.blue { border-left-color: var(--accent2); }
+.concept-block.green { border-left-color: var(--accent3); }
+.concept-block.orange { border-left-color: var(--accent4); }
+.concept-block.purple { border-left-color: var(--accent5); }
+.concept-block .label { font-size: 11px; font-family: var(--font-mono); color: var(--accent); margin-bottom: 4px; letter-spacing: 0.5px; }
+.concept-block.blue .label { color: var(--accent2); }
+.concept-block.green .label { color: var(--accent3); }
+.concept-block.orange .label { color: var(--accent4); }
+.concept-block.purple .label { color: var(--accent5); }
+.concept-block p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+.concept-block strong { color: var(--text); font-weight: 500; }
+
+/* CODE / FORMULA */
+.formula { background: var(--surface3); border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem 1rem; font-family: var(--font-mono); font-size: 13px; color: var(--accent2); margin: 8px 0; line-height: 1.7; overflow-x: auto; }
+.formula .comment { color: var(--muted); }
+
+/* PROBLEM BLOCKS */
+.problem { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 14px; }
+.problem-q { font-size: 14px; color: var(--text); line-height: 1.7; margin-bottom: 1rem; }
+.problem-q strong { color: var(--accent); }
+.toggle-btn { background: var(--surface2); border: 1px solid var(--border2); color: var(--muted); padding: 7px 16px; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: var(--font-body); transition: all 0.15s; }
+.toggle-btn:hover { background: var(--surface3); color: var(--text); }
+.solution { display: none; margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 1rem; }
+.solution.open { display: block; }
+.solution-step { display: flex; gap: 10px; margin-bottom: 8px; }
+.step-num { background: rgba(232,197,71,0.12); color: var(--accent); font-family: var(--font-mono); font-size: 11px; min-width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 6px; margin-top: 2px; flex-shrink: 0; }
+.step-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.step-text strong { color: var(--text); font-weight: 500; }
+.step-formula { background: var(--surface3); border-radius: 6px; padding: 6px 10px; font-family: var(--font-mono); font-size: 12px; color: var(--accent2); margin-top: 4px; display: block; }
+
+/* MCQ */
+.mcq-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; margin-bottom: 14px; }
+.mcq-q { font-size: 14px; color: var(--text); margin-bottom: 0.75rem; line-height: 1.6; }
+.mcq-options { display: flex; flex-direction: column; gap: 6px; }
+.mcq-opt { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 9px 14px; font-size: 13px; color: var(--muted); cursor: pointer; transition: all 0.15s; text-align: left; font-family: var(--font-body); }
+.mcq-opt:hover { border-color: var(--border2); color: var(--text); }
+.mcq-opt.correct { background: rgba(126,232,162,0.1); border-color: rgba(126,232,162,0.4); color: var(--accent3); }
+.mcq-opt.wrong { background: rgba(245,91,91,0.1); border-color: rgba(245,91,91,0.3); color: var(--danger); }
+.mcq-feedback { margin-top: 0.75rem; font-size: 13px; color: var(--muted); display: none; background: var(--surface2); border-radius: 8px; padding: 0.6rem 0.8rem; line-height: 1.6; }
+.mcq-feedback strong { color: var(--text); font-weight: 500; }
+.mcq-feedback.show { display: block; }
+
+/* VISUAL TABLE */
+.vtable { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+.vtable th { background: var(--surface3); color: var(--text); font-weight: 500; padding: 8px 12px; text-align: left; border: 1px solid var(--border2); font-family: var(--font-mono); font-size: 12px; }
+.vtable td { padding: 8px 12px; border: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+.vtable tr:hover td { background: var(--surface2); }
+.vtable .hl { color: var(--accent); font-weight: 500; }
+.vtable .hl2 { color: var(--accent3); }
+.vtable .hl3 { color: var(--accent2); }
+
+/* INTERACTIVE FD SOLVER */
+.fd-solver { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem 1.5rem; }
+.fd-input-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.fd-input { background: var(--surface3); border: 1px solid var(--border2); color: var(--text); padding: 8px 12px; border-radius: 8px; font-family: var(--font-mono); font-size: 13px; flex: 1; min-width: 120px; }
+.fd-input::placeholder { color: var(--muted); }
+.fd-input:focus { outline: none; border-color: rgba(91,138,245,0.5); }
+.fd-btn { background: rgba(91,138,245,0.15); border: 1px solid rgba(91,138,245,0.3); color: var(--accent2); padding: 8px 18px; border-radius: 8px; font-size: 13px; cursor: pointer; font-family: var(--font-body); transition: all 0.15s; white-space: nowrap; }
+.fd-btn:hover { background: rgba(91,138,245,0.25); }
+.fd-output { background: var(--surface3); border-radius: 8px; padding: 1rem; font-family: var(--font-mono); font-size: 13px; color: var(--text); min-height: 80px; line-height: 1.8; margin-top: 10px; white-space: pre-wrap; }
+.fd-output .ok { color: var(--accent3); }
+.fd-output .step { color: var(--muted); }
+.fd-output .result { color: var(--accent); }
+
+/* NORMALIZATION VISUAL */
+.nf-ladder { display: flex; flex-direction: column; gap: 0; }
+.nf-level { display: flex; align-items: center; gap: 12px; padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 4px; }
+.nf-num { font-family: var(--font-display); font-size: 18px; font-weight: 800; min-width: 52px; }
+.nf-rule { font-size: 13px; color: var(--muted); flex: 1; }
+.nf-rule strong { color: var(--text); font-weight: 500; }
+.nf-check { font-size: 11px; font-family: var(--font-mono); padding: 3px 8px; border-radius: 6px; }
+
+/* TRANSACTION DIAGRAM */
+.txn-states { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; margin: 1rem 0; }
+.txn-state { padding: 8px 16px; border-radius: 8px; font-size: 12px; font-family: var(--font-mono); text-align: center; min-width: 90px; }
+.txn-arrow { color: var(--muted); font-size: 18px; }
+.txn-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+/* EXAM TIPS */
+.tip { display: flex; gap: 10px; background: rgba(232,197,71,0.06); border: 1px solid rgba(232,197,71,0.15); border-radius: 10px; padding: 0.75rem 1rem; margin-bottom: 8px; }
+.tip-icon { font-size: 14px; flex-shrink: 0; margin-top: 2px; }
+.tip-text { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.tip-text strong { color: var(--accent); font-weight: 500; }
+
+/* DIVIDER */
+.divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">DBMS Finals · 2026</div>
+  <div class="nav-links">
+    <button class="nav-link active" onclick="showPage('predict')">Predicted Paper</button>
+    <button class="nav-link" onclick="showPage('fd')">FD & Keys</button>
+    <button class="nav-link" onclick="showPage('norm')">Normalization</button>
+    <button class="nav-link" onclick="showPage('acid')">Transactions</button>
+    <button class="nav-link" onclick="showPage('schema')">ER → Schema</button>
+    <button class="nav-link" onclick="showPage('partition')">Partitioning</button>
+    <button class="nav-link" onclick="showPage('problems')">Problems</button>
+    <button class="nav-link" onclick="showPage('mcq')">MCQs</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero" id="hero">
+  <div class="hero-tag">DBMS · Batch 23F · Finals 2026</div>
+  <h1>Database<br><span>Finals Prep</span></h1>
+  <p class="hero-desc">Complete interactive study guide for DBMS finals. Week 7 to end — Functional Dependencies, Normalization, ACID, Transactions, Partitioning. C3–C8 level.</p>
+  <div class="hero-pills">
+    <span class="pill hot">🔥 FD & Candidate Keys</span>
+    <span class="pill hot">🔥 Normalization 2NF→BCNF</span>
+    <span class="pill hot">🔥 ACID & Transactions</span>
+    <span class="pill sure">✓ ER → Schema</span>
+    <span class="pill sure">✓ Constraints</span>
+    <span class="pill key">⚡ Partitioning</span>
+    <span class="pill key">⚡ Denormalization</span>
+  </div>
+</div>
+
+<!-- PAGE: PREDICTED PAPER -->
+<div id="predict" class="page active">
+  <div class="section-title">Teacher Pattern Analysis</div>
+  <div class="concept-block accent">
+    <div class="label">methodology</div>
+    <p>Analyzed: your mids paper (23F), 2024 mids paper, 20F finals (2 parts). Teacher converts assignment questions from the PDF directly into exam questions. All questions at C3–C5 taxonomy — application, analysis, evaluation. Finals cover Week 7 onwards.</p>
+  </div>
+
+  <div class="section-title">Predicted Final Paper — Question by Question</div>
+
+  <div class="card hot">
+    <div class="card-header">
+      <div class="card-title">Q1 — Functional Dependencies & Candidate Keys</div>
+      <span class="badge hot">🔥 Certain</span>
+    </div>
+    <p>Given a relation R(A,B,C,D,E...) with a set of FDs, find all candidate keys using attribute closure. Identify prime and non-prime attributes. Appeared in 20F finals, mids paper, and is the foundation of normalization questions. Expect two sub-relations at different difficulty levels.</p>
+    <div class="marks">Expected marks: 6–8 · Level: C4 Analysis</div>
+  </div>
+
+  <div class="card hot">
+    <div class="card-header">
+      <div class="card-title">Q2 — Normalize to 3NF / BCNF</div>
+      <span class="badge hot">🔥 Certain</span>
+    </div>
+    <p>Real-world scenario (software firm, hospital, employee-project system). Given attributes and FDs or a scenario — identify anomalies, decompose to 2NF then 3NF showing each step. The software consultancy question from 20F finals is a direct assignment-to-exam conversion. Expect a transitive dependency chain to eliminate.</p>
+    <div class="marks">Expected marks: 6–8 · Level: C4–C5</div>
+  </div>
+
+  <div class="card hot">
+    <div class="card-header">
+      <div class="card-title">Q3 — ACID Properties with Justification</div>
+      <span class="badge hot">🔥 Certain</span>
+    </div>
+    <p>"Transaction Should be in ACID form" — exact quote from 20F finals with Atomicity, Constraint, Isolation, Durability noted by students. You must justify each with a real-world example, not just define. Transaction states diagram (Active → Partially Committed → Committed / Failed → Aborted) likely asked as a sub-part.</p>
+    <div class="marks">Expected marks: 4–6 · Level: C3–C4</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Q4 — Constraints in DBMS</div>
+      <span class="badge med">⚡ Very Likely</span>
+    </div>
+    <p>"Constraints facilitate maintaining the accuracy of data in the database" — exact quote from 20F finals. Cover: Entity Integrity (PK not null), Referential Integrity (FK rules), Domain constraints, NULL constraint. Also: "Associating domain with an attribute helps in maintaining integrity" appeared in finals — prepare this.</p>
+    <div class="marks">Expected marks: 4–5 · Level: C3</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Q5 — Partitioning & Denormalization</div>
+      <span class="badge med">⚡ Very Likely</span>
+    </div>
+    <p>"Partitioning is one of the ways to speed up the search — illustrate the statement." Exact quote from 20F finals. Handwritten notes show: Range, List, Hash, Vertical, Horizontal. Cover all types with examples. Denormalization (joins are expensive, trade redundancy for speed) often paired here.</p>
+    <div class="marks">Expected marks: 4 · Level: C3–C4</div>
+  </div>
+
+  <div class="card sure">
+    <div class="card-header">
+      <div class="card-title">Q6 — ER Diagram → Relational Schema</div>
+      <span class="badge sure">✓ Possible</span>
+    </div>
+    <p>Given an ER diagram (like the Batch/RawMaterial/Production one from 20F finals), convert to relational schema. Identify all PKs and FKs. Also: find candidate keys from given FDs (the R={WXYZ} and R={ABCDE} problems). Appeared as Q3(b) in 20F finals — "Examine FDs and find candidate keys."</p>
+    <div class="marks">Expected marks: 6 · Level: C4–C5</div>
+  </div>
+
+  <div class="section-title">Assignment → Exam Conversion Map</div>
+  <div class="concept-block blue">
+    <div class="label">teacher's pattern</div>
+    <p>Every assignment in the PDF has become or will become an exam question. These are confirmed:</p>
+  </div>
+  <table class="vtable">
+    <tr><th>PDF Assignment</th><th>Past Exam Appearance</th><th>Likely in Finals</th></tr>
+    <tr><td>NKL Kabaddi ER diagram</td><td>20F Finals Q2a</td><td class="hl2">Yes — ER to Schema</td></tr>
+    <tr><td>Software Consultancy normalization</td><td>20F Finals Q4</td><td class="hl2">Yes — repeat or variant</td></tr>
+    <tr><td>ACID justification</td><td>20F Finals Q5a</td><td class="hl2">Yes — certain</td></tr>
+    <tr><td>Associating domain with attribute</td><td>20F Finals Q5c</td><td class="hl">Likely as definition Q</td></tr>
+    <tr><td>Partitioning types</td><td>20F Finals Q2b</td><td class="hl2">Yes — illustrate</td></tr>
+    <tr><td>Candidate key from FDs (R={WXYZ})</td><td>20F Finals Q3b</td><td class="hl2">Yes — FD problem</td></tr>
+    <tr><td>DB Architecture (DBA, 3-level)</td><td>Mids 2024, Mids 23F</td><td class="hl3">Possibly as brief Q</td></tr>
+  </table>
+
+  <div class="section-title">Taxonomy Level Guide — What Each Level Expects</div>
+  <table class="vtable">
+    <tr><th>Level</th><th>Verb</th><th>What you write</th></tr>
+    <tr><td class="hl">C3 — Apply</td><td>Interpret, Explain, Illustrate</td><td>Define + give example from real world</td></tr>
+    <tr><td class="hl2">C4 — Analyze</td><td>Examine, Analyze, Distinguish</td><td>Break into parts, compare, find reasons</td></tr>
+    <tr><td class="hl3">C5 — Evaluate</td><td>Justify, Conclude, Assess</td><td>Give evidence-backed argument or decision</td></tr>
+    <tr><td style="color:var(--accent5)">C6 — Create</td><td>Construct, Design, Develop</td><td>Build ER diagram, normalize, design schema</td></tr>
+  </table>
+</div>
+
+<!-- PAGE: FUNCTIONAL DEPENDENCIES -->
+<div id="fd" class="page">
+  <div class="section-title">Week 8 — Functional Dependencies</div>
+
+  <div class="concept-block accent">
+    <div class="label">core definition</div>
+    <p><strong>X → Y</strong> means: knowing the value of X, we can always determine exactly one value of Y. If two tuples agree on X, they must agree on Y. Read as "X functionally determines Y."</p>
+  </div>
+
+  <div class="grid-2">
+    <div class="concept-block blue">
+      <div class="label">trivial FD</div>
+      <p><strong>Y ⊆ X</strong> — always true, useless. Example: AB → A. These don't help with normalization.</p>
+    </div>
+    <div class="concept-block green">
+      <div class="label">non-trivial FD</div>
+      <p><strong>Y ⊄ X</strong> — actually constrains data. Example: StudentID → Name. These drive normalization.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Armstrong's Axioms — Must Memorize All 6</div>
+  <table class="vtable">
+    <tr><th>Rule</th><th>Statement</th><th>Example</th></tr>
+    <tr><td class="hl">Reflexivity</td><td>If Y ⊆ X, then X → Y</td><td>StdId, Name → StdId</td></tr>
+    <tr><td class="hl">Augmentation</td><td>If X → Y, then XZ → YZ</td><td>StdId → Name ⟹ StdId,Dept → Name,Dept</td></tr>
+    <tr><td class="hl">Transitivity</td><td>If X → Y and Y → Z, then X → Z</td><td>StdId → Program, Program → Credits ⟹ StdId → Credits</td></tr>
+    <tr><td class="hl2">Union</td><td>If X → Y and X → Z, then X → YZ</td><td>EmpId → Name, EmpId → Sal ⟹ EmpId → Name,Sal</td></tr>
+    <tr><td class="hl2">Decomposition</td><td>If X → YZ, then X → Y and X → Z</td><td>EmpId → Name,Sal ⟹ EmpId → Name and EmpId → Sal</td></tr>
+    <tr><td class="hl2">Pseudo-transitivity</td><td>If X → Y and WY → Z, then WX → Z</td><td>StdId → StName, StName,Dept → Grade ⟹ StdId,Dept → Grade</td></tr>
+  </table>
+
+  <div class="section-title">Key Types — Hierarchy</div>
+  <div class="concept-block orange">
+    <div class="label">super key</div>
+    <p><strong>Any set of attributes</strong> whose closure contains all attributes of R. The most general — can include redundant attributes. Example: {StdId, Name} is a super key if StdId alone identifies everything.</p>
+  </div>
+  <div class="concept-block accent">
+    <div class="label">candidate key (CK)</div>
+    <p><strong>Minimal super key</strong> — a super key from which no attribute can be removed without losing the uniqueness property. A relation can have multiple CKs. Every CK is a super key, not vice versa.</p>
+  </div>
+  <div class="concept-block blue">
+    <div class="label">primary key (PK)</div>
+    <p><strong>The chosen CK</strong> — one candidate key selected by the designer. Cannot have NULL. Usually shorter, more stable. All other CKs become alternate keys.</p>
+  </div>
+  <div class="concept-block green">
+    <div class="label">foreign key (FK)</div>
+    <p><strong>Attribute in table A</strong> that is the PK in table B. Enforces referential integrity — FK value must match some PK value in home relation, or be NULL.</p>
+  </div>
+
+  <div class="section-title">Attribute Closure X⁺ — The Core Exam Algorithm</div>
+  <div class="concept-block accent">
+    <div class="label">algorithm</div>
+    <p><strong>Goal:</strong> Find all attributes functionally determined by X (written X⁺).<br>
+    <strong>Step 1:</strong> Start with X⁺ = X (reflexivity)<br>
+    <strong>Step 2:</strong> For every FD (LHS → RHS): if LHS ⊆ X⁺, then add RHS to X⁺<br>
+    <strong>Step 3:</strong> Repeat Step 2 until no new attributes can be added<br>
+    <strong>Step 4:</strong> X is a CK if X⁺ = all attributes of R AND no proper subset of X has the same closure</p>
+  </div>
+
+  <div class="section-title">Interactive Closure Solver</div>
+  <div class="fd-solver">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Enter relation attributes and FDs to compute attribute closure and find candidate keys.</p>
+    <div class="fd-input-row">
+      <input class="fd-input" id="fd-attrs" placeholder="Attributes e.g. A,B,C,D,E" value="A,B,C,D,E">
+      <input class="fd-input" id="fd-fds" placeholder="FDs e.g. A→B,B→CD,C→E" value="A→B,B→CD,C→E,D→C">
+      <input class="fd-input" id="fd-closure-of" placeholder="Find closure of e.g. A" value="A" style="max-width:160px">
+      <button class="fd-btn" onclick="solveFD()">Compute ↗</button>
+    </div>
+    <div class="fd-output" id="fd-output">Enter values above and click Compute...</div>
+  </div>
+
+  <div class="section-title">Candidate Key Shortcut Rules</div>
+  <div class="tip">
+    <div class="tip-icon">★</div>
+    <div class="tip-text"><strong>Rule 1:</strong> Any attribute that NEVER appears on the RHS of any FD must be part of every candidate key. Start there — it's your guaranteed CK components.</div>
+  </div>
+  <div class="tip">
+    <div class="tip-icon">★</div>
+    <div class="tip-text"><strong>Rule 2:</strong> Any attribute that ONLY appears on RHS (never on LHS) cannot be in any candidate key — it's always determined, never determining.</div>
+  </div>
+  <div class="tip">
+    <div class="tip-icon">★</div>
+    <div class="tip-text"><strong>Rule 3:</strong> Start with the must-have attributes, compute closure. If it covers R, that's a CK. If not, try adding one attribute at a time and check minimality.</div>
+  </div>
+
+  <div class="section-title">Minimal Cover Algorithm</div>
+  <div class="concept-block blue">
+    <div class="label">step-by-step</div>
+    <p>
+    <strong>1. Decompose RHS:</strong> Write each FD with single attribute on RHS (A→BC becomes A→B and A→C)<br>
+    <strong>2. Remove trivial:</strong> Eliminate any FD where LHS contains RHS<br>
+    <strong>3. Minimize LHS:</strong> For each FD with composite LHS, check if any attribute is redundant — remove it if closure still holds<br>
+    <strong>4. Remove redundant FDs:</strong> Remove any FD X→A where A ∈ (X)⁺ without using that FD
+    </p>
+  </div>
+
+  <div class="section-title">Worked Example — Find CKs from FDs</div>
+  <div class="problem">
+    <div class="problem-q"><strong>R(A,B,C,D,E)</strong> with FDs: A→B, B→CD, C→E, D→C<br>Find all candidate keys and identify prime/non-prime attributes.</div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Check which attributes never appear on RHS:</strong> Looking at all RHS values: B, C, D, E, C (again). Attribute <strong>A</strong> never appears on RHS → A must be in every CK.</div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Compute A⁺:</strong>
+          <span class="step-formula">A⁺ = {A}  (start)
+→ A→B fires: A⁺ = {A, B}
+→ B→CD fires: A⁺ = {A, B, C, D}
+→ C→E fires: A⁺ = {A, B, C, D, E}
+→ D→C fires: (C already in set)
+A⁺ = {A, B, C, D, E} = all attributes ✓</span>
+        </div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>A alone is a CK!</strong> Since A⁺ = R and no proper subset of {A} gives the same closure, <strong>A is a candidate key.</strong></div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Check other possible CKs:</strong> Any set that includes A is a super key (not CK). Check sets not containing A:<br>
+          <span class="step-formula">D⁺ = {D} → D→C → {D,C} → C→E → {D,C,E} ✗ (missing A,B)
+B⁺ = {B} → B→CD → {B,C,D} → C→E → {B,C,D,E} ✗ (missing A)
+No other single attribute gives full closure without A.</span>
+        </div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>Result:</strong> Only CK = <strong>{A}</strong>. Prime attributes = {A}. Non-prime attributes = {B, C, D, E}.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: NORMALIZATION -->
+<div id="norm" class="page">
+  <div class="section-title">Week 8–9 — Normalization</div>
+
+  <div class="concept-block accent">
+    <div class="label">definition</div>
+    <p><strong>Normalization</strong> is the process of decomposing relations into smaller, well-structured relations to eliminate data redundancy and prevent insertion, deletion, and update anomalies. Proposed by E.F. Codd. Bottom-up design technique.</p>
+  </div>
+
+  <div class="section-title">The Three Anomalies — Why We Normalize</div>
+  <div class="grid-2">
+    <div class="concept-block orange">
+      <div class="label">insertion anomaly</div>
+      <p>Cannot add data about one entity without adding data about another. E.g., can't add a teacher to a subject unless a student is enrolled.</p>
+    </div>
+    <div class="concept-block orange">
+      <div class="label">deletion anomaly</div>
+      <p>Deleting one entity's data unintentionally destroys another's. E.g., deleting the only student in a course erases course-teacher info.</p>
+    </div>
+    <div class="concept-block orange">
+      <div class="label">update anomaly</div>
+      <p>Same fact stored in multiple places — changing one copy creates inconsistency. E.g., student DoB repeated in every course row.</p>
+    </div>
+    <div class="concept-block accent">
+      <div class="label">redundancy</div>
+      <p>Same data stored multiple times, wasting memory and creating inconsistency risk. Normalization controls this systematically.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Normal Forms — The Complete Ladder</div>
+  <div class="nf-ladder">
+    <div class="nf-level" style="background:rgba(245,133,91,0.07);border:1px solid rgba(245,133,91,0.2);border-radius:10px;">
+      <div class="nf-num" style="color:var(--accent4)">1NF</div>
+      <div class="nf-rule"><strong>Every cell is atomic (single value)</strong> — no repeating groups, no multi-valued cells. If a student can have multiple subjects, expand to separate rows.</div>
+      <span class="badge hot">Required</span>
+    </div>
+    <div style="text-align:center;color:var(--muted);font-size:18px;padding:2px 0">↓</div>
+    <div class="nf-level" style="background:rgba(232,197,71,0.07);border:1px solid rgba(232,197,71,0.2);border-radius:10px;">
+      <div class="nf-num" style="color:var(--accent)">2NF</div>
+      <div class="nf-rule"><strong>In 1NF + No partial dependencies</strong> — every non-prime attribute must depend on the WHOLE primary key, not just part of it. Only relevant when PK is composite.</div>
+      <span class="badge med">Eliminate partial deps</span>
+    </div>
+    <div style="text-align:center;color:var(--muted);font-size:18px;padding:2px 0">↓</div>
+    <div class="nf-level" style="background:rgba(91,138,245,0.07);border:1px solid rgba(91,138,245,0.2);border-radius:10px;">
+      <div class="nf-num" style="color:var(--accent2)">3NF</div>
+      <div class="nf-rule"><strong>In 2NF + No transitive dependencies</strong> — no non-prime attribute determines another non-prime attribute. NonKey1 → NonKey2 is forbidden.</div>
+      <span class="badge key">Eliminate transitive deps</span>
+    </div>
+    <div style="text-align:center;color:var(--muted);font-size:18px;padding:2px 0">↓</div>
+    <div class="nf-level" style="background:rgba(126,232,162,0.07);border:1px solid rgba(126,232,162,0.2);border-radius:10px;">
+      <div class="nf-num" style="color:var(--accent3)">BCNF</div>
+      <div class="nf-rule"><strong>Every determinant must be a candidate key</strong> — if X → Y, then X must be a CK. Stricter than 3NF. Use when multiple overlapping CKs exist.</div>
+      <span class="badge sure">Every det = CK</span>
+    </div>
+  </div>
+
+  <div class="section-title">Quick Detection Cheat Sheet</div>
+  <div class="formula"><span class="comment">-- 2NF violation: Partial dependency</span>
+PK is composite (e.g. AB). If A → NonPrime, that's partial → violates 2NF
+Fix: Move A → NonPrime into its own table with A as PK
+
+<span class="comment">-- 3NF violation: Transitive dependency</span>
+PK → NonKey1 → NonKey2  (NonKey1 determines NonKey2) → violates 3NF
+Fix: Move NonKey1 → NonKey2 into separate table
+
+<span class="comment">-- BCNF violation:</span>
+X → Y exists but X is NOT a candidate key → violates BCNF
+Fix: Decompose R into (X, Y) and (R - Y + X)</div>
+
+  <div class="section-title">Interactive Normalization Explorer</div>
+  <div class="fd-solver">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px">Paste a relation and FDs to check what normal form it satisfies and get decomposition steps.</p>
+    <div class="fd-input-row">
+      <input class="fd-input" id="nf-rel" placeholder="Relation e.g. Eid,Pnum,Hours,Ename,Pname,Ploc" value="Eid,Pnum,Hours,Ename,Pname,Ploc">
+    </div>
+    <div class="fd-input-row">
+      <input class="fd-input" id="nf-pk" placeholder="Primary Key e.g. Eid,Pnum" value="Eid,Pnum">
+      <input class="fd-input" id="nf-fds" placeholder="FDs e.g. Eid,Pnum→Hours|Eid→Ename|Pnum→Pname,Ploc" value="Eid,Pnum→Hours|Eid→Ename|Pnum→Pname,Ploc">
+      <button class="fd-btn" onclick="solveNF()">Analyze ↗</button>
+    </div>
+    <div class="fd-output" id="nf-output">Enter values above and click Analyze...</div>
+  </div>
+
+  <div class="section-title">Worked Example — 1NF → 2NF → 3NF</div>
+  <div class="problem">
+    <div class="problem-q">
+      <strong>EmpDept(Eid, Ename, Address, DeptNum, DeptName, DmgrId)</strong><br>
+      FD1: Eid → Ename, Address, DeptNum<br>
+      FD2: DeptNum → DeptName, DmgrId<br>
+      Normalize to 3NF.
+    </div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Check 1NF:</strong> All values assumed atomic. ✓ In 1NF.</div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Identify PK and check 2NF:</strong> PK = {Eid} (single attribute). With single-attribute PK, partial dependencies are impossible → automatically in 2NF. ✓</div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>Check 3NF — transitive dependency:</strong>
+          <span class="step-formula">Eid → DeptNum (non-prime → non-prime start)
+DeptNum → DeptName, DmgrId (non-prime → non-prime)
+So: Eid → DeptNum → DeptName, DmgrId
+This is a TRANSITIVE DEPENDENCY → violates 3NF ✗</span>
+        </div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>Decompose to 3NF:</strong> Move the transitive chain (DeptNum → DeptName, DmgrId) into its own table:
+          <span class="step-formula">ED1(Eid, Ename, Address, DeptNum)   ← DeptNum becomes FK
+ED2(DeptNum, DeptName, DmgrId)      ← DeptNum is PK here</span>
+        </div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>Verify:</strong> ED1 — PK=Eid, all non-key attrs depend only on Eid ✓. ED2 — PK=DeptNum, all non-key attrs depend only on DeptNum ✓. Both in 3NF.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-q">
+      <strong>Software Consultancy (from 20F Finals)</strong><br>
+      Attributes: EmpId, DeptCode, ProjectCode, ProjectSupervisor, ProjectDesc, EmpName<br>
+      Rules: EmpId is unique. Each dept has one DeptCode. Each project has one code and supervisor. Employee names not unique. ProjectCode, ProjectDesc, ProjectSupervisor are repeating fields (emp works on multiple projects). Normalize to 3NF.
+    </div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Identify FDs from rules:</strong>
+          <span class="step-formula">EmpId → EmpName, DeptCode           (emp uniqueness)
+DeptCode → (single dept, from rule 2)
+ProjectCode → ProjectDesc, ProjectSupervisor (each project has one supervisor)
+EmpId, ProjectCode → (work relationship)  </span>
+        </div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>1NF:</strong> ProjectCode, Desc, Supervisor are repeating → expand to atomic rows. Each row = one employee–project pair. PK = {EmpId, ProjectCode} (composite).</div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">3</div>
+        <div class="step-text"><strong>2NF violations (partial deps on composite PK):</strong>
+          <span class="step-formula">EmpId → EmpName, DeptCode          (partial: only EmpId, not full PK)
+ProjectCode → ProjectDesc, Supervisor (partial: only ProjectCode, not full PK)</span>
+        </div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">4</div>
+        <div class="step-text"><strong>2NF decomposition:</strong>
+          <span class="step-formula">R1(EmpId, EmpName, DeptCode)           PK=EmpId
+R2(ProjectCode, ProjectDesc, Supervisor) PK=ProjectCode
+R3(EmpId, ProjectCode)                   PK=(EmpId, ProjectCode) — bridge table</span>
+        </div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">5</div>
+        <div class="step-text"><strong>Check 3NF in each table:</strong> R1: Is DeptCode → something? DeptCode has single dept per code (EmpId → DeptCode → ... nothing further given) → OK. R2 and R3 also clean. <strong>Final result is in 3NF.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">BCNF Worked Example</div>
+  <div class="problem">
+    <div class="problem-q">
+      <strong>R(A,B,C)</strong> FDs: A→B, B→C, C→A<br>
+      This is in 3NF. Is it in BCNF?
+    </div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step">
+        <div class="step-num">1</div>
+        <div class="step-text"><strong>Find all CKs:</strong> A⁺={A,B,C}✓, B⁺={B,C,A}✓, C⁺={C,A,B}✓ → CKs = {A}, {B}, {C} — ALL three are candidate keys. Every attribute is prime.</div>
+      </div>
+      <div class="solution-step">
+        <div class="step-num">2</div>
+        <div class="step-text"><strong>Check BCNF:</strong> For every FD X→Y, is X a CK? A→B: A is CK ✓. B→C: B is CK ✓. C→A: C is CK ✓. <strong>Yes — this relation is in BCNF.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Exam Tips — Normalization</div>
+  <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Always state the PK first</strong> before checking normal forms. With single-attribute PK, 2NF is automatic — say that explicitly to show you understand it.</div></div>
+  <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Show the dependency chain</strong> for transitive: PK → A → B. The arrow chain visually demonstrates the violation at C4 level.</div></div>
+  <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Naming decomposed tables</strong> — use meaningful names (not just R1, R2). E.g., Employee(), Department(), Project(). Shows C5-level thinking.</div></div>
+</div>
+
+<!-- PAGE: ACID & TRANSACTIONS -->
+<div id="acid" class="page">
+  <div class="section-title">Week 10 — Transaction Management</div>
+
+  <div class="concept-block accent">
+    <div class="label">transaction definition</div>
+    <p>A <strong>transaction</strong> is an indivisible unit of work comprising several operations. It is the basic unit of database consistency. Transactions ensure that the database moves from one consistent state to another.</p>
+  </div>
+
+  <div class="section-title">ACID Properties — With Real-World Examples</div>
+
+  <div class="concept-block accent">
+    <div class="label">A — Atomicity</div>
+    <p><strong>All or nothing.</strong> Either all operations in a transaction complete successfully, or none of them do. If any step fails, the entire transaction is rolled back.<br><br>
+    <strong>Example:</strong> Bank transfer of Rs.5000 from Account A to B. Step 1: Debit A. Step 2: Credit B. If system crashes after step 1 — without atomicity, A loses money but B never gets it. With atomicity, the entire transaction rolls back and A's balance is restored.</p>
+  </div>
+
+  <div class="concept-block blue">
+    <div class="label">C — Consistency</div>
+    <p><strong>Valid state to valid state.</strong> A transaction must bring the database from one consistent state to another. All defined rules, constraints, and integrity conditions must hold before and after.<br><br>
+    <strong>Example:</strong> A student enrolment system requires total enrolled credits ≤ 21. A transaction enrolling a student in a course must check this constraint. If violated, the transaction aborts — consistency preserved.</p>
+  </div>
+
+  <div class="concept-block green">
+    <div class="label">I — Isolation</div>
+    <p><strong>Transactions don't see each other's intermediate states.</strong> Concurrent transactions execute as if they were sequential — no dirty reads, no lost updates.<br><br>
+    <strong>Example:</strong> Two students simultaneously booking the last seat in a course. Without isolation, both might read "1 seat available" and both enrol — creating a conflict. With isolation, one transaction completes first and the other sees 0 seats.</p>
+  </div>
+
+  <div class="concept-block purple">
+    <div class="label">D — Durability</div>
+    <p><strong>Committed changes survive crashes.</strong> Once a transaction commits, its changes are permanent — even if the system fails immediately after.<br><br>
+    <strong>Example:</strong> Student submits final exam paper — system confirms submission. If server crashes 1 second later, the submission must still be there when the system restarts. Achieved via write-ahead logging to disk.</p>
+  </div>
+
+  <div class="section-title">Transaction States — Draw This in Exam</div>
+  <div class="txn-states">
+    <div class="txn-state" style="background:rgba(91,138,245,0.12);border:1px solid rgba(91,138,245,0.3);color:var(--accent2)">
+      <div>Active</div>
+      <div class="txn-note">Executing</div>
+    </div>
+    <div class="txn-arrow">→</div>
+    <div class="txn-state" style="background:rgba(232,197,71,0.12);border:1px solid rgba(232,197,71,0.3);color:var(--accent)">
+      <div>Partially<br>Committed</div>
+      <div class="txn-note">Last op done</div>
+    </div>
+    <div class="txn-arrow">→</div>
+    <div class="txn-state" style="background:rgba(126,232,162,0.12);border:1px solid rgba(126,232,162,0.3);color:var(--accent3)">
+      <div>Committed</div>
+      <div class="txn-note">Success ✓</div>
+    </div>
+  </div>
+  <div class="txn-states">
+    <div class="txn-state" style="background:rgba(91,138,245,0.12);border:1px solid rgba(91,138,245,0.3);color:var(--accent2)">
+      <div>Active</div>
+      <div class="txn-note">Executing</div>
+    </div>
+    <div class="txn-arrow">→</div>
+    <div class="txn-state" style="background:rgba(245,91,91,0.12);border:1px solid rgba(245,91,91,0.3);color:var(--danger)">
+      <div>Failed</div>
+      <div class="txn-note">Error detected</div>
+    </div>
+    <div class="txn-arrow">→</div>
+    <div class="txn-state" style="background:rgba(245,91,91,0.12);border:1px solid rgba(245,91,91,0.3);color:var(--danger)">
+      <div>Aborted</div>
+      <div class="txn-note">Rolled back</div>
+    </div>
+  </div>
+
+  <div class="section-title">Commit vs Rollback</div>
+  <div class="grid-2">
+    <div class="concept-block green">
+      <div class="label">COMMIT</div>
+      <p>All steps executed successfully. Changes made permanent to the database. Transaction ends in Committed state. Cannot be undone after commit.</p>
+    </div>
+    <div class="concept-block orange">
+      <div class="label">ROLLBACK</div>
+      <p>Error in one or more steps. All changes from the transaction are undone. Database returns to pre-transaction state. Transaction ends in Aborted state.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Types of Failures</div>
+  <table class="vtable">
+    <tr><th>Failure Type</th><th>Description</th><th>Example</th></tr>
+    <tr><td class="hl">Transaction Failure</td><td>Logical error in the transaction itself</td><td>Division by zero, constraint violation, deadlock</td></tr>
+    <tr><td class="hl2">System Failure</td><td>OS or DBMS crashes</td><td>Power outage, kernel panic — volatile memory lost</td></tr>
+    <tr><td class="hl3">Media Failure</td><td>Physical storage damaged</td><td>Hard disk crash, corrupted disk blocks</td></tr>
+    <tr><td style="color:var(--accent5)">Action Failure</td><td>Individual operation fails</td><td>Invalid input, unauthorized access attempt</td></tr>
+  </table>
+
+  <div class="section-title">Exam Question — Practice with Answer</div>
+  <div class="problem">
+    <div class="problem-q"><strong>"A Transaction should be in ACID form" — Justify this statement with appropriate real-world examples for each property.</strong> [6 marks]</div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Model Answer</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">A</div><div class="step-text"><strong>Atomicity:</strong> A transaction is atomic — it is indivisible. Consider a funds transfer: debit Account A (step 1), credit Account B (step 2). If a crash occurs after step 1, without atomicity the money vanishes. DBMS ensures both steps complete or neither does — preventing partial updates.</div></div>
+      <div class="solution-step"><div class="step-num">C</div><div class="step-text"><strong>Consistency:</strong> A transaction must transition the DB from one consistent state to another. Example: A purchase transaction must update inventory count. Before: 10 items. After: 9 items + 1 order. If a constraint says stock ≥ 0, the transaction aborts if stock would go negative — consistency enforced.</div></div>
+      <div class="solution-step"><div class="step-num">I</div><div class="step-text"><strong>Isolation:</strong> Concurrent transactions appear sequential. Example: Two clerks simultaneously processing withdrawals from the same account with Rs.10,000 balance. Without isolation, both read Rs.10,000 and both withdraw Rs.8,000 — the account goes negative. Isolation ensures one transaction commits before the other reads the balance.</div></div>
+      <div class="solution-step"><div class="step-num">D</div><div class="step-text"><strong>Durability:</strong> Committed changes survive system failures. Example: An exam registration portal confirms your course enrollment. If the server crashes 1 second later, your enrollment record must persist when the system restarts — achieved via write-ahead logging (WAL) to non-volatile storage.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: ER TO SCHEMA -->
+<div id="schema" class="page">
+  <div class="section-title">Week 7–8 — ER Diagram to Relational Schema</div>
+
+  <div class="section-title">Conversion Rules — Complete Set</div>
+
+  <div class="concept-block accent">
+    <div class="label">rule 1 — strong entity</div>
+    <p>Each strong entity becomes a <strong>table</strong>. Entity name = table name. Key attribute = Primary Key. All other attributes = columns.</p>
+  </div>
+
+  <div class="concept-block blue">
+    <div class="label">rule 2 — weak entity</div>
+    <p>Weak entity becomes a table. PK = (partial key of weak entity + PK of owner entity as FK). The owner's PK appears in the weak entity's table as a Foreign Key. Double diamond in ER = double PK in schema.</p>
+  </div>
+
+  <div class="concept-block orange">
+    <div class="label">rule 3 — 1:1 relationship</div>
+    <p>Add the PK of either entity as a FK in the other table. Prefer adding FK to the entity with <strong>total participation</strong> (double line in ER). No new table needed.</p>
+  </div>
+
+  <div class="concept-block green">
+    <div class="label">rule 4 — 1:M relationship</div>
+    <p>Add the PK of the <strong>"one" side</strong> as a FK in the <strong>"many" side</strong> table. Any relationship attributes go in the "many" side table. No new table needed.</p>
+  </div>
+
+  <div class="concept-block purple">
+    <div class="label">rule 5 — M:N relationship</div>
+    <p>Create a <strong>new bridge/junction table</strong>. PK of this table = (PK of entity A + PK of entity B) — composite key. Both become FK. Any attributes on the relationship (like "Hours" in Employee-Project) also go in this bridge table.</p>
+  </div>
+
+  <div class="section-title">Worked Example — EmpProj</div>
+  <div class="problem">
+    <div class="problem-q">
+      ER: EMPLOYEE(Eid, Ename) works-on PROJECT(Pnum, Pname, Ploc) — M:N relationship with attribute Hours.<br>
+      Convert to relational schema with all PKs and FKs.
+    </div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">1</div><div class="step-text"><strong>EMPLOYEE entity → table:</strong>
+        <span class="step-formula">EMPLOYEE(Eid, Ename)   PK: Eid</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">2</div><div class="step-text"><strong>PROJECT entity → table:</strong>
+        <span class="step-formula">PROJECT(Pnum, Pname, Ploc)   PK: Pnum</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">3</div><div class="step-text"><strong>M:N relationship works-on → bridge table:</strong> Hours is a relationship attribute, goes in bridge.
+        <span class="step-formula">WORKS_ON(Eid, Pnum, Hours)
+  PK: (Eid, Pnum)  ← composite
+  FK: Eid references EMPLOYEE(Eid)
+  FK: Pnum references PROJECT(Pnum)</span>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="section-title">NKL Kabaddi — ER to Schema</div>
+  <div class="problem">
+    <div class="problem-q">
+      The NKL has many teams. Each team has: name, city, coach, captain (who is also a player). Each player belongs to only one team, has name, position, skill level, and injury records. A game between two teams is recorded with date and score. Convert to relational schema.
+    </div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">1</div><div class="step-text"><strong>Entities identified:</strong> TEAM, PLAYER, GAME</div></div>
+      <div class="solution-step"><div class="step-num">2</div><div class="step-text"><strong>TEAM:</strong>
+        <span class="step-formula">TEAM(TeamId, TeamName, CityName, CoachName, CaptainId)
+  PK: TeamId
+  FK: CaptainId references PLAYER(PlayerId)  ← captain is a player</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">3</div><div class="step-text"><strong>PLAYER:</strong> Each player belongs to one team (1:M — team has many players)
+        <span class="step-formula">PLAYER(PlayerId, PlayerName, Position, SkillLevel, TeamId)
+  PK: PlayerId
+  FK: TeamId references TEAM(TeamId)</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">4</div><div class="step-text"><strong>INJURY (weak entity — player can have many injury records):</strong>
+        <span class="step-formula">INJURY(InjuryId, PlayerId, InjuryDate, InjuryType, Recovery)
+  PK: (InjuryId, PlayerId)
+  FK: PlayerId references PLAYER(PlayerId)</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">5</div><div class="step-text"><strong>GAME (between two teams — M:N on TEAM with itself, or binary):</strong>
+        <span class="step-formula">GAME(GameId, HomeTeamId, AwayTeamId, GameDate, Score)
+  PK: GameId
+  FK: HomeTeamId references TEAM(TeamId)
+  FK: AwayTeamId references TEAM(TeamId)</span>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Codd's Rules — 12 Rules of RDBMS</div>
+  <table class="vtable">
+    <tr><th>#</th><th>Rule</th><th>Meaning</th></tr>
+    <tr><td class="hl">1</td><td>Information</td><td>Data presented as tables only</td></tr>
+    <tr><td class="hl">2</td><td>Guaranteed Access</td><td>Each cell accessible by table name + PK + column name</td></tr>
+    <tr><td class="hl">3</td><td>Systematic NULL Treatment</td><td>NULL handled uniformly, distinct from zero/blank</td></tr>
+    <tr><td class="hl">4</td><td>Active Online Catalog</td><td>DB description (data dictionary) stored as tables, queryable by SQL</td></tr>
+    <tr><td class="hl2">5</td><td>Comprehensive Sublanguage</td><td>One language (SQL) for all operations: DDL, DML, constraints, views</td></tr>
+    <tr><td class="hl2">6</td><td>View Updating</td><td>All theoretically updatable views must be updatable</td></tr>
+    <tr><td class="hl2">7</td><td>Logical Data Independence</td><td>Conceptual schema changes don't affect application programs</td></tr>
+    <tr><td class="hl2">8</td><td>Physical Data Independence</td><td>Physical storage changes don't affect conceptual schema</td></tr>
+    <tr><td>9</td><td>Integrity Independence</td><td>Integrity constraints stored in catalog, not application code</td></tr>
+    <tr><td>10</td><td>Distribution Independence</td><td>Works the same whether centralized or distributed</td></tr>
+    <tr><td>11</td><td>Non-subversion</td><td>No low-level access can bypass integrity rules</td></tr>
+    <tr><td>12</td><td>High-level Insert/Update/Delete</td><td>DML operates on sets of rows, not just one at a time</td></tr>
+  </table>
+</div>
+
+<!-- PAGE: PARTITIONING -->
+<div id="partition" class="page">
+  <div class="section-title">Week 11 — Partitioning, Denormalization & Replication</div>
+
+  <div class="concept-block accent">
+    <div class="label">partitioning definition</div>
+    <p><strong>Partitioning</strong> splits a large table into smaller physical pieces to reduce query workload and improve performance. The data logically belongs to one table but is physically distributed across smaller segments.</p>
+  </div>
+
+  <div class="section-title">Types of Partitioning — All 5 Types</div>
+
+  <div class="concept-block orange">
+    <div class="label">horizontal partitioning</div>
+    <p><strong>Table split by ROWS.</strong> Each partition contains a subset of rows, all with the same columns. Reduces the number of rows scanned per query.<br><br>
+    <strong>Example:</strong> Student table partitioned by year: Partition 1 = 2022 students, Partition 2 = 2023 students, Partition 3 = 2024 students. A query for 2024 results only scans Partition 3.</p>
+  </div>
+
+  <div class="concept-block blue">
+    <div class="label">vertical partitioning</div>
+    <p><strong>Table split by COLUMNS (attributes).</strong> PK must be repeated in all vertical partitions to allow reconstruction. Useful when some columns are accessed much more than others.<br><br>
+    <strong>Example:</strong> Employee table split into Employee_Basic(Eid, Name, Phone) and Employee_Financial(Eid, Salary, BankAccount). HR system accesses basic info frequently; payroll system accesses financial info separately.</p>
+  </div>
+
+  <div class="concept-block accent">
+    <div class="label">range partitioning</div>
+    <p><strong>Based on value ranges.</strong> Rows assigned to partitions based on a range of values in a key column.<br><strong>Example:</strong> Orders table — Partition A: OrderDate Jan–Mar, Partition B: Apr–Jun, Partition C: Jul–Sep.</p>
+  </div>
+
+  <div class="concept-block green">
+    <div class="label">hash partitioning</div>
+    <p><strong>Based on hash function.</strong> A hash function applied to the partition key distributes rows across N partitions. Ensures even distribution.<br><strong>Example:</strong> Customer table — CustomerID % 4 = 0 → Partition 0, = 1 → Partition 1, etc.</p>
+  </div>
+
+  <div class="concept-block purple">
+    <div class="label">list partitioning</div>
+    <p><strong>Based on discrete list of values.</strong> Each partition defined by an explicit list of values for the partition key.<br><strong>Example:</strong> Sales table — Partition_South = (Karachi, Hyderabad, Sukkur), Partition_North = (Lahore, Islamabad, Peshawar).</p>
+  </div>
+
+  <div class="section-title">Partitioning Advantages</div>
+  <table class="vtable">
+    <tr><th>Benefit</th><th>How It Helps</th></tr>
+    <tr><td class="hl">Reduced Workload</td><td>Queries scan only relevant partition instead of entire table — partition elimination</td></tr>
+    <tr><td class="hl2">Faster Access</td><td>Smaller tables = faster index scans, less I/O, better cache utilization</td></tr>
+    <tr><td class="hl3">Easier Maintenance</td><td>Backup, restore, archiving operations on individual partitions instead of whole table</td></tr>
+    <tr><td>Better Security</td><td>Access control at partition level — different permissions per partition</td></tr>
+    <tr><td>Disk Optimization</td><td>Different partitions can be placed on different physical disks, reducing contention</td></tr>
+  </table>
+
+  <div class="section-title">Denormalization</div>
+  <div class="concept-block orange">
+    <div class="label">what and why</div>
+    <p><strong>Denormalization</strong> is the intentional introduction of redundancy into a normalized database to improve query performance. Joins are computationally expensive — merging pre-related tables avoids join cost at runtime.<br><br>
+    <strong>Trade-off:</strong> Faster read performance vs. risk of update anomalies. Used in reporting systems and data warehouses where reads dominate and updates are infrequent.</p>
+  </div>
+
+  <div class="problem">
+    <div class="problem-q">
+      <strong>Denormalization Example:</strong><br>
+      Normalized: Emp(EmpId, EmpName, ProjId, Sal) + Proj(ProjId, ProjName) + Work(EmpId, ProjId, Date)<br>
+      Show the denormalization decision.
+    </div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">1</div><div class="step-text"><strong>Problem identified:</strong> Every time we query "which employee worked on which project and when," we need a 3-way JOIN — Emp ⋈ Work ⋈ Proj. Joins are expensive operations.</div></div>
+      <div class="solution-step"><div class="step-num">2</div><div class="step-text"><strong>Denormalization decision:</strong> Merge Proj and Work tables since they are always queried together:
+        <span class="step-formula">ProjWork(ProjId, ProjName, EmpId, Date)   ← merged table
+  PK: (ProjId, EmpId, Date)
+  Result: Now only 1 join needed (Emp ⋈ ProjWork) instead of 2</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">3</div><div class="step-text"><strong>Cost:</strong> ProjName is now repeated for every Work record → update anomaly risk. If ProjName changes, must update all rows. Acceptable if project names rarely change and read performance is critical.</div></div>
+    </div>
+  </div>
+
+  <div class="section-title">Replication</div>
+  <div class="concept-block blue">
+    <div class="label">definition</div>
+    <p><strong>Replication</strong> is copying a portion of the database to one or more additional environments and keeping those copies synchronized with the source. It is the most extreme form of denormalization.<br><br>
+    <strong>Benefits:</strong> Increased access speed (local copies), reduced failure damage (redundancy). <strong>Problem:</strong> If updates are frequent, propagating changes to all copies is slow and complex. Best suited for read-heavy, rarely-updated data.</p>
+  </div>
+
+  <div class="section-title">Exam Tip — "Illustrate Partitioning" Question</div>
+  <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>The 20F finals said "illustrate the statement"</strong> — this means draw a small table, split it into partitions, and label which rows/columns go where. Don't just define. Show a before-table and two after-partition tables with an arrow between them.</div></div>
+  <div class="tip"><div class="tip-icon">⚡</div><div class="tip-text"><strong>Always mention partition elimination</strong> — the key benefit. "Instead of scanning all 10 million rows, the query only scans the relevant partition of 500k rows." That's the C4-level analysis the examiner wants.</div></div>
+</div>
+
+<!-- PAGE: PROBLEMS -->
+<div id="problems" class="page">
+  <div class="section-title">Practice Problems — Finals Level</div>
+
+  <div class="problem">
+    <div class="problem-q"><strong>[FD — C4]</strong> R = {A, B, C, D, E} with FDs: AB→C, C→D, D→B, C→E. Find all candidate keys and state the highest normal form this relation is in with justification.</div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">1</div><div class="step-text"><strong>Never on RHS:</strong> A is never on any RHS → must be in every CK.</div></div>
+      <div class="solution-step"><div class="step-num">2</div><div class="step-text"><strong>Compute AB⁺:</strong>
+        <span class="step-formula">AB⁺ = {A,B} → AB→C → {A,B,C} → C→D → {A,B,C,D} → D→B (B already in) → C→E → {A,B,C,D,E} ✓
+AB is a candidate key. Check subsets: A⁺={A} ✗, B⁺={B,C,D,E} (missing A) ✗ → AB is minimal → CK</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">3</div><div class="step-text"><strong>Other CKs?</strong> Note D→B and C→D and AB→C. So C→D→B and AB→C. Try AE: AE⁺={A,E} — E has no FDs from it. No. Try AC: C→D→B→ ... AC⁺={A,C,D,B,E}✓ but AB→C means A with B gives C, not A alone. AC⁺ = {A,C,D,E,B} = all ✓. Is AC minimal? A⁺={A}✗, C⁺={C,D,B,E}✗. Yes, <strong>AC is also a CK.</strong></div></div>
+      <div class="solution-step"><div class="step-num">4</div><div class="step-text"><strong>CKs = {AB, AC}</strong>. Prime attrs = {A, B, C}. Non-prime = {D, E}.</div></div>
+      <div class="solution-step"><div class="step-num">5</div><div class="step-text"><strong>Normal form check:</strong> PK = AB (choose AB). C→D: C is prime (in AB's PK? No, C is a prime attr but C→D where D is non-prime. In BCNF: C must be a CK. C⁺={C,D,E,B} — missing A → C is NOT a CK → <strong>BCNF violated</strong>. In 3NF: is D transitively dependent? AB→C (prime→prime OK). C→D: prime→non-prime, allowed in 3NF. So <strong>relation is in 3NF but NOT BCNF.</strong></div></div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-q"><strong>[Normalization — C5]</strong> Hospital relation: Patient(PatientId, PatientName, DoctorId, DoctorName, Specialty, WardNo, WardCapacity, AdmDate). Normalize to 3NF showing all steps, anomalies, and final schema with PKs and FKs.</div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">1</div><div class="step-text"><strong>Identify FDs from domain knowledge:</strong>
+        <span class="step-formula">PatientId → PatientName, WardNo
+DoctorId → DoctorName, Specialty
+WardNo → WardCapacity
+PatientId, DoctorId → AdmDate   (a patient may see multiple doctors)</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">2</div><div class="step-text"><strong>1NF:</strong> All atomic. Composite PK = {PatientId, DoctorId}.</div></div>
+      <div class="solution-step"><div class="step-num">3</div><div class="step-text"><strong>2NF violations:</strong>
+        <span class="step-formula">PatientId → PatientName, WardNo     (partial — only PatientId, not full PK)
+DoctorId → DoctorName, Specialty   (partial — only DoctorId, not full PK)
+Full PK → AdmDate only (no violation here)</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">4</div><div class="step-text"><strong>After 2NF:</strong>
+        <span class="step-formula">R1(PatientId, PatientName, WardNo)      PK: PatientId
+R2(DoctorId, DoctorName, Specialty)    PK: DoctorId
+R3(PatientId, DoctorId, AdmDate)       PK: (PatientId, DoctorId)</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">5</div><div class="step-text"><strong>3NF check — transitive deps:</strong>
+        <span class="step-formula">In R1: PatientId → WardNo → WardCapacity  ← TRANSITIVE DEPENDENCY ✗
+Fix: Extract Ward table</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">6</div><div class="step-text"><strong>Final 3NF schema:</strong>
+        <span class="step-formula">PATIENT(PatientId, PatientName, WardNo)  PK:PatientId  FK:WardNo→WARD
+WARD(WardNo, WardCapacity)              PK:WardNo
+DOCTOR(DoctorId, DoctorName, Specialty) PK:DoctorId
+ADMISSION(PatientId, DoctorId, AdmDate) PK:(PatientId,DoctorId)
+                                         FK:PatientId→PATIENT, FK:DoctorId→DOCTOR</span>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-q"><strong>[BCNF — C5]</strong> R(StudentId, CourseId, InstructorId) with FDs: StudentId,CourseId → InstructorId and InstructorId → CourseId. Is this in 3NF? Is it in BCNF? Decompose if needed.</div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">1</div><div class="step-text"><strong>Find CKs:</strong> (StudentId,CourseId)⁺ = {Std,Crs,Ins} ✓ → CK1. (StudentId,InstructorId)⁺: InstructorId→CourseId → {Std,Ins,Crs} ✓ → CK2. CKs = {(Std,Crs), (Std,Ins)}. All attributes are prime.</div></div>
+      <div class="solution-step"><div class="step-num">2</div><div class="step-text"><strong>3NF check:</strong> No non-prime attributes exist (all are prime) → 3NF requires no non-prime transitively dependent. With all prime attrs, 3NF is satisfied. <strong>Yes, in 3NF.</strong></div></div>
+      <div class="solution-step"><div class="step-num">3</div><div class="step-text"><strong>BCNF check:</strong> InstructorId → CourseId exists. Is InstructorId a CK? InstructorId⁺ = {Ins, Crs} — missing StudentId → NOT a CK. <strong>BCNF violated.</strong></div></div>
+      <div class="solution-step"><div class="step-num">4</div><div class="step-text"><strong>Decompose for BCNF:</strong>
+        <span class="step-formula">R1(InstructorId, CourseId)        PK: InstructorId  ← from violating FD
+R2(StudentId, InstructorId)      PK: (StudentId, InstructorId)
+Note: Original dependency (Std,Crs)→Ins is LOST — BCNF may lose FD preservation. This is the known 3NF vs BCNF trade-off.</span>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-q"><strong>[Partitioning — C4]</strong> A university has a Student table with 2 million records. Final exam results queries run very slowly. Suggest TWO partitioning strategies explaining how each speeds up result queries, with a concrete example for each.</div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">1</div><div class="step-text"><strong>Strategy 1 — Horizontal Partitioning by Batch Year:</strong>
+        <span class="step-formula">Original: Student(StdId, Name, Batch, Department, CGPA, ExamResult)
+Partition 1: Batch = 2022 → 500k rows
+Partition 2: Batch = 2023 → 500k rows
+Partition 3: Batch = 2024 → 500k rows
+Partition 4: Batch = 2025 → 500k rows
+
+Query: "Show results for Batch 2024" → scans only 500k rows (Partition 3)
+Instead of scanning all 2 million rows → 4x faster (partition elimination)</span>
+      </div></div>
+      <div class="solution-step"><div class="step-num">2</div><div class="step-text"><strong>Strategy 2 — Vertical Partitioning by access pattern:</strong>
+        <span class="step-formula">Student_Basic(StdId, Name, Department, ContactNo)  ← frequently accessed
+Student_Academic(StdId, CGPA, ExamResult, Marks)  ← accessed during result queries
+
+Exam result queries only scan Student_Academic → smaller columns → faster I/O
+Student ID repeated in both tables as PK/FK to allow reconstruction (JOIN when needed)</span>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="problem">
+    <div class="problem-q"><strong>[Constraints — C3]</strong> "Constraints facilitate maintaining the accuracy of data in the database." Explain Entity Integrity, Referential Integrity, and Domain constraints with examples from a University DB.</div>
+    <button class="toggle-btn" onclick="toggleSolution(this)">Show Solution</button>
+    <div class="solution">
+      <div class="solution-step"><div class="step-num">1</div><div class="step-text"><strong>Entity Integrity Constraint:</strong> No attribute of a Primary Key can have NULL value. Every tuple must be uniquely identified. In University DB: Student(StdId, Name, GPA) — StdId is PK and cannot be NULL. Two students cannot have the same StdId. Without this, we'd lose the ability to uniquely identify records.</div></div>
+      <div class="solution-step"><div class="step-num">2</div><div class="step-text"><strong>Referential Integrity (FK Constraint):</strong> FK value must match an existing PK value in the home relation, or be NULL. In University DB: Enrollment(StdId, CourseId) — StdId must exist in Student table. A student cannot enroll in a system without being registered — prevents orphaned records.</div></div>
+      <div class="solution-step"><div class="step-num">3</div><div class="step-text"><strong>Domain Constraint:</strong> Attribute value must be from the defined domain. In University DB: GPA must be between 0.00 and 4.00. Semester must be from {Fall, Spring, Summer}. Associating a domain with each attribute prevents invalid data entry and maintains semantic correctness.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE: MCQs -->
+<div id="mcq" class="page">
+  <div class="section-title">Quick MCQs — Finals Topics</div>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:1.5rem">Click an option to check your answer. Explanations reveal after selection.</p>
+
+  <div class="mcq-block">
+    <div class="mcq-q"><strong>Q1.</strong> R(A,B,C,D) with FDs: A→B, B→C, C→D. Which of the following is a candidate key?</div>
+    <div class="mcq-options">
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R1')">B</button>
+      <button class="mcq-opt" onclick="mcq(this,'correct','R1')">A</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R1')">AB</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R1')">AC</button>
+    </div>
+    <div class="mcq-feedback" id="R1">A⁺ = {A,B,C,D} = all attributes ✓. A is minimal (no subset exists). So <strong>A is the only CK</strong>. AB and AC are super keys (not minimal). B⁺ = {B,C,D} — missing A → not a CK.</div>
+  </div>
+
+  <div class="mcq-block">
+    <div class="mcq-q"><strong>Q2.</strong> A relation R has composite PK (X,Y). FD: X→A exists where A is a non-prime attribute. This violates which normal form?</div>
+    <div class="mcq-options">
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R2')">1NF</button>
+      <button class="mcq-opt" onclick="mcq(this,'correct','R2')">2NF</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R2')">3NF</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R2')">BCNF</button>
+    </div>
+    <div class="mcq-feedback" id="R2">X→A is a <strong>partial dependency</strong> — A depends on only part of the composite PK (X), not the full key (X,Y). Partial dependencies violate <strong>2NF</strong>. This is the classic 2NF case — only relevant when PK is composite.</div>
+  </div>
+
+  <div class="mcq-block">
+    <div class="mcq-q"><strong>Q3.</strong> In an M:N relationship between STUDENT and COURSE with attribute "Grade" on the relationship, where should Grade be placed in the relational schema?</div>
+    <div class="mcq-options">
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R3')">In STUDENT table</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R3')">In COURSE table</button>
+      <button class="mcq-opt" onclick="mcq(this,'correct','R3')">In the bridge/junction table</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R3')">In both STUDENT and COURSE</button>
+    </div>
+    <div class="mcq-feedback" id="R3">In M:N relationships, a <strong>bridge table</strong> ENROLLMENT(StdId, CourseId, Grade) is created. Grade belongs here because it's a property of the relationship itself — one student can get different grades in different courses. Putting it in STUDENT or COURSE would cause redundancy.</div>
+  </div>
+
+  <div class="mcq-block">
+    <div class="mcq-q"><strong>Q4.</strong> A system crashes after a bank transfer transaction has committed. When the system restarts, the transfer is missing. Which ACID property was violated?</div>
+    <div class="mcq-options">
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R4')">Atomicity</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R4')">Consistency</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R4')">Isolation</button>
+      <button class="mcq-opt" onclick="mcq(this,'correct','R4')">Durability</button>
+    </div>
+    <div class="mcq-feedback" id="R4"><strong>Durability</strong> guarantees that committed transactions persist even after system failures. If a committed transaction's changes are lost after a crash, Durability was not maintained. Atomicity would be violated if the transaction only partially executed before crashing.</div>
+  </div>
+
+  <div class="mcq-block">
+    <div class="mcq-q"><strong>Q5.</strong> A hospital has 5 million patient records. Queries for "patients admitted in 2024" are slow. The best partitioning strategy is:</div>
+    <div class="mcq-options">
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R5')">Vertical partitioning by column type</button>
+      <button class="mcq-opt" onclick="mcq(this,'correct','R5')">Horizontal partitioning by admission year</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R5')">Denormalization of the patient table</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R5')">Hash partitioning on patient name</button>
+    </div>
+    <div class="mcq-feedback" id="R5"><strong>Horizontal partitioning by year</strong> places each year's records in a separate partition. A query for 2024 patients only scans the 2024 partition — partition elimination. Hash on name gives uneven distribution for time-based queries. Vertical partitioning splits columns, not useful here. Denormalization increases redundancy but doesn't partition data.</div>
+  </div>
+
+  <div class="mcq-block">
+    <div class="mcq-q"><strong>Q6.</strong> Which of the following is TRUE about Foreign Keys?</div>
+    <div class="mcq-options">
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R6')">FK cannot be NULL</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R6')">FK must have the same name as the PK it references</button>
+      <button class="mcq-opt" onclick="mcq(this,'correct','R6')">FK value must match an existing PK value or be NULL</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R6')">A table can have only one FK</button>
+    </div>
+    <div class="mcq-feedback" id="R6">The <strong>Referential Integrity Constraint</strong> states: FK value must either match a PK value in the referenced (home) relation, OR be completely NULL. FKs CAN be NULL (optional relationship). FK and PK can have different names but must share the same domain. A table can have multiple FKs.</div>
+  </div>
+
+  <div class="mcq-block">
+    <div class="mcq-q"><strong>Q7.</strong> In the Three-Level ANSI/SPARC architecture, which level is closest to the user and deals with individual user views?</div>
+    <div class="mcq-options">
+      <button class="mcq-opt" onclick="mcq(this,'correct','R7')">External Level</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R7')">Conceptual Level</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R7')">Internal Level</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R7')">Physical Level</button>
+    </div>
+    <div class="mcq-feedback" id="R7">The <strong>External Level</strong> (also called View Level) is closest to the user. It contains multiple user views — each user sees only the data relevant to them. The Conceptual Level has the full logical structure. The Internal Level has the physical storage structure (indexes, file organization).</div>
+  </div>
+
+  <div class="mcq-block">
+    <div class="mcq-q"><strong>Q8.</strong> BCNF is violated when:</div>
+    <div class="mcq-options">
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R8')">A non-prime attribute partially depends on the PK</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R8')">A non-prime attribute transitively depends on the PK</button>
+      <button class="mcq-opt" onclick="mcq(this,'correct','R8')">A determinant (LHS of FD) is not a candidate key</button>
+      <button class="mcq-opt" onclick="mcq(this,'wrong','R8')">A table has multiple candidate keys</button>
+    </div>
+    <div class="mcq-feedback" id="R8"><strong>BCNF rule:</strong> For every non-trivial FD X → Y, X must be a candidate key. If any FD has a determinant (LHS) that is NOT a candidate key, BCNF is violated — even if the relation is in 3NF. Having multiple CKs is fine; it's when a non-CK determines something that BCNF breaks.</div>
+  </div>
+</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+  document.getElementById('hero').style.display = 'none';
+  window.scrollTo(0, 0);
+}
+
+function toggleSolution(btn) {
+  const sol = btn.nextElementSibling;
+  const isOpen = sol.classList.contains('open');
+  sol.classList.toggle('open');
+  btn.textContent = isOpen ? 'Show Solution' : 'Hide Solution';
+}
+
+function mcq(btn, result, feedbackId) {
+  const block = btn.closest('.mcq-block');
+  if (block.querySelector('.correct') || block.querySelector('.wrong.selected')) return;
+  const opts = block.querySelectorAll('.mcq-opt');
+  opts.forEach(o => o.style.pointerEvents = 'none');
+  btn.classList.add(result);
+  if (result === 'wrong') {
+    block.querySelector(`button[onclick*="${feedbackId}"][onclick*="correct"]`)?.classList.add('correct');
+  }
+  const feedback = document.getElementById(feedbackId);
+  feedback.classList.add('show');
+}
+
+// FD Closure Solver
+function parseFDs(fdStr) {
+  const fds = [];
+  fdStr.split(',').forEach(fd => {
+    const parts = fd.trim().split('→');
+    if (parts.length === 2) {
+      const lhs = parts[0].trim().split('').filter(c => c.trim());
+      const rhs = parts[1].trim().split('').filter(c => c.trim());
+      fds.push({ lhs, rhs });
+    }
+  });
+  return fds;
+}
+
+function computeClosure(attrs, fds) {
+  let closure = new Set(attrs);
+  let changed = true;
+  const steps = [];
+  while (changed) {
+    changed = false;
+    for (const fd of fds) {
+      if (fd.lhs.every(a => closure.has(a))) {
+        const newAttrs = fd.rhs.filter(a => !closure.has(a));
+        if (newAttrs.length > 0) {
+          newAttrs.forEach(a => closure.add(a));
+          steps.push(`  ${fd.lhs.join('')}→${fd.rhs.join('')} fires → add {${newAttrs.join(',')}} → closure = {${[...closure].join(',')}}`);
+          changed = true;
+        }
+      }
+    }
+  }
+  return { closure: [...closure], steps };
+}
+
+function solveFD() {
+  const attrsRaw = document.getElementById('fd-attrs').value.trim();
+  const fdsRaw = document.getElementById('fd-fds').value.trim();
+  const closeOf = document.getElementById('fd-closure-of').value.trim();
+  const allAttrs = attrsRaw.split(',').map(a => a.trim()).filter(Boolean);
+  const fds = parseFDs(fdsRaw);
+  const startAttrs = closeOf.split('').filter(c => c.trim() && c !== ',');
+  
+  let out = `Relation R(${allAttrs.join(', ')})\n`;
+  out += `FDs: ${fdsRaw}\n`;
+  out += `\nComputing ${closeOf}⁺:\n`;
+  out += `  Start: {${startAttrs.join(',')}}\n`;
+  
+  const { closure, steps } = computeClosure(startAttrs, fds);
+  steps.forEach(s => out += s + '\n');
+  out += `\n✦ ${closeOf}⁺ = {${closure.join(', ')}}\n`;
+  
+  const isFullClosure = allAttrs.every(a => closure.includes(a));
+  if (isFullClosure) {
+    out += `\n✓ ${closeOf}⁺ covers all attributes → ${closeOf} is a SUPER KEY\n`;
+    const allSubsets = [];
+    for (let i = 1; i < startAttrs.length; i++) {
+      const sub = startAttrs.slice(0, i);
+      const { closure: sc } = computeClosure(sub, fds);
+      if (allAttrs.every(a => sc.includes(a))) {
+        allSubsets.push(sub.join(''));
+      }
+    }
+    if (allSubsets.length === 0) {
+      out += `✓ No proper subset is a super key → ${closeOf} is a CANDIDATE KEY`;
+    } else {
+      out += `✗ Proper subset ${allSubsets[0]} also determines all attrs → ${closeOf} is a super key but NOT minimal (not CK)`;
+    }
+  } else {
+    const missing = allAttrs.filter(a => !closure.includes(a));
+    out += `\n✗ Missing: {${missing.join(', ')}} → ${closeOf} is NOT a super key`;
+  }
+  
+  const el = document.getElementById('fd-output');
+  el.textContent = out;
+}
+
+// NF Analyzer
+function solveNF() {
+  const relRaw = document.getElementById('nf-rel').value.trim();
+  const pkRaw = document.getElementById('nf-pk').value.trim();
+  const fdsRaw = document.getElementById('nf-fds').value.trim();
+  
+  const allAttrs = relRaw.split(',').map(a => a.trim());
+  const pkAttrs = pkRaw.split(',').map(a => a.trim());
+  const nonPrime = allAttrs.filter(a => !pkAttrs.includes(a));
+  
+  const fds = [];
+  fdsRaw.split('|').forEach(fd => {
+    const parts = fd.trim().split('→');
+    if (parts.length === 2) {
+      const lhs = parts[0].trim().split(',').map(a => a.trim());
+      const rhs = parts[1].trim().split(',').map(a => a.trim());
+      fds.push({ lhs, rhs });
+    }
+  });
+  
+  let out = `Relation: R(${allAttrs.join(', ')})\n`;
+  out += `PK: {${pkAttrs.join(', ')}}\n`;
+  out += `Prime attrs: {${pkAttrs.join(', ')}}\n`;
+  out += `Non-prime attrs: {${nonPrime.join(', ')}}\n\n`;
+  
+  const isCompositePK = pkAttrs.length > 1;
+  const partialDeps = [];
+  const transitiveDeps = [];
+  
+  if (isCompositePK) {
+    for (const fd of fds) {
+      const isSubsetOfPK = fd.lhs.every(a => pkAttrs.includes(a)) && fd.lhs.length < pkAttrs.length;
+      const detsNonPrime = fd.rhs.some(a => nonPrime.includes(a));
+      if (isSubsetOfPK && detsNonPrime) {
+        partialDeps.push(`${fd.lhs.join(',')} → ${fd.rhs.join(',')}`);
+      }
+    }
+  }
+  
+  for (const fd of fds) {
+    const lhsAllNonPrime = fd.lhs.every(a => nonPrime.includes(a));
+    const rhsHasNonPrime = fd.rhs.some(a => nonPrime.includes(a));
+    if (lhsAllNonPrime && rhsHasNonPrime) {
+      transitiveDeps.push(`${fd.lhs.join(',')} → ${fd.rhs.join(',')}`);
+    }
+  }
+  
+  out += `✦ 1NF Check: Assumed atomic values → IN 1NF ✓\n\n`;
+  
+  if (!isCompositePK) {
+    out += `✦ 2NF Check: PK is single attribute → Partial deps impossible → IN 2NF ✓\n\n`;
+  } else if (partialDeps.length > 0) {
+    out += `✦ 2NF Check: PARTIAL DEPENDENCIES FOUND → NOT in 2NF ✗\n`;
+    partialDeps.forEach(d => out += `  Violation: ${d}\n`);
+    out += `\n  DECOMPOSITION NEEDED:\n`;
+    partialDeps.forEach(d => {
+      const parts = d.split(' → ');
+      out += `  R_new(${parts[0]}, ${parts[1]})  PK: ${parts[0]}\n`;
+    });
+    out += `  R_main(PK + remaining non-prime attrs)\n`;
+  } else {
+    out += `✦ 2NF Check: No partial dependencies → IN 2NF ✓\n\n`;
+  }
+  
+  if (transitiveDeps.length > 0) {
+    out += `✦ 3NF Check: TRANSITIVE DEPENDENCIES FOUND → NOT in 3NF ✗\n`;
+    transitiveDeps.forEach(d => out += `  Violation: ${d}\n`);
+    out += `\n  DECOMPOSITION NEEDED:\n`;
+    transitiveDeps.forEach(d => {
+      const parts = d.split(' → ');
+      out += `  R_new(${parts[0]}, ${parts[1]})  PK: ${parts[0]}\n`;
+    });
+  } else if (partialDeps.length === 0) {
+    out += `✦ 3NF Check: No transitive dependencies → IN 3NF ✓\n`;
+    out += `\n✦ RESULT: Relation is in 3NF`;
+  }
+  
+  document.getElementById('nf-output').textContent = out;
+}
+
+// Pre-run solvers on load
+window.onload = () => { solveFD(); solveNF(); };
+</script>
+</body>
+</html>
