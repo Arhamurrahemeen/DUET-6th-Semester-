@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRW Finals — Preparation Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F4ED;
+  --bg-2:#F1ECE1;
+  --card:#FFFEFB;
+  --ink:#29271F;
+  --ink-soft:#6B665B;
+  --ink-faint:#9A958A;
+  --clay:#C46A48;
+  --clay-deep:#A8512F;
+  --clay-soft:#F0E4DB;
+  --sage:#6E8A78;
+  --sage-soft:#E2EAE2;
+  --sky:#5E7E9B;
+  --sky-soft:#E0E8EE;
+  --gold:#B98A3E;
+  --gold-soft:#F1E7D2;
+  --line:#E6DFD1;
+  --line-soft:#EFE9DD;
+  --sans:'Hanken Grotesk',-apple-system,sans-serif;
+  --serif:'Newsreader',Georgia,serif;
+  --r:14px;
+  --r-sm:9px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased}
+::selection{background:var(--clay-soft)}
+
+/* progress bar */
+#progress{position:fixed;top:0;left:0;height:3px;background:var(--clay);width:0;z-index:200;transition:width .1s}
+
+/* layout */
+.shell{display:flex;max-width:1240px;margin:0 auto}
+nav.side{position:sticky;top:0;height:100vh;width:248px;flex-shrink:0;padding:30px 18px;overflow-y:auto;border-right:1px solid var(--line)}
+nav.side .brand{font-family:var(--serif);font-size:21px;font-weight:600;letter-spacing:-.01em;margin-bottom:3px}
+nav.side .brand span{color:var(--clay)}
+nav.side .tag{font-size:12.5px;color:var(--ink-faint);margin-bottom:26px}
+nav.side a{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:var(--r-sm);color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500;margin-bottom:2px;transition:all .15s}
+nav.side a .n{width:21px;height:21px;border-radius:6px;background:var(--bg-2);color:var(--ink-faint);font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:600;transition:all .15s}
+nav.side a:hover{background:var(--bg-2);color:var(--ink)}
+nav.side a.active{background:var(--clay-soft);color:var(--clay-deep)}
+nav.side a.active .n{background:var(--clay);color:#fff}
+
+main{flex:1;min-width:0;padding:0 0 80px}
+.wrap{max-width:760px;margin:0 auto;padding:0 28px}
+section{padding:64px 0 12px;scroll-margin-top:10px}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--clay);margin-bottom:10px}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,5vw,46px);line-height:1.08;letter-spacing:-.02em;margin-bottom:14px}
+h2{font-family:var(--serif);font-weight:600;font-size:30px;letter-spacing:-.01em;margin-bottom:8px;line-height:1.15}
+h3{font-family:var(--serif);font-weight:600;font-size:20px;margin:22px 0 10px}
+.lead{font-size:18px;color:var(--ink-soft);line-height:1.6}
+p{margin-bottom:12px}
+.sec-intro{color:var(--ink-soft);font-size:16.5px;margin-bottom:8px}
+
+/* hero */
+.hero{padding-top:60px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 8px}
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);border-radius:30px;padding:7px 15px;font-size:13.5px;font-weight:500;color:var(--ink-soft)}
+.chip b{color:var(--clay);font-weight:600}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--sage)}
+
+/* cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px 24px;margin:16px 0}
+.card.tinted{background:var(--bg-2);border-color:var(--line-soft)}
+.card-h{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:18px;font-weight:600;margin-bottom:12px}
+.ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
+.ic.clay{background:var(--clay-soft);color:var(--clay-deep)}
+.ic.sage{background:var(--sage-soft);color:var(--sage)}
+.ic.sky{background:var(--sky-soft);color:var(--sky)}
+.ic.gold{background:var(--gold-soft);color:var(--gold)}
+
+ul.clean{list-style:none;margin:6px 0}
+ul.clean li{position:relative;padding-left:22px;margin-bottom:7px;color:var(--ink-soft);font-size:15px}
+ul.clean li::before{content:"";position:absolute;left:2px;top:9px;width:6px;height:6px;border-radius:50%;background:var(--clay)}
+ul.clean li b{color:var(--ink);font-weight:600}
+ol.steps{list-style:none;counter-reset:s;margin:8px 0}
+ol.steps li{position:relative;padding-left:34px;margin-bottom:9px;color:var(--ink-soft);font-size:15px;counter-increment:s}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:23px;height:23px;border-radius:7px;background:var(--clay-soft);color:var(--clay-deep);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;font-family:var(--sans)}
+
+/* flow diagram */
+.flow{display:flex;align-items:stretch;gap:0;flex-wrap:wrap;margin:18px 0}
+.flow .node{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:13px 14px;text-align:center}
+.flow .node .nt{font-weight:600;font-size:14px;margin-bottom:3px;color:var(--ink)}
+.flow .node .nd{font-size:12px;color:var(--ink-faint);line-height:1.4}
+.flow .arr{display:flex;align-items:center;justify-content:center;color:var(--clay);font-size:18px;padding:0 8px;flex-shrink:0}
+.flow.v{flex-direction:column}
+.flow.v .arr{padding:6px 0;transform:rotate(90deg)}
+.flow .node.c1{background:var(--sky-soft);border-color:transparent}
+.flow .node.c1 .nt{color:var(--sky)}
+.flow .node.c2{background:var(--sage-soft);border-color:transparent}
+.flow .node.c2 .nt{color:var(--sage)}
+.flow .node.c3{background:var(--gold-soft);border-color:transparent}
+.flow .node.c3 .nt{color:var(--gold)}
+.flow .node.c4{background:var(--clay-soft);border-color:transparent}
+.flow .node.c4 .nt{color:var(--clay-deep)}
+
+/* AIDA funnel */
+.funnel{margin:18px 0}
+.funnel .step{margin:0 auto 6px;border-radius:var(--r-sm);padding:11px 16px;text-align:center;font-weight:500;color:#fff;font-size:14.5px}
+.funnel .step small{display:block;font-size:11.5px;opacity:.9;font-weight:400}
+
+/* decision tree */
+.tree{margin:18px 0}
+.tree .q{background:var(--ink);color:#fff;border-radius:var(--r-sm);padding:11px 16px;text-align:center;font-weight:500;font-size:14.5px;max-width:380px;margin:0 auto 14px}
+.branches{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.branch{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:13px;text-align:center}
+.branch .cond{font-size:12px;color:var(--ink-faint);margin-bottom:6px;font-style:italic}
+.branch .res{font-weight:600;font-size:14px}
+.branch.b1{border-top:3px solid var(--sage)}.branch.b1 .res{color:var(--sage)}
+.branch.b2{border-top:3px solid var(--gold)}.branch.b2 .res{color:var(--gold)}
+.branch.b3{border-top:3px solid var(--clay)}.branch.b3 .res{color:var(--clay-deep)}
+
+/* reveal answer */
+.reveal{margin:14px 0}
+.reveal-btn{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);color:var(--clay-deep);font-family:var(--sans);font-weight:600;font-size:14px;padding:10px 16px;border-radius:var(--r-sm);cursor:pointer;transition:all .15s}
+.reveal-btn:hover{background:var(--clay-soft);border-color:var(--clay-soft)}
+.reveal-btn .chev{transition:transform .2s}
+.reveal-btn.open .chev{transform:rotate(180deg)}
+.reveal-body{display:none;margin-top:12px;animation:fade .3s ease}
+.reveal-body.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* model answer block */
+.model{background:var(--bg-2);border:1px solid var(--line);border-left:3px solid var(--sage);border-radius:0 var(--r-sm) var(--r-sm) 0;padding:16px 18px;font-size:14.5px}
+.model .doc{font-family:var(--sans);white-space:pre-wrap;line-height:1.7;color:var(--ink)}
+.model .lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--sage);margin-bottom:8px}
+.annot{display:inline-block;background:var(--clay-soft);color:var(--clay-deep);font-size:11px;font-weight:600;padding:1px 7px;border-radius:5px;margin-left:4px}
+
+/* tips */
+.tips{background:var(--gold-soft);border:1px solid #E7D5B0;border-radius:var(--r);padding:18px 22px;margin:16px 0}
+.tips .card-h{color:var(--gold)}
+.tips ul.clean li::before{background:var(--gold)}
+
+/* practice */
+.q-item{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:15px 18px;margin:10px 0}
+.q-item .qn{font-weight:600;color:var(--ink);font-size:15px;margin-bottom:4px}
+.q-item .qn .badge{font-size:11px;background:var(--bg-2);color:var(--ink-faint);padding:2px 8px;border-radius:5px;margin-right:8px;font-weight:600}
+
+/* word swap table */
+.swap{width:100%;border-collapse:collapse;margin:12px 0;font-size:14.5px}
+.swap th{text-align:left;padding:9px 12px;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-faint);border-bottom:1px solid var(--line)}
+.swap td{padding:9px 12px;border-bottom:1px solid var(--line-soft)}
+.swap td.bad{color:var(--clay-deep);text-decoration:line-through;text-decoration-color:#D9A88F}
+.swap td.good{color:var(--sage);font-weight:600}
+.swap tr:last-child td{border-bottom:none}
+
+/* roadmap */
+.road{margin:20px 0}
+.road .stop{display:flex;gap:16px;margin-bottom:4px}
+.road .rail{display:flex;flex-direction:column;align-items:center}
+.road .bub{width:34px;height:34px;border-radius:50%;background:var(--clay);color:#fff;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .2s}
+.road .bub.done{background:var(--sage)}
+.road .line{width:2px;flex:1;background:var(--line);margin:3px 0}
+.road .rc{flex:1;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:13px 16px;margin-bottom:14px}
+.road .rc .rt{font-weight:600;font-size:15px;display:flex;align-items:center;justify-content:space-between}
+.road .rc .rd{font-size:13.5px;color:var(--ink-soft);margin-top:3px}
+.road .rc.done{opacity:.6}
+.road .rc.done .rt{text-decoration:line-through}
+
+/* exam paper */
+.paper{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin:18px 0}
+.paper .ph{background:var(--bg-2);padding:20px 24px;border-bottom:1px solid var(--line);text-align:center}
+.paper .ph .uni{font-family:var(--serif);font-weight:600;font-size:18px}
+.paper .ph .meta{font-size:13px;color:var(--ink-soft);margin-top:4px}
+.paper .pbody{padding:8px 24px 22px}
+.psec{border-bottom:1px solid var(--line-soft);padding:16px 0}
+.psec:last-child{border-bottom:none}
+.psec .sh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.psec .sh .st{font-weight:600;font-size:15px}
+.psec .sh .mk{font-size:12.5px;color:var(--clay-deep);font-weight:600;background:var(--clay-soft);padding:2px 9px;border-radius:5px}
+.psec ol{margin-left:18px;font-size:14.5px;color:var(--ink-soft)}
+.psec ol li{margin-bottom:6px;padding-left:4px}
+
+.note{font-size:13.5px;color:var(--ink-faint);font-style:italic;margin-top:10px}
+.kbd{background:var(--bg-2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13px;font-family:var(--sans);font-weight:600;color:var(--ink-soft)}
+
+/* mobile */
+.menu-btn{display:none}
+@media(max-width:920px){
+  nav.side{position:fixed;left:0;top:0;transform:translateX(-100%);background:var(--bg);z-index:150;transition:transform .25s;box-shadow:0 0 40px rgba(0,0,0,.12)}
+  nav.side.open{transform:none}
+  .menu-btn{display:flex;position:fixed;top:14px;right:14px;z-index:160;width:44px;height:44px;border-radius:11px;background:var(--card);border:1px solid var(--line);align-items:center;justify-content:center;font-size:20px;cursor:pointer;color:var(--ink)}
+  .branches{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .wrap{padding:0 18px}
+  .flow{flex-direction:column}
+  .flow .arr{transform:rotate(90deg);padding:6px 0}
+}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button class="menu-btn" onclick="document.querySelector('nav.side').classList.toggle('open')">☰</button>
+
+<div class="shell">
+<nav class="side">
+  <div class="brand">TRW <span>Prep</span></div>
+  <div class="tag">Technical Report Writing · Finals</div>
+  <a href="#start" class="nav-link"><span class="n">&#8594;</span> Start here</a>
+  <a href="#roadmap" class="nav-link"><span class="n">0</span> Study roadmap</a>
+  <a href="#basics" class="nav-link"><span class="n">1</span> Writing basics</a>
+  <a href="#memo" class="nav-link"><span class="n">2</span> Memo &amp; Email</a>
+  <a href="#persuasive" class="nav-link"><span class="n">3</span> Persuasive messages</a>
+  <a href="#manual" class="nav-link"><span class="n">4</span> User manual</a>
+  <a href="#paper" class="nav-link"><span class="n">5</span> Reading a paper</a>
+  <a href="#vocab" class="nav-link"><span class="n">6</span> Simple vocabulary</a>
+  <a href="#mock" class="nav-link"><span class="n">&#9733;</span> Predicted paper</a>
+  <a href="#final" class="nav-link"><span class="n">&#10003;</span> Exam-day tips</a>
+</nav>
+
+<main>
+<div class="wrap">
+<section id="start" class="hero">
+  <div class="eyebrow">Technical Report Writing</div>
+  <h1>Your finals prep hub,<br>built to be studied.</h1>
+  <p class="lead">A short paper — 25 marks, just 3 questions — so this is a tight, focused flow. Work through each topic: understand the idea, see it as a diagram, read a model answer, learn the tricks, then test yourself.</p>
+  <div class="hero-meta">
+    <span class="chip"><span class="dot"></span> 25 marks &middot; 3 questions</span>
+    <span class="chip"><b>Model</b> answers</span>
+    <span class="chip"><b>Flow</b> diagrams</span>
+    <span class="chip"><b>Predicted</b> paper</span>
+  </div>
+  <div class="card tinted" style="margin-top:24px">
+    <div class="card-h"><span class="ic clay">📌</span> What the finals cover</div>
+    <ul class="clean">
+      <li><b>Positive memo and email</b> — format, structure, and writing them well</li>
+      <li><b>Persuasive messages</b> — the three strategies and when to use each</li>
+      <li><b>Developing a user manual</b> — writing clear instructions</li>
+      <li><b>How to read a scientific paper</b> — IMRD and the three reading tasks</li>
+      <li><b>Writing basics</b> — structure, the 7 Cs, and types of writing</li>
+    </ul>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="eyebrow">Step 0</div>
+  <h2>Study roadmap</h2>
+  <p class="sec-intro">It's a minor subject with a short 25-mark paper, so keep revision light and focused. Study in this order. Tap a number to mark it done.</p>
+  <div class="road" id="road">
+    <div class="stop">
+      <div class="rail"><div class="bub" onclick="toggleStop(this)">1</div><div class="line"></div></div>
+      <div class="rc"><div class="rt">Writing basics + vocabulary <span style="font-size:12px;color:var(--ink-faint);font-weight:400">~20 min</span></div><div class="rd">The foundation. 7 Cs, structure, types of writing, simple words.</div></div>
+    </div>
+    <div class="stop">
+      <div class="rail"><div class="bub" onclick="toggleStop(this)">2</div><div class="line"></div></div>
+      <div class="rc"><div class="rt">Memo &amp; Email <span style="font-size:12px;color:var(--ink-faint);font-weight:400">~25 min</span></div><div class="rd">Easiest marks. Learn the format first — it's pure memory.</div></div>
+    </div>
+    <div class="stop">
+      <div class="rail"><div class="bub" onclick="toggleStop(this)">3</div><div class="line"></div></div>
+      <div class="rc"><div class="rt">Persuasive messages <span style="font-size:12px;color:var(--ink-faint);font-weight:400">~25 min</span></div><div class="rd">Three strategies + AIDA. Common "match the scenario" questions.</div></div>
+    </div>
+    <div class="stop">
+      <div class="rail"><div class="bub" onclick="toggleStop(this)">4</div><div class="line"></div></div>
+      <div class="rc"><div class="rt">User manual <span style="font-size:12px;color:var(--ink-faint);font-weight:400">~20 min</span></div><div class="rd">Fixing instructions + writing steps. Practical and quick.</div></div>
+    </div>
+    <div class="stop">
+      <div class="rail"><div class="bub" onclick="toggleStop(this)">5</div></div>
+      <div class="rc"><div class="rt">Reading a research paper <span style="font-size:12px;color:var(--ink-faint);font-weight:400">~20 min</span></div><div class="rd">IMRD + three tasks. Use your own assignment papers to practise.</div></div>
+    </div>
+  </div>
+  <p class="note">Only 3 questions for 25 marks — so expect two writing tasks and one short-answer question. Cover all topics lightly; don't over-study any one.</p>
+</section>
+
+<section id="basics">
+  <div class="eyebrow">Topic 1</div>
+  <h2>Writing basics</h2>
+  <p class="sec-intro">The ideas that sit under every topic above: how a piece of writing is built, the qualities of good writing, and the main types.</p>
+
+  <h3>The universal structure</h3>
+  <div class="flow">
+    <div class="node c1"><div class="nt">Introduction</div><div class="nd">State purpose, give context</div></div>
+    <div class="arr">›</div>
+    <div class="node c2"><div class="nt">Body</div><div class="nd">Develop ideas with facts</div></div>
+    <div class="arr">›</div>
+    <div class="node c3"><div class="nt">Conclusion</div><div class="nd">Summarize, state action</div></div>
+  </div>
+
+  <h3>Direct vs indirect order</h3>
+  <div class="card">
+    <ul class="clean">
+      <li><b>Direct order:</b> main point first, then details. Use for good or neutral news.</li>
+      <li><b>Indirect order:</b> reasons first, main point later. Use for bad news or persuasion.</li>
+    </ul>
+  </div>
+
+  <h3>The 7 Cs of good writing <span class="annot">common question</span></h3>
+  <div class="card tinted">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px 24px">
+      <div><b>Clear</b> — easy to understand</div>
+      <div><b>Concise</b> — no extra words</div>
+      <div><b>Concrete</b> — specific facts</div>
+      <div><b>Correct</b> — accurate grammar &amp; facts</div>
+      <div><b>Coherent</b> — flows logically</div>
+      <div><b>Complete</b> — nothing missing</div>
+      <div><b>Courteous</b> — polite and reader-focused</div>
+    </div>
+  </div>
+
+  <h3>Types of writing</h3>
+  <div class="card">
+    <table class="swap">
+      <tr><th>Type</th><th>Tone</th><th>Purpose</th></tr>
+      <tr><td><b>Academic</b></td><td>Formal, objective</td><td>Inform / argue with evidence</td></tr>
+      <tr><td><b>Business</b></td><td>Professional, direct</td><td>Communicate / get action</td></tr>
+      <tr><td><b>Technical</b></td><td>Clear, neutral</td><td>Instruct / explain</td></tr>
+      <tr><td><b>Creative</b></td><td>Personal, expressive</td><td>Entertain / express</td></tr>
+      <tr><td><b>Persuasive</b></td><td>Compelling</td><td>Convince / influence</td></tr>
+    </table>
+  </div>
+
+  <div class="tips">
+    <div class="card-h"><span class="ic gold">💡</span> Tips &amp; tricks</div>
+    <ul class="clean">
+      <li>Remember the writing process in 3 steps: <b>Prewriting → Drafting → Revising</b></li>
+      <li>If asked to "define academic / business / technical writing", give the <b>tone, purpose, and one example</b> of each</li>
+      <li>The 7 Cs all start with <b>C</b> — recite them in order to recall all seven</li>
+    </ul>
+  </div>
+</section>
+
+<section id="memo">
+  <div class="eyebrow">Topic 2</div>
+  <h2>Memo &amp; Email</h2>
+  <p class="sec-intro">A memo is an internal message inside one organization. An email is faster and can go to many people at once. Both must be clear and get to the point.</p>
+
+  <h3>The memo format — memorize this</h3>
+  <div class="card">
+    <div class="model">
+      <div class="lbl">Standard heading</div>
+      <div class="doc">DATE:     June 4, 2026
+TO:       Ray Charles, Marketing Manager
+FROM:     Bruce King, Events Manager   BK
+SUBJECT:  Conference Planning</div>
+    </div>
+    <ul class="clean" style="margin-top:14px">
+      <li>Cue words (DATE, TO, FROM, SUBJECT) line up neatly</li>
+      <li>Use the <b>full date</b>: Month Day, Year</li>
+      <li>Add the person's <b>job title</b> on TO and FROM lines</li>
+      <li>The sender writes their <b>initials</b> next to their name</li>
+      <li>Subject is a short <b>headline</b>, not a full sentence</li>
+      <li>No "Yours sincerely" needed — memos have <b>no closing</b></li>
+      <li>Write <b>Encs:</b> if you attach any documents</li>
+    </ul>
+  </div>
+
+  <h3>The three-paragraph flow</h3>
+  <div class="flow v">
+    <div class="node c1"><div class="nt">1 · Introduction</div><div class="nd">State the purpose. Who, what, where, when. "I am writing to inform…"</div></div>
+    <div class="arr">›</div>
+    <div class="node c2"><div class="nt">2 · Discussion</div><div class="nd">Give the facts and details. One theme per paragraph.</div></div>
+    <div class="arr">›</div>
+    <div class="node c3"><div class="nt">3 · Conclusion</div><div class="nd">What action to take, any deadline, end on a polite note.</div></div>
+  </div>
+
+  <h3>Model answer — a positive memo</h3>
+  <p style="font-size:15px;color:var(--ink-soft)">Scenario: You work in HR. Write a memo announcing a new Employee Wellness Program (fitness challenges, free counseling, flexible hours).</p>
+  <div class="reveal">
+    <button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Show model answer</button>
+    <div class="reveal-body">
+      <div class="model">
+        <div class="doc">DATE:     June 4, 2026
+TO:       All Employees
+FROM:     A. Rajput, HR Officer   AR
+SUBJECT:  Launch of Employee Wellness Program
+
+This memo is to inform all employees that our new Employee Wellness Program will begin on April 1.
+
+The program aims to improve well-being and productivity at work. It offers three benefits: monthly fitness challenges with prizes, free mental health counseling sessions, and a flexible work schedule option. More details will be shared at an upcoming town hall.
+
+Please contact HR if you have any questions. We thank you for taking part in this effort to make our workplace healthier.
+
+Encs: Wellness Program brochure</div>
+      </div>
+      <p class="note">Notice: purpose in the first line, benefits grouped in the middle, polite action close at the end.</p>
+    </div>
+  </div>
+
+  <h3>Email — the key rules</h3>
+  <div class="card tinted">
+    <ul class="clean">
+      <li><b>Reply</b> within a day or two; set an out-of-office if away longer</li>
+      <li><b>Subject line</b> states the exact purpose (use FOR ACTION / FYI / URGENT only when needed)</li>
+      <li>Put the <b>most important point first</b></li>
+      <li>Use <b>bullet or numbered lists</b> for items that should stand out</li>
+      <li>Short paragraphs with a space between them</li>
+      <li>Never write in <b>ALL CAPS</b> (shouting) or <b>all lowercase</b> (careless)</li>
+      <li>Always <b>explain any attachment</b> in the body</li>
+    </ul>
+  </div>
+
+  <h3>Model answer — a professional email</h3>
+  <p style="font-size:15px;color:var(--ink-soft)">Scenario: Request an assignment extension from your professor.</p>
+  <div class="reveal">
+    <button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Show model answer</button>
+    <div class="reveal-body">
+      <div class="model">
+        <div class="doc">Subject: Request for Extension — Data Structures Assignment
+
+Dear Professor Khan,
+
+I am writing to request a short extension on the Data Structures assignment due on June 6.
+
+I was unwell for the past three days and could not finish the work on time. I have completed most of it and only need two more days to test and submit. May I please submit it by June 8?
+
+I would be grateful for your consideration and will make sure the work is submitted by the new date. Thank you for your understanding.
+
+Best regards,
+Muhammad Arham Rajput
+Student ID: 23-CSE-13</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <div class="card-h"><span class="ic gold">💡</span> Tips &amp; tricks</div>
+    <ul class="clean">
+      <li>If a question gives you <b>jumbled details</b>, your job is to sort them into intro / discussion / conclusion — don't add new information</li>
+      <li>The <b>first sentence</b> must state the purpose. Examiners look for this</li>
+      <li>"Positive memo" means <b>good or neutral news</b> — use direct order (point first)</li>
+      <li>Memo = no greeting and no sign-off. Email = greeting and sign-off both needed</li>
+    </ul>
+  </div>
+
+  <h3>Practice questions</h3>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q1</span> List the four cue words in a memo heading and what goes after each.</div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">DATE — full calendar date (June 4, 2026)
+TO — recipient's name and job title
+FROM — sender's name, title, and initials
+SUBJECT — a short one-line headline of the purpose</div></div></div></div>
+  </div>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q2</span> Give three situations where you should NOT use email.</div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">1. When personal contact is the only way to clear a misunderstanding.
+2. When a phone call would be faster and more efficient.
+3. When there is a real chance of miscommunication.</div></div></div></div>
+  </div>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q3</span> Write a memo reminding staff to keep the lunchroom clean after a pest problem. <span style="font-weight:400;color:var(--ink-faint)">(try it yourself, then compare)</span></div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Sample answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">DATE:     June 4, 2026
+TO:       All Staff
+FROM:     A. Rajput, Office Manager   AR
+SUBJECT:  Keeping the Lunchroom Clean
+
+This memo is to remind all staff to clean up after using the lunchroom. We recently had a problem with insects, and the building has now been treated.
+
+To stop the problem from coming back, please wash your dishes, wipe the tables, and throw away any food waste before you leave. Leaving food out attracts pests.
+
+Your cooperation will keep our lunchroom safe and pleasant for everyone. Thank you for your help.</div></div></div></div>
+  </div>
+</section>
+
+<section id="persuasive">
+  <div class="eyebrow">Topic 3</div>
+  <h2>Persuasive messages</h2>
+  <p class="sec-intro">A persuasive message is used to propose an idea, request an action, or convince someone to agree. The skill is choosing the right strategy for the situation.</p>
+
+  <h3>First, analyze the situation</h3>
+  <div class="card tinted">
+    <ul class="clean">
+      <li>What do you want the reader to do?</li>
+      <li>What objections might they have?</li>
+      <li>How strong is your case?</li>
+      <li>Which strategy fits the situation and the organization's culture?</li>
+    </ul>
+  </div>
+
+  <h3>The three strategies — which one to pick</h3>
+  <div class="tree">
+    <div class="q">How much resistance do you expect from the reader?</div>
+    <div class="branches">
+      <div class="branch b1"><div class="cond">Little / none — they'll likely say yes</div><div class="res">Direct request</div></div>
+      <div class="branch b2"><div class="cond">Some — they may object or hesitate</div><div class="res">Problem-solving</div></div>
+      <div class="branch b3"><div class="cond">High — you must sell the idea</div><div class="res">Sales pattern</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <ul class="clean">
+      <li><b>Direct request:</b> state the request → give details → ask for the action. <span style="color:var(--ink-faint)">e.g. requesting missed lecture slides.</span></li>
+      <li><b>Problem-solving:</b> describe a shared problem → build common ground → give your solution → show benefits → ask for action. <span style="color:var(--ink-faint)">e.g. asking for a deadline extension.</span></li>
+      <li><b>Sales pattern (AIDA):</b> grab attention → build interest → create desire → call for action. <span style="color:var(--ink-faint)">e.g. requesting a free software trial.</span></li>
+    </ul>
+  </div>
+
+  <h3>The AIDA funnel — for the sales pattern</h3>
+  <div class="funnel">
+    <div class="step" style="background:var(--sky);width:100%">Attention<small>Open with something that grabs interest</small></div>
+    <div class="step" style="background:var(--sage);width:82%">Interest<small>Make it relevant to the reader</small></div>
+    <div class="step" style="background:var(--gold);width:64%">Desire<small>Show the benefits, remove doubts</small></div>
+    <div class="step" style="background:var(--clay);width:46%">Action<small>Ask for a clear, specific response</small></div>
+  </div>
+
+  <h3>Match the scenario</h3>
+  <div class="card">
+    <table class="swap">
+      <tr><th>Scenario</th><th>Strategy</th></tr>
+      <tr><td>Request missed lecture slides</td><td class="good">Direct</td></tr>
+      <tr><td>3-day extension on a final project</td><td class="good">Problem-solving</td></tr>
+      <tr><td>Free trial of a premium database tool</td><td class="good">Sales pattern</td></tr>
+      <tr><td>Convince teacher to invite a guest speaker</td><td class="good">Sales pattern</td></tr>
+      <tr><td>Request a new computer from IT</td><td class="good">Problem-solving</td></tr>
+      <tr><td>Confirm enrollment in a workshop</td><td class="good">Direct</td></tr>
+      <tr><td>Reconsider an unfair performance review</td><td class="good">Problem-solving</td></tr>
+    </table>
+  </div>
+
+  <h3>Model answer — a persuasive email</h3>
+  <p style="font-size:15px;color:var(--ink-soft)">Scenario: Convince your teacher to invite a CS industry expert to speak to your class.</p>
+  <div class="reveal">
+    <button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Show model answer</button>
+    <div class="reveal-body">
+      <div class="model">
+        <div class="doc">Subject: Request to Invite an Industry Expert for Our Class
+
+Dear Sir,
+
+After our recent class discussion on emerging technologies, I would like to suggest inviting a real-world industry professional to speak to our class.   ← Attention
+
+Many of us found the topic exciting, but we feel that hearing from someone who works in the field would make the ideas much clearer and more real.   ← Interest
+
+A short session with a software engineer or AI developer would give us true insight into how these technologies are used in industry, and could inspire many of us in choosing our careers.   ← Desire
+
+Could we discuss arranging such a session? I would be happy to help coordinate and organize it. Thank you for considering this idea.   ← Action
+
+Best regards,
+Muhammad Arham Rajput</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <div class="card-h"><span class="ic gold">💡</span> Tips &amp; tricks</div>
+    <ul class="clean">
+      <li>The trick to "match the strategy" questions: ask <b>"will they easily say yes?"</b> If yes → Direct. If they need convincing → Problem-solving. If you're selling something they don't want yet → Sales</li>
+      <li>For a sales-pattern answer, <b>label your paragraphs</b> A-I-D-A in your head so you don't miss a stage</li>
+      <li>Always end persuasive messages with a <b>clear, specific action</b> — never a vague "let me know"</li>
+    </ul>
+  </div>
+
+  <h3>Practice questions</h3>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q1</span> What does AIDA stand for? Explain each stage in one line.</div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">Attention — grab the reader's interest with a strong opening.
+Interest — build relevance so they keep reading.
+Desire — show the benefits and reduce objections.
+Action — ask for a clear, specific response.</div></div></div></div>
+  </div>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q2</span> Which strategy fits: asking your supervisor to reconsider an unfair review? Why?</div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">Problem-solving. The reader may resist, so you open with a shared concern, build common ground, present your case calmly, and then ask for the review to be reconsidered.</div></div></div></div>
+  </div>
+</section>
+
+<section id="manual">
+  <div class="eyebrow">Topic 4</div>
+  <h2>Developing a user manual</h2>
+  <p class="sec-intro">A user guide (or manual) is a document that helps people use a product or system — for training, operating, servicing, or repairing it.</p>
+
+  <h3>Two ways to write a manual</h3>
+  <div class="flow">
+    <div class="node c1"><div class="nt">Feature-oriented</div><div class="nd">Explains each button, knob, and menu one by one</div></div>
+    <div class="arr" style="opacity:0">·</div>
+    <div class="node c2"><div class="nt">Task-oriented</div><div class="nd">Focuses on getting a job done, step by step</div></div>
+  </div>
+
+  <h3>How to write clear instructions</h3>
+  <div class="flow v">
+    <div class="node c4"><div class="nt">Use imperative verbs</div><div class="nd">"Click", "Press", "Insert" — give a direct command</div></div>
+    <div class="arr">›</div>
+    <div class="node c4"><div class="nt">One action per step</div><div class="nd">Don't combine two actions in a single step</div></div>
+    <div class="arr">›</div>
+    <div class="node c4"><div class="nt">Logical order, max 8 steps</div><div class="nd">Follow the real sequence; keep it short</div></div>
+  </div>
+
+  <h3>Fixing weak instructions <span class="annot">very common</span></h3>
+  <div class="card">
+    <div class="model" style="border-left-color:var(--clay)">
+      <div class="lbl" style="color:var(--clay-deep)">Wrong → Right</div>
+      <div class="doc">✗  "Allow the glue to dry adequately."
+✓  Let the glue dry completely.
+
+✗  "...quickly and in an easy manner rearrange headings."
+✓  ...quickly and easily rearrange headings.
+
+✗  "After having used the equipment, sliding the sensor
+    back into its holder is highly recommended."
+✓  After use, slide the temperature sensor back into
+    its holder.</div>
+    </div>
+    <p class="note">The fixes remove wordiness, passive voice, and indirect phrasing — and use plain command verbs.</p>
+  </div>
+
+  <h3>Model answer — step-by-step instructions</h3>
+  <p style="font-size:15px;color:var(--ink-soft)">Task: Write instructions to insert a picture in a PowerPoint slide.</p>
+  <div class="reveal">
+    <button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Show model answer</button>
+    <div class="reveal-body">
+      <div class="model">
+        <div class="lbl">Inserting a picture in PowerPoint</div>
+        <div class="doc">1. Open your presentation and select the slide.
+2. Click the Insert tab.
+3. Click Pictures.
+4. Select This Device.
+5. Find and select your image.
+6. Click Insert.
+7. Drag the corner handles to resize the picture.
+8. Click outside the image to finish.</div>
+      </div>
+      <p class="note">Each step starts with a command verb, has one action, and follows the real order — exactly the rules.</p>
+    </div>
+  </div>
+
+  <h3>Parts of a user guide</h3>
+  <div class="card tinted">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+      <div>
+        <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);margin-bottom:8px">Usually included</div>
+        <ul class="clean" style="font-size:14px">
+          <li>Title page &amp; covers</li>
+          <li>Trademarks, disclaimers, warranties</li>
+          <li>Introduction / product description</li>
+          <li>Getting started &amp; installation</li>
+          <li>Operating &amp; maintenance instructions</li>
+          <li>Troubleshooting with safety notices</li>
+          <li>Glossary &amp; index</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-faint);margin-bottom:8px">Optional</div>
+        <ul class="clean" style="font-size:14px">
+          <li>Table of contents</li>
+          <li>Appendices</li>
+          <li>FAQ section</li>
+          <li>Reader-comment form</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="tips">
+    <div class="card-h"><span class="ic gold">💡</span> Tips &amp; tricks</div>
+    <ul class="clean">
+      <li>Spot weak instructions by looking for: <b>passive voice</b> ("is recommended"), <b>wordy phrases</b> ("in an easy manner"), and <b>non-command verbs</b></li>
+      <li>A <b>feature</b> is what the app has; a <b>task</b> is what the user does. "Has a search bar" = feature; "Search for a file" = task</li>
+      <li>Keep each step to <b>one clear action</b> — examiners deduct marks for combined steps</li>
+    </ul>
+  </div>
+
+  <h3>Practice questions</h3>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q1</span> Rewrite: "Sharing of files between two phones can be done by turning on Bluetooth."</div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">Turn on Bluetooth on both phones to share files.
+
+(Direct command, active voice, one action.)</div></div></div></div>
+  </div>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q2</span> Turn this feature into a user task: "The app has a dark mode setting."</div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">Feature → Task:  "Switch the app to dark mode."</div></div></div></div>
+  </div>
+</section>
+
+<section id="paper">
+  <div class="eyebrow">Topic 5</div>
+  <h2>How to read a research paper</h2>
+  <p class="sec-intro">Scientific papers follow a fixed structure. Knowing it helps you find information fast and judge whether the work is good.</p>
+
+  <h3>The IMRD structure <span class="annot">memorize</span></h3>
+  <div class="flow">
+    <div class="node c1"><div class="nt">Introduction</div><div class="nd">Context &amp; reason — why the study matters</div></div>
+    <div class="arr">›</div>
+    <div class="node c2"><div class="nt">Methods</div><div class="nd">How the research was done</div></div>
+    <div class="arr">›</div>
+    <div class="node c3"><div class="nt">Results</div><div class="nd">What was found (data, figures)</div></div>
+    <div class="arr">›</div>
+    <div class="node c4"><div class="nt">Discussion</div><div class="nd">What it means &amp; why it matters</div></div>
+  </div>
+  <p style="font-size:15px;color:var(--ink-soft)">The <b>Abstract</b> sits before all of these — a quick summary of aim, method, findings, and conclusion. Read it first to decide if the paper is useful, but never rely on it alone.</p>
+
+  <h3>The three reading tasks</h3>
+  <div class="flow v">
+    <div class="node c1"><div class="nt">1 · Comprehension</div><div class="nd">Understand the research problem and the contribution (what is new?)</div></div>
+    <div class="arr">›</div>
+    <div class="node c2"><div class="nt">2 · Evaluation</div><div class="nd">Judge if the problem is important, the contribution real, and the claims valid</div></div>
+    <div class="arr">›</div>
+    <div class="node c3"><div class="nt">3 · Synthesis</div><div class="nd">Generate new ideas: alternatives, counter-arguments, open problems</div></div>
+  </div>
+
+  <h3>Reading the introduction — find four things</h3>
+  <div class="card tinted">
+    <ul class="clean">
+      <li><b>Context</b> — background about the topic</li>
+      <li><b>Importance</b> — why the issue matters</li>
+      <li><b>Research gap</b> — what is missing or unsolved in past work</li>
+      <li><b>Purpose</b> — what the authors aim to do</li>
+    </ul>
+  </div>
+
+  <h3>Model answer — analyzing an introduction</h3>
+  <p style="font-size:15px;color:var(--ink-soft)">Using the paper "Agentic AI for Digital Twin" (one of your assignment papers):</p>
+  <div class="reveal">
+    <button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Show model answer</button>
+    <div class="reveal-body">
+      <div class="model">
+        <div class="doc">Context — Digital twins are widely used in industries such as
+shipping, but they are complex and hard to scale.
+
+Importance — As data sources grow, combining them for
+real-time decisions becomes difficult, which limits how
+useful digital twins can be.
+
+Research gap — Existing systems struggle to bring together
+diverse, fast-changing data, and they are too complex for
+non-expert users.
+
+Purpose — To build an interactive agentic framework that
+uses large language models as a "universal interface" to
+pick the right tools and data automatically.
+
+Research problem statement:
+Digital twins in the shipping industry are hard to scale
+because of high complexity and the challenge of joining
+many real-time data sources. There is a need for a simpler
+way for different users to get insights. This study proposes
+an agentic AI framework that uses LLMs to manage tools and
+data on their own for real-time decisions.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Note-taking template</h3>
+  <div class="card">
+    <ul class="clean" style="font-size:14px">
+      <li><b>Citation</b> — author, year, title, journal, pages</li>
+      <li><b>Keywords</b> — general and specific subject</li>
+      <li><b>Hypothesis</b> — what question did they ask?</li>
+      <li><b>Methodology</b> — what experiments were done?</li>
+      <li><b>Results</b> — key findings</li>
+      <li><b>Summary</b> — in your own words</li>
+      <li><b>Significance</b> — why it matters to the field and your work</li>
+    </ul>
+  </div>
+
+  <div class="tips">
+    <div class="card-h"><span class="ic gold">💡</span> Tips &amp; tricks</div>
+    <ul class="clean">
+      <li>Remember the order with the word <b>IMRD</b> and the three tasks as <b>C-E-S</b> (Comprehension, Evaluation, Synthesis)</li>
+      <li>For a "research problem statement", use this shape: <b>what the problem is → why it matters → what the study does about it</b></li>
+      <li><b>Paraphrase</b> — explain ideas in your own words. Copying sentences loses marks</li>
+    </ul>
+  </div>
+
+  <h3>Practice questions</h3>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q1</span> What does IMRD stand for, and what does each section do?</div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">Introduction — gives context and the reason for the study.
+Methods — describes how the research was done.
+Results — presents the findings and data.
+Discussion — explains what the results mean and why they matter.</div></div></div></div>
+  </div>
+  <div class="q-item">
+    <div class="qn"><span class="badge">Q2</span> Name and briefly explain the three essential tasks of reading a paper.</div>
+    <div class="reveal"><button class="reveal-btn" onclick="rev(this)"><span class="chev">▾</span> Answer</button>
+    <div class="reveal-body"><div class="model"><div class="doc">Comprehension — understand what the paper says (problem + contribution).
+Evaluation — judge if the claims are important and valid.
+Synthesis — use the work to generate new research ideas.</div></div></div></div>
+  </div>
+</section>
+
+<section id="vocab">
+  <div class="eyebrow">Topic 6</div>
+  <h2>Simple vocabulary</h2>
+  <p class="sec-intro">Your teacher prefers plain, simple wording over fancy words. Good technical writing is about being clear, not clever. Swap heavy words for simple ones.</p>
+
+  <h3>Use this, not that</h3>
+  <div class="card">
+    <table class="swap">
+      <tr><th>Don't write</th><th>Write</th></tr>
+      <tr><td class="bad">utilize</td><td class="good">use</td></tr>
+      <tr><td class="bad">commence</td><td class="good">start</td></tr>
+      <tr><td class="bad">terminate</td><td class="good">end / stop</td></tr>
+      <tr><td class="bad">in order to</td><td class="good">to</td></tr>
+      <tr><td class="bad">at this point in time</td><td class="good">now</td></tr>
+      <tr><td class="bad">due to the fact that</td><td class="good">because</td></tr>
+      <tr><td class="bad">a large number of</td><td class="good">many</td></tr>
+      <tr><td class="bad">in the event that</td><td class="good">if</td></tr>
+      <tr><td class="bad">prior to</td><td class="good">before</td></tr>
+      <tr><td class="bad">assist</td><td class="good">help</td></tr>
+      <tr><td class="bad">endeavour</td><td class="good">try</td></tr>
+      <tr><td class="bad">in an easy manner</td><td class="good">easily</td></tr>
+    </table>
+  </div>
+
+  <h3>Useful words to know (with simple meanings)</h3>
+  <div class="card tinted">
+    <ul class="clean" style="font-size:14.5px">
+      <li><b>Memo</b> — a short message sent inside an organization</li>
+      <li><b>Cue words</b> — the labels DATE, TO, FROM, SUBJECT</li>
+      <li><b>Persuasive</b> — meant to convince someone</li>
+      <li><b>Objection</b> — a reason the reader might say no</li>
+      <li><b>Imperative verb</b> — a command word like "click" or "press"</li>
+      <li><b>Paraphrase</b> — to say something in your own words</li>
+      <li><b>Research gap</b> — a missing or unsolved part of past research</li>
+      <li><b>Concise</b> — short and to the point</li>
+      <li><b>Coherent</b> — clear and well-connected</li>
+      <li><b>Encs</b> — short for "enclosures", documents attached to a memo</li>
+    </ul>
+  </div>
+
+  <div class="tips">
+    <div class="card-h"><span class="ic gold">💡</span> Tips &amp; tricks</div>
+    <ul class="clean">
+      <li>When unsure between two words, pick the <b>shorter, simpler one</b></li>
+      <li>Read your sentence aloud — if it sounds like normal speech, it's clear enough</li>
+      <li>Avoid long sentences. One idea per sentence is easiest to mark</li>
+    </ul>
+  </div>
+</section>
+
+<section id="mock">
+  <div class="eyebrow">Test yourself</div>
+  <h2>Predicted question paper</h2>
+  <p class="sec-intro">A minor-subject final: <b>25 marks, 3 questions</b>. Based on your syllabus, slides, and tasksheets. Expect two writing tasks and one short-answer question. Try it closed-book in about an hour.</p>
+
+  <div class="paper">
+    <div class="ph">
+      <div class="uni">Technical Report Writing — Final Examination</div>
+      <div class="meta">Time: 1 Hour &nbsp;·&nbsp; Total Marks: 25 &nbsp;·&nbsp; Attempt all three questions</div>
+    </div>
+    <div class="pbody">
+      <div class="psec">
+        <div class="sh"><span class="st">Question 1 — Memo or Email</span><span class="mk">9 marks</span></div>
+        <p style="font-size:14.5px;color:var(--ink-soft);margin:0 0 6px">Attempt any <b>one</b>:</p>
+        <ol>
+          <li>Write a positive memo announcing a two-day staff training seminar. Include the date, presenter, venue, and whether lunch is provided.</li>
+          <li><i>OR</i> &nbsp;Write a persuasive email to your teacher requesting that a CS industry expert be invited to speak to your class. Use the correct persuasive strategy.</li>
+        </ol>
+      </div>
+      <div class="psec">
+        <div class="sh"><span class="st">Question 2 — Instructions</span><span class="mk">8 marks</span></div>
+        <ol>
+          <li>Write clear step-by-step instructions (maximum 8 steps) for printing a Word document. (5)</li>
+          <li>Correct these two instructions: (a) "Allowing the glue to dry adequately is advised." (b) "The file can be saved by clicking the save button." (3)</li>
+        </ol>
+      </div>
+      <div class="psec">
+        <div class="sh"><span class="st">Question 3 — Short Answers</span><span class="mk">8 marks</span></div>
+        <ol>
+          <li>What does IMRD stand for? Give a one-line role for each section. (4)</li>
+          <li>Name the three persuasive strategies and state when each is used. (3)</li>
+          <li>What does AIDA stand for? (1)</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="reveal">
+    <button class="reveal-btn" onclick="rev(this)"><span class="chev">&#9662;</span> Reveal Question 1 model answers</button>
+    <div class="reveal-body">
+      <div class="model">
+        <div class="lbl">Q1 (a) — sample memo</div>
+        <div class="doc">DATE:     June 4, 2026
+TO:       All Staff
+FROM:     A. Rajput, Training Coordinator   AR
+SUBJECT:  Two-Day Software Training Seminar
+
+This memo is to inform all staff of a two-day training seminar
+on project management software.
+
+The seminar will be led by Mr. Imran Ali, a senior trainer with
+ten years of industry experience. It will be held in Conference
+Room B on June 18 and 19, from 9 a.m. to 1 p.m. Lunch will be
+provided on both days.
+
+Please confirm your attendance with HR by June 12. We look
+forward to your participation.
+
+Encs: Seminar schedule</div>
+      </div>
+      <div class="model" style="margin-top:12px">
+        <div class="lbl">Q1 (b) — sample persuasive email</div>
+        <div class="doc">Subject: Request to Invite an Industry Expert for Our Class
+
+Dear Sir,
+
+After our recent class discussion on emerging technologies, I
+would like to suggest inviting a real-world professional to speak
+to our class.   (Attention)
+
+Many of us found the topic exciting, but feel that hearing from
+someone who works in the field would make the ideas clearer and
+more real.   (Interest)
+
+A short session with a software engineer or AI developer would
+give us true insight into how these technologies are used, and
+could inspire us in choosing our careers.   (Desire)
+
+Could we discuss arranging such a session? I would be happy to
+help organize it. Thank you for considering this idea.   (Action)
+
+Best regards,
+Muhammad Arham Rajput</div>
+      </div>
+    </div>
+  </div>
+  <div class="reveal">
+    <button class="reveal-btn" onclick="rev(this)"><span class="chev">&#9662;</span> Reveal Question 2 &amp; 3 model answers</button>
+    <div class="reveal-body">
+      <div class="model">
+        <div class="lbl">Q2 (1) — sample instructions</div>
+        <div class="doc">Printing a Word document:
+1. Open the document in MS Word.
+2. Click the File tab.
+3. Click Print.
+4. Choose your printer.
+5. Set the number of copies.
+6. Click Print.</div>
+      </div>
+      <div class="model" style="margin-top:12px">
+        <div class="lbl">Q2 (2) — corrections</div>
+        <div class="doc">(a) Let the glue dry completely.
+(b) Click the Save button to save the file.</div>
+      </div>
+      <div class="model" style="margin-top:12px">
+        <div class="lbl">Q3 — short answers</div>
+        <div class="doc">1. IMRD: Introduction (context/reason) · Methods (how it was done) ·
+   Results (findings/data) · Discussion (what it means).
+2. Direct request — when the reader will agree easily.
+   Problem-solving — when the reader may resist or hesitate.
+   Sales pattern — when you must sell an idea they don't want yet.
+3. AIDA: Attention, Interest, Desire, Action.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="final">
+  <div class="eyebrow">Last thing</div>
+  <h2>Exam-day checklist</h2>
+  <div class="card">
+    <ul class="clean">
+      <li><b>Memo:</b> always include the four cue words and put the purpose in the first line</li>
+      <li><b>Email:</b> include a subject line, greeting, and sign-off; never use all caps</li>
+      <li><b>Persuasive:</b> ask "will they say yes easily?" to pick the strategy; end with a clear action</li>
+      <li><b>Instructions:</b> command verb, one action per step, max 8 steps</li>
+      <li><b>Research paper:</b> recall IMRD and the three tasks (Comprehension, Evaluation, Synthesis)</li>
+      <li><b>Writing:</b> the 7 Cs, direct vs indirect order, and the five types</li>
+      <li><b>Always</b> use simple words, short sentences, and neat formatting — your teacher rewards clarity</li>
+    </ul>
+  </div>
+  <p style="text-align:center;color:var(--ink-faint);font-family:var(--serif);font-size:19px;font-style:italic;margin-top:36px">You've got this, Arham. Clear beats clever.</p>
+</section>
+
+</div>
+</main>
+</div>
+
+<script>
+// progress bar
+const prog=document.getElementById('progress');
+window.addEventListener('scroll',()=>{
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  prog.style.width=(window.scrollY/h*100)+'%';
+});
+// reveal toggles
+function rev(btn){
+  btn.classList.toggle('open');
+  const body=btn.nextElementSibling;
+  body.classList.toggle('show');
+  btn.querySelector('.chev').textContent=body.classList.contains('show')?'▴':'▾';
+  const label=btn.childNodes[2];
+}
+// roadmap stops
+function toggleStop(b){
+  b.classList.toggle('done');
+  const rc=b.closest('.stop').querySelector('.rc');
+  rc.classList.toggle('done');
+}
+// active nav on scroll
+const links=document.querySelectorAll('.nav-link');
+const secs=[...links].map(l=>document.querySelector(l.getAttribute('href')));
+function setActive(){
+  let idx=0;
+  secs.forEach((s,i)=>{ if(s&&s.getBoundingClientRect().top<160) idx=i; });
+  links.forEach(l=>l.classList.remove('active'));
+  links[idx].classList.add('active');
+}
+window.addEventListener('scroll',setActive); setActive();
+// close mobile menu on link click
+links.forEach(l=>l.addEventListener('click',()=>document.querySelector('nav.side').classList.remove('open')));
+</script>
+</body>
+</html>
